@@ -384,9 +384,6 @@
   .block {
     display: block;
   }
-  .contents {
-    display: contents;
-  }
   .flex {
     display: flex;
   }
@@ -1566,7 +1563,7 @@
   color: var(--color-accent);
 }
 .gh-canvas {
-  max-width: 720px;
+  max-width: 880px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1.5rem;
@@ -1620,7 +1617,7 @@
   text-wrap: balance;
 }
 .post-full-image {
-  max-width: 1040px;
+  max-width: 880px;
   margin: 0 auto 3rem;
   padding: 0 1.5rem;
 }

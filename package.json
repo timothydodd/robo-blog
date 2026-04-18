@@ -14,7 +14,7 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",
     "@tailwindcss/typography": "^0.5.19",
-    "cheerio": "^1.0.0",
+    "cheerio": "^1.2.0",
     "eta": "^4.5.1",
     "markdown-it": "^14.1.1",
     "markdown-it-anchor": "^9.2.0",
@@ -23,7 +23,7 @@
     "prismjs": "^1.30.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.2",
-    "turndown": "^7.2.0",
+    "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2"
   }
 }

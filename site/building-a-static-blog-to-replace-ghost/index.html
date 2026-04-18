@@ -18,7 +18,7 @@
   <meta property="og:url" content="https://robododd.com/building-a-static-blog-to-replace-ghost/">
   <meta property="og:image" content="https://robododd.com/images/2026/04/new-blog-4e07363f.jpg">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-04-17T23:30:00.000Z">
-  <meta property="article:modified_time" content="2026-04-18T01:30:00.000Z">  <meta property="article:tag" content="Web Development">  
+  <meta property="article:modified_time" content="2026-04-18T02:18:46.522Z">  <meta property="article:tag" content="Web Development">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
@@ -341,30 +341,25 @@
 <p><strong>Cost</strong> reminded me of the first two every month.</p>
 <p>So I built a replacement. The goal was simple: write posts in a nice local editor, save them as JSON and Markdown, build static HTML, ship it to cheap storage. Total control, minimal moving parts, nothing to break into.</p>
 <h2 id="how-the-system-works">How the system works</h2>
-<p><img src="/images/2026/04/architecture-diagram.jpg" alt="High-level flow: editor writes JSON, builder renders HTML, GitHub Action deploys to Azure" loading="lazy" decoding="async" data-zoom=""></p>
-<p>Four small pieces, each doing one thing:</p>
+<p><img src="/images/2026/04/architecture-diagram.jpg" alt="High-level flow: editor writes JSON, builder renders HTML, GitHub Action deploys to Azure" loading="lazy" decoding="async" data-zoom="">Four small pieces, each doing one thing:</p>
 <ul>
-<li><strong><code>content/</code></strong> — the source of truth. One JSON file per post, one per page, plus a tags list and site settings. Images live in a dated folder structure.</li>
-<li><strong><code>editor/</code></strong> — a React app I run locally. Never deployed. It reads and writes the JSON files through a tiny local backend.</li>
-<li><strong><code>builder/</code></strong> — a Node script that turns <code>content/</code> into a static <code>site/</code> folder: every post becomes <code>site/&lt;slug&gt;/index.html</code>, plus home pages, tag pages, RSS, and a sitemap.</li>
+<li><code>content/</code> — the source of truth. One JSON file per post, one per page, plus a tags list and site settings. Images live in a dated folder structure.</li>
+<li><code>editor/</code> — a React app I run locally. Never deployed. It reads and writes the JSON files through a tiny local backend.</li>
+<li><code>builder/</code> — a Node script that turns <code>content/</code> into a static <code>site/</code> folder: every post becomes <code>site/&lt;slug&gt;/index.html</code>, plus home pages, tag pages, RSS, and a sitemap.</li>
 <li><strong>GitHub Action</strong> — on push to <code>main</code>, syncs <code>site/</code> to an Azure Blob Storage container, which serves it as a static website.</li>
 </ul>
 <p>That’s it. <code>npm run import</code> seeded everything from the Ghost export once. After that it’s <code>npm run build</code> and <code>git push</code>.</p>
 <h2 id="importing-posts-from-ghost">Importing posts from Ghost</h2>
 <p>Ghost has an <em>Export your content</em> button that hands you one big JSON file. I wrote a script that reads it, converts each post’s HTML body to Markdown, preserves the special Ghost blocks that don’t round-trip cleanly (bookmark previews, galleries, callouts), and downloads every referenced image into the repo.</p>
-<p><img src="/images/2026/04/post-json-sample.jpg" alt="A single imported post as a JSON file: metadata at the top, Markdown body below" loading="lazy" decoding="async" data-zoom=""></p>
-<p>Every post ends up as a plain, readable JSON file. Easy to diff, easy to edit by hand, and future-me will never be locked out by a proprietary format.</p>
+<p><img src="/images/2026/04/post-json-sample.jpg" alt="A single imported post as a JSON file: metadata at the top, Markdown body below" loading="lazy" decoding="async" data-zoom="">Every post ends up as a plain, readable JSON file. Easy to diff, easy to edit by hand, and future-me will never be locked out by a proprietary format.</p>
 <p>One moment I enjoyed: Cloudflare sits in front of <a href="http://robododd.com">robododd.com</a> and — naturally — blocked my importer from downloading my own images. <code>403 cf-mitigated: challenge</code> on every single file. I paused the rule for five minutes, re-ran the importer, grabbed all 328 images in under a minute, and turned it back on. Funny getting rate-limited by your own site.</p>
 <h2 id="a-local-editor-for-writing-posts">A local editor for writing posts</h2>
-<p><img src="/images/2026/04/editor-full.jpg" alt="Editing this very post: Markdown editor on the left, metadata sidebar on the right" loading="lazy" decoding="async" data-zoom=""></p>
-<p>I spent the most time on the editor, because writing posts is what I’ll actually do day-to-day. It runs locally, feels like a polished CMS, and writes straight to the JSON files.</p>
+<p><img src="/images/2026/04/editor-full.jpg" alt="Editing this very post: Markdown editor on the left, metadata sidebar on the right" loading="lazy" decoding="async" data-zoom="">I spent the most time on the edito. It runs locally, feels like a polished CMS, and writes straight to the JSON files.</p>
 <p>It handles posts, pages, tags, images, and site-wide settings. Each post has a rich Markdown editor on the left and a sidebar for metadata on the right — title, status, publish date, tags, feature image, excerpt. There’s a drag-and-drop image library, and drafts live in a gitignored folder so half-finished posts never accidentally ship.</p>
-<p><img src="/images/2026/04/editor-settings.jpg" alt="Site settings — title, description, accent color picker, locale, timezone" loading="lazy" decoding="async" data-zoom=""></p>
-<p>The <strong>Site settings</strong> screen also has a code-injection section for pasting Google Analytics tags, custom CSS, or any raw HTML that needs to land in <code>&lt;head&gt;</code> or before <code>&lt;/body&gt;</code> on every page. Pragmatic escape hatch.</p>
+<p><img src="/images/2026/04/editor-settings.jpg" alt="Site settings — title, description, accent color picker, locale, timezone" loading="lazy" decoding="async" data-zoom="">The <strong>Site settings</strong> screen also has a code-injection section for pasting Google Analytics tags, custom CSS, or any raw HTML that needs to land in <code>&lt;head&gt;</code> or before <code>&lt;/body&gt;</code> on every page. Pragmatic escape hatch.</p>
 <h3 id="one-click-build-from-the-editor">One-click build from the editor</h3>
 <p>Since the editor already has a local backend, I wired up a <strong>Build site</strong> button that runs the builder and streams the log back in real time. No alt-tab to a terminal.</p>
-<p><img src="/images/2026/04/build-log-panel.jpg" alt="Build log panel streaming output from the builder" loading="lazy" decoding="async" data-zoom=""></p>
-<p>Click, watch it go, see “Built in 8.2s”. If something fails, the error is right there in the panel. Small feature, large quality-of-life win.</p>
+<p><img src="/images/2026/04/build-log-panel.jpg" alt="Build log panel streaming output from the builder" loading="lazy" decoding="async" data-zoom="">Click, watch it go, see “Built in 8.2s”. If something fails, the error is right there in the panel. Small feature, large quality-of-life win.</p>
 <h2 id="small-touches-that-matter">Small touches that matter</h2>
 <ul>
 <li><strong>Image lightbox.</strong> Click any image in a post (including galleries) and a full-screen overlay opens with ← → navigation and keyboard support.</li>
@@ -373,8 +368,7 @@
 <li><strong>Auto social icons.</strong> Add a LinkedIn link in site settings and the LinkedIn glyph appears in the top bar. Same for GitHub, X, email, RSS.</li>
 <li><strong>Gradient top bar</strong> that echoes the logo palette (navy → purple → magenta → peach).</li>
 </ul>
-<p><img src="/images/2026/04/homepage-feed.jpg" alt="Gradient top bar with the orb logo and social icons, above the featured post card" loading="lazy" decoding="async" data-zoom=""></p>
-<h2 id="publishing-to-azure-blob-storage">Publishing to Azure Blob Storage</h2>
+<p><img src="/images/2026/04/homepage-feed.jpg" alt="Gradient top bar with the orb logo and social icons, above the featured post card" loading="lazy" decoding="async" data-zoom="">## Publishing to Azure Blob Storage</p>
 <p>Shipping a post is three steps:</p>
 <ol>
 <li>Write it in the editor.</li>

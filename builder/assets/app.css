@@ -195,7 +195,7 @@
 /* ---------- Full post ---------- */
 
 .gh-canvas {
-  max-width: 720px; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem;
+  max-width: 880px; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem;
 }
 .post-full { padding-top: 2.5rem; }
 .post-full-header { padding-bottom: 2rem; text-align: center; }
@@ -229,7 +229,7 @@
 }
 
 .post-full-image {
-  max-width: 1040px; margin: 0 auto 3rem; padding: 0 1.5rem;
+  max-width: 880px; margin: 0 auto 3rem; padding: 0 1.5rem;
 }
 .post-full-image img {
   width: 100%; border-radius: var(--radius-card); box-shadow: var(--shadow-card);
