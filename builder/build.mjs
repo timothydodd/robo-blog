@@ -240,7 +240,7 @@ async function main() {
   // ---- Posts
   for (const p of posts) {
     const related = posts.filter(r => r.slug !== p.slug && r.primary_tag?.slug === p.primary_tag?.slug).slice(0, 3);
-    const body = eta.render("post", { post: p, related });
+    const body = eta.render("post", { post: p, related, site });
     const canonicalPath = `/${p.slug}/`;
     const html = renderPage({
       body,

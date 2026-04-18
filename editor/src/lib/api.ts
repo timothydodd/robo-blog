@@ -19,6 +19,13 @@ export interface Post extends PostSummary {
 
 export interface Tag { slug: string; name: string; description?: string | null; }
 
+export interface Author {
+  name: string;
+  avatar?: string | null;
+  bio?: string | null;
+  url?: string | null;
+}
+
 export interface SiteSettings {
   title: string;
   description?: string | null;
@@ -33,6 +40,7 @@ export interface SiteSettings {
   locale?: string;
   twitter?: string | null;
   facebook?: string | null;
+  author?: Author | null;
   navigation: { label: string; url: string }[];
   secondary_navigation: { label: string; url: string }[];
   custom_css?: string | null;

@@ -37,6 +37,16 @@ function publisher(site, baseUrl) {
   };
 }
 
+function authorEntity(site, baseUrl) {
+  const a = site.author || {};
+  return {
+    "@type": "Person",
+    name: a.name || "Tim Dodd",
+    url: a.url || baseUrl,
+    image: a.avatar ? absUrl(baseUrl, a.avatar) : undefined,
+  };
+}
+
 export function buildArticleJsonLd({ site, post, canonical, baseUrl }) {
   return serialize({
     "@context": "https://schema.org",
@@ -45,7 +55,7 @@ export function buildArticleJsonLd({ site, post, canonical, baseUrl }) {
     headline: post.title,
     description: post.excerpt || undefined,
     image: post.feature_image ? absUrl(baseUrl, post.feature_image) : undefined,
-    author: { "@type": "Person", name: "Timothy Dodd", url: baseUrl },
+    author: authorEntity(site, baseUrl),
     publisher: publisher(site, baseUrl),
     datePublished: post.published_at,
     dateModified: post.updated_at || post.published_at,

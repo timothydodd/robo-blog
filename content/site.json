@@ -12,6 +12,12 @@
   "locale": "en",
   "twitter": "@robododd",
   "facebook": null,
+  "author": {
+    "name": "Tim Dodd",
+    "avatar": "/images/2026/04/img-2753-jpg-829cdc43.jpg",
+    "bio": null,
+    "url": "https://robododd.com"
+  },
   "navigation": [
     {
       "url": "https://www.linkedin.com/in/timothy-dodd-a53b38131/",

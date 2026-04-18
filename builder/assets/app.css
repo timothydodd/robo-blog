@@ -216,15 +216,58 @@
 .post-full { padding-top: 2.5rem; }
 .post-full-header { padding-bottom: 2rem; text-align: center; }
 
+/* One row: meta on the left, a thin divider, byline on the right.
+   align-items: center keeps the avatar visually centered with the
+   meta text baseline. Wraps to a new line on narrow screens. */
+.post-full-topline {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-bottom: 1.1rem;
+}
 .post-full-meta {
-  display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  display: flex; align-items: center; flex-wrap: wrap;
   gap: 0.55rem;
   color: var(--color-muted);
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   font-weight: 600;
-  margin-bottom: 1.1rem;
+  margin: 0;
+}
+
+.post-full-byline {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin: 0;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--color-rule);
+}
+@media (max-width: 560px) {
+  /* On narrow viewports the byline wraps to its own line; hide the rule
+     since it would be sitting alone on the left edge. */
+  .post-full-byline { border-left: none; padding-left: 0; }
+}
+.post-full-byline-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgb(194 54 143 / 0.25);
+  background: var(--color-bg-soft);
+  flex: 0 0 auto;
+}
+.post-full-byline-avatar--initials {
+  background: linear-gradient(135deg, #F39167 0%, #C2368F 55%, #6B36A8 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+.post-full-byline-name {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--color-ink);
+  letter-spacing: -0.005em;
+  line-height: 1;
 }
 .post-full-meta-tag { color: var(--color-accent); }
 .post-full-meta-tag:hover { color: var(--color-accent-deep); }

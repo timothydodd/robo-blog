@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
-import { Save, Plus, Trash2, GripVertical } from "lucide-react";
-import { api, type SiteSettings } from "@/lib/api";
+import { useEffect, useRef, useState } from "react";
+import { Save, Plus, Trash2, GripVertical, Upload } from "lucide-react";
+import { api, type SiteSettings, type Author } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Input";
 import { useToast } from "@/components/ui/Toast";
+
+function authorInitials(name: string | undefined | null) {
+  if (!name) return "TD";
+  return name.trim().split(/\s+/).map(n => n[0] || "").join("").slice(0, 2).toUpperCase() || "TD";
+}
 
 type NavKey = "navigation" | "secondary_navigation";
 
@@ -11,6 +16,8 @@ export function Settings() {
   const [site, setSite] = useState<SiteSettings | null>(null);
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInput = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   useEffect(() => { api.getSite().then(setSite).catch(e => toast(e.message, "error")); }, [toast]);
@@ -18,6 +25,28 @@ export function Settings() {
   function patch(updates: Partial<SiteSettings>) {
     setSite(prev => prev ? { ...prev, ...updates } : prev);
     setDirty(true);
+  }
+
+  function patchAuthor(updates: Partial<Author>) {
+    setSite(prev => {
+      if (!prev) return prev;
+      const current: Author = prev.author ?? { name: "Tim Dodd", avatar: null, bio: null, url: null };
+      return { ...prev, author: { ...current, ...updates } };
+    });
+    setDirty(true);
+  }
+
+  async function uploadAvatar(files: FileList | null) {
+    if (!files?.length) return;
+    setUploadingAvatar(true);
+    try {
+      const [uploaded] = await api.uploadImages([files[0]]);
+      if (uploaded) patchAuthor({ avatar: uploaded.path });
+    } catch (e: any) {
+      toast(e.message || "Upload failed", "error");
+    } finally {
+      setUploadingAvatar(false);
+    }
   }
 
   function updateNav(k: NavKey, i: number, field: "label" | "url", value: string) {
@@ -107,6 +136,90 @@ export function Settings() {
           <div>
             <Label>Twitter handle</Label>
             <Input value={site.twitter || ""} onChange={(e) => patch({ twitter: e.target.value || null })} placeholder="@handle" />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl border border-zinc-200 p-5 space-y-4">
+          <div>
+            <h3 className="text-base font-semibold">Author</h3>
+            <p className="text-xs text-zinc-500 mt-0.5">Byline and avatar shown on every post. If no avatar is set, a gradient initials badge stands in.</p>
+          </div>
+
+          <div className="flex gap-5 items-start">
+            <div className="flex flex-col items-center gap-2 shrink-0">
+              <div className="relative group">
+                {site.author?.avatar ? (
+                  <img
+                    src={site.author.avatar}
+                    alt=""
+                    className="w-[120px] h-[120px] rounded-full object-cover border border-zinc-200 shadow-sm"
+                  />
+                ) : (
+                  <div
+                    className="w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-2xl tracking-wide shadow-sm select-none"
+                    style={{ background: "linear-gradient(135deg, #F39167 0%, #C2368F 55%, #6B36A8 100%)" }}
+                    aria-hidden="true"
+                  >
+                    {authorInitials(site.author?.name)}
+                  </div>
+                )}
+                {site.author?.avatar && (
+                  <button
+                    type="button"
+                    onClick={() => patchAuthor({ avatar: null })}
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                    aria-label="Remove avatar"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                )}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => avatarInput.current?.click()}
+                disabled={uploadingAvatar}
+              >
+                <Upload size={13} />
+                {uploadingAvatar ? "Uploading…" : site.author?.avatar ? "Replace" : "Upload"}
+              </Button>
+              <input
+                ref={avatarInput}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => { uploadAvatar(e.target.files); e.target.value = ""; }}
+              />
+            </div>
+
+            <div className="flex-1 space-y-3">
+              <div>
+                <Label>Name</Label>
+                <Input
+                  value={site.author?.name || ""}
+                  onChange={(e) => patchAuthor({ name: e.target.value })}
+                  placeholder="Tim Dodd"
+                />
+              </div>
+              <div>
+                <Label>Profile URL</Label>
+                <Input
+                  value={site.author?.url || ""}
+                  onChange={(e) => patchAuthor({ url: e.target.value || null })}
+                  placeholder="https://robododd.com"
+                />
+              </div>
+              <div>
+                <Label>Short bio</Label>
+                <Textarea
+                  rows={3}
+                  value={site.author?.bio || ""}
+                  onChange={(e) => patchAuthor({ bio: e.target.value || null })}
+                  placeholder="Optional — one-sentence bio for future use (not yet displayed)"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
