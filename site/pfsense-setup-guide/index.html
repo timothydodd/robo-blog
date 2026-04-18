@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pfsense Hardware Setup Guide — RoboDodd</title>
+  <meta name="description" content="Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/pfsense-setup-guide/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Pfsense Hardware Setup Guide — RoboDodd">
+  <meta property="og:description" content="Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.">
+  <meta property="og:url" content="https://robododd.com/pfsense-setup-guide/">
+  <meta property="og:image" content="https://robododd.com/images/2023/08/pic2.jpg">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2023-08-02T11:30:57.000Z">
+  <meta property="article:modified_time" content="2025-03-11T20:57:15.000Z">  <meta property="article:tag" content="pfsesnse">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/pfsesnse/">pfsesnse</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2023-08-02T11:30:57.000Z">Aug 2, 2023</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+      <h1 class="post-full-title">Pfsense Hardware Setup Guide</h1>
+      <p class="post-full-subtitle">Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2023/08/pic2.jpg" alt="Pfsense Hardware Setup Guide" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>In this guide, we’ll delve into the world of pfSense and walk through the process of setting up some custom pfSense hardware.</p>
+<p>Before we dive into the technical details, let’s take a moment to understand what pfSense is and why it’s become a popular choice for network enthusiasts and professionals alike.</p>
+<h3 id="what-is-pfsense">What is Pfsense?</h3>
+<p>PfSense is a versatile open-source platform built for efficient network management and security. Operating as a firewall, router, and VPN gateway, pfSense empowers users with a user-friendly web interface that sidesteps complex command-line interfaces. Its arsenal of features includes robust firewall capabilities, streamlined VPN setup (OpenVPN, IPSec, L2TP), and dynamic routing for optimal data flow.</p>
+<p>Going beyond the basics, pfSense offers intrusion detection and prevention, ensuring your network is shielded from potential threats. Quality of Service (QoS) ensures seamless prioritization of critical applications, while a captive portal is on hand for secure guest network access. Equipped with DNS, DHCP services, and customizable reporting tools, pfSense is adaptable to both small-scale home networks and expansive enterprise setups. With the added flexibility of package management for expanding functionality, pfSense is the go-to solution for those seeking a cost-effective, powerful network management tool. Step into the world of pfSense to elevate your network management prowess.</p>
+<h3 id="what-hardware-should-i-use">What hardware should I use ?</h3>
+<p>When it comes to hardware options, there are a few routes you can take. While many experts suggest opting for Netgate’s native hardware for robust production setups, if you’re looking for a more personalized solution, consider alternatives like the AppNeta M70. This choice boasts impressive capabilities, effortlessly reaching speeds of 1 gigabit up and down. So whether you’re leaning towards tried-and-true or seeking a tailored approach, pfSense has you covered</p>
+<h4 id="netgate-1100"><strong>Netgate 1100</strong></h4>
+<p><a href="https://amzn.to/3CeARxF" target="_blank" rel="noopener noreferrer">Netgate 1100 on Amazon</a></p>
+<p><img src="/images/2023/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>If you’re looking for a reliable option, you can’t go wrong with Netgate. However, it’s a bit on the pricey side for the specs that you get. For $189, you can get their entry-level <strong>Netgate 1100</strong>, which is well-suited for a home lab setup.</p>
+<p><strong>Specs</strong>:</p>
+<ul>
+<li>Dual-Core Cortex-A53 ARM64 SoC @ 1.2GHz</li>
+<li>8 GB eMMC storage</li>
+<li>3-Port 1 GbE Ethernet (Marvell switch)</li>
+<li>1 GB DDR4 RAM</li>
+</ul>
+<h4 id="appneta-m70"><strong>AppNeta M70</strong></h4>
+<p><img src="/images/2023/07/cq5dam.web.1280.1280.jpeg" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>I personally went with the <strong>AppNeta M70</strong>. It’s Intel-based with impressive specs, making it a great choice if you need more power. You can usually find one on eBay for around $280.</p>
+<p><strong>Specs</strong>:</p>
+<ul>
+<li>Intel Atom C3758 Processor @ 2.2 GHz (8 cores, AES-NI support)</li>
+<li>8 GB DDR4 RAM</li>
+<li>32 GB SSD</li>
+<li>2x USB 3.0 ports</li>
+<li>Serial console port</li>
+<li>6x Intel Gigabit Ethernet ports (all rear-accessible)</li>
+</ul>
+<p><a href="https://www.ebay.com/sch/i.html?_nkw=appneta+m70" target="_blank" rel="noopener noreferrer">Ebay Search Link</a></p>
+<h2 id="protectli-vault-fw4b">Protectli Vault FW4B</h2>
+<p><img src="/images/2025/01/image-7.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Protectli offers excellent fanless options like the <strong>FW4B</strong>, which is perfect for those looking for silent performance. At $299, it comes with US-based support and a 30-day money-back guarantee.</p>
+<p><strong>Specs</strong>:</p>
+<ul>
+<li>CPU: Intel Quad-Core Celeron J3160, 64-bit, up to 2.2GHz, AES-NI hardware support</li>
+<li>Ports: 4x Intel Gigabit Ethernet, 2x USB 3.0, 1x RJ-45 COM, 2x HDMI</li>
+<li>Components: 4 GB DDR3L RAM, 32 GB mSATA SSD (coreboot BIOS optional, user-installed)</li>
+<li>Compatibility: No OS pre-installed; tested with pfSense, Untangle, OPNsense, and other popular open-source software solutions</li>
+</ul>
+<p><a href="https://amzn.to/40CYcBc" target="_blank" rel="noopener noreferrer">Protectli Vault FW4B on Amazon</a></p>
+<h3 id="installation-via-console-port">Installation via Console Port</h3>
+<p>If your using hardware that doesn’t have a monitor port it probably has a console port which you need to connect via serial port . If you don’t have a serial port you can pick up a usb to ethernet serial port . I used the one below.</p>
+<figure class="kg-card kg-image-card kg-card-hascaption"><img src="/images/2023/07/51bHgcGiLOL._AC_SL1500_.jpg" class="kg-image" alt="" loading="lazy" width="1327" height="1430" decoding="async" data-zoom=""><figcaption><span style="white-space: pre-wrap;">Usb to RJ45 (Moyina Brand)</span></figcaption></figure>
+<p>Amazon Link for Cable - <a href="https://amzn.to/4ak7czT" target="_blank" rel="noopener noreferrer">https://amzn.to/4ak7czT</a></p>
+<p>Download pfsense community edition (link below)</p>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://www.pfsense.org/download/" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Download pfSense Community Edition</div><div class="kg-bookmark-description">pfSense is a free and open source firewall and router that also features unified threat management, load balancing, multi WAN, and more</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://www.pfsense.org/img/apple-touch-icon.png" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">pfSense Logo</span></div></div><div class="kg-bookmark-thumbnail"><img src="https://www.pfsense.org/images/sponsored-by-netgate-logo-225.png" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
+<p>I used the following options when downloading the Image , note the Architecture , mirror and console options.</p>
+<p><img src="/images/2023/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Extract the downloaded gz file.</p>
+<h3 id="create-a-bootable-usb-windows">Create a bootable USB (windows)</h3>
+<p>I recommend using <a href="https://rufus.ie/en/" target="_blank" rel="noopener noreferrer">https://rufus.ie/en/</a> on windows.</p>
+<ul>
+<li>Open Rufus and select your flash drive from the “Device” drop-down menu.</li>
+<li>Insert your USB stick</li>
+<li>In the “Boot selection” section, click the “Select” button and choose the pfsense img file you downloaded.</li>
+<li>Click the “Start” button to begin the process of creating the bootable flash drive.</li>
+</ul>
+<p><img src="/images/2023/01/fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580.png" alt="fd04f13dd3e608cb1328684aeafae066111c9c132517x580" loading="lazy" decoding="async" data-zoom=""></p>
+<h2 id="use-putty-and-install-pfsense">Use PuTTy And install Pfsense</h2>
+<p>PuTTY is a popular terminal emulator that you can use to access the console port of your router and install pfSense. Here’s a step-by-step guide on how to use PuTTY to install pfSense via the console port:</p>
+<p><strong>1. Download and Install PuTTY:</strong></p>
+<p>If you haven’t already, download PuTTY from the official website: <a href="https://www.putty.org/" target="_blank" rel="noopener noreferrer">https://www.putty.org/</a><br>
+Install PuTTY on your computer by following the installation instructions.</p>
+<p><strong>2. Connect to the Console Port:</strong></p>
+<p>Use a serial cable to connect the console port of your router to a USB port on your computer. Make sure you have the appropriate cable and adapter for this connection.<br>
+Power on your router.</p>
+<p><strong>3. Determine the COM Port:</strong></p>
+<p>In Windows, go to the “Device Manager” (you can search for it in the Start menu or right-click on the “Computer” icon and select “Manage,” then choose “Device Manager”).<br>
+Under “Ports (COM &amp; LPT),” you should see an entry for the USB-to-Serial adapter you connected. Note the COM port number associated with it (e.g., COM1, COM2, etc.).</p>
+<p><strong>4. Configure PuTTY:</strong></p>
+<p>Launch PuTTY from your computer.<br>
+In the PuTTY Configuration window:<br>
+In the “Category” list on the left, select “Session.”<br>
+For “Connection type,” choose “Serial.”<br>
+In the “Serial line” field, enter the COM port you noted earlier (e.g., COM1).<br>
+Set the “Speed” to the baud rate recommended for your router (often 9600 or 115200).<br>
+Click the “Open” button to start the serial connection.</p>
+<p><strong>5. Access the Router Console:</strong></p>
+<p>You should now see the console output from your router in the PuTTY window. Press Enter a few times if you don’t see any output to wake up the router.<br>
+Depending on your router, you might need to press a specific key combination (like Ctrl + C or Break) to interrupt the boot process and access the console menu.</p>
+<p><strong>6. Install pfSense:</strong></p>
+<p>Once you have console access, boot off the usb we created with the pfsense installation files. Follow the on-screen prompts to install pfSense. The installation process will guide you through various configuration options such as disk partitioning, network settings, and so on.<br>
+Make sure to carefully follow the installation instructions provided by pfSense.</p>
+<p><strong>7. Complete the Installation:</strong></p>
+<p>Once the installation is complete, the router will likely reboot automatically. You may need to remove the USB-to-Serial cable at this point.<br>
+That’s it! You’ve successfully used PuTTY to access the console port of your router and install pfSense. Remember that the specific steps might vary depending on your router model and the version of pfSense you’re installing. Always refer to the documentation provided by pfSense and your router manufacturer for accurate and detailed instructions.</p>
+    </section>
+
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

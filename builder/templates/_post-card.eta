@@ -1,0 +1,23 @@
+<% const p = it.post; const size = it.size || 'small'; %>
+<article class="post-card<%= size === 'large' ? ' post-card-large' : '' %>">
+  <% if (p.feature_image) { %>
+  <a class="post-card-image-link" href="/<%= p.slug %>/">
+    <img class="post-card-image" src="<%= p.feature_image %>" alt="<%= p.feature_image_alt || p.title %>" loading="lazy" decoding="async">
+  </a>
+  <% } %>
+  <div class="post-card-content">
+    <a class="post-card-content-link" href="/<%= p.slug %>/">
+      <header class="post-card-header">
+        <% if (p.primary_tag) { %>
+        <div class="post-card-tags"><span class="post-card-primary-tag"><%= p.primary_tag.name %></span></div>
+        <% } %>
+        <h2 class="post-card-title"><%= p.title %></h2>
+      </header>
+      <% if (p.excerpt) { %><div class="post-card-excerpt"><p><%= p.excerpt %></p></div><% } %>
+    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="<%= p.published_at %>"><%= p.published_at_formatted %></time>
+      <span class="post-card-meta-length"><%= p.reading_time %> min read</span>
+    </footer>
+  </div>
+</article>

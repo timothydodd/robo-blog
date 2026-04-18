@@ -1,0 +1,22 @@
+{
+  "title": "How to Run the DeepSeek-R1 AI Model on a Mac Locally",
+  "slug": "how-to-run-the-deepseek-r1-ai-model-on-a-mac-locally",
+  "status": "published",
+  "published_at": "2025-02-14T22:43:43.000Z",
+  "updated_at": "2025-02-14T22:46:14.000Z",
+  "created_at": "2025-02-14T22:15:19.000Z",
+  "feature_image": "/images/2025/02/mac2.webp",
+  "feature_image_alt": null,
+  "feature_image_caption": null,
+  "excerpt": "Learn how to run DeepSeek-R1 on a Mac Mini M4 using Ollama for efficient AI model performance. Step-by-step guide for installation, setup, and interaction.",
+  "tags": [
+    "deepseek",
+    "ollama",
+    "ollama-ai",
+    "macos",
+    "apple",
+    "ai"
+  ],
+  "featured": false,
+  "content": "## Introduction {#introduction}\n\nI recently tested DeepSeek on my new Mac Mini M4, and to my surprise, it outperformed my Windows machine with an NVIDIA GeForce RTX 2080 Super. The efficiency of Apple Silicon and its Neural Engine makes it an excellent choice for running AI models locally. If you're looking to set up DeepSeek on your Mac, here’s a quick guide to get you started. Check out the specs on amazon.\n\n## Hardware Used {#hardware-used}\n\n[Apple 2024 Mac Mini M4](https://amzn.to/3X12JN0) - Amazon\n\n---\n\n## Prerequisites {#prerequisites}\n\nBefore installing DeepSeek, make sure you have:\n\n1.  macOS Sonoma or later installed\n2.  Apple Silicon (M4 recommended for best performance)\n\n---\n\n## Step 1: Install Ollama {#step-1-install-ollama}\n\n1.  **Download Ollama**:\n    -   Go to [Ollama's official website](https://ollama.com/download).\n    -   Click on \"Download for macOS\" to get the latest version.\n2.  **Install the Application**:\n    -   Once the download is complete, locate the `Ollama` application file in your Downloads folder.\n    -   Once opened go through the installer an click Install. This will prompt you for admin password.\n3.  **OpenTerminal**:\n    -   Hit `Command + Space` to bring up terminal\n    -   Type `Terminal` and hit enter\n\n![](/images/2025/02/image-15.webp)\n\n---\n\n## Step 2: Run DeepSeek-R1 {#step-2-run-deepseek-r1}\n\n**Run the Model**:\n\n```bash\nollama run deepseek-r1:1.5b\n```\n\nFor machines with more than 16GB of Video RAM, use the smaller model:\n\n```bash\nollama run deepseek-r1:7b\n```\n\n**Interact with the Model**:\n\n-   wait for the big packages to get pulled in.\n-   Once the model is running, you can start asking it questions.\n-   Use the `/?` command to view available options and features.\n-   If you encounter any issues, use the `/clear` command to reset the session context.\n\nExample Query:\n\n```bash\nHow many r's are in the word strawberry?\n```\n\n![](/images/2025/02/image-14.webp)\n\n---\n\n## Hardware for Ollama {#hardware-for-ollama}\n\nIf you're looking for budget-friendly hardware to run Ollama efficiently, check out my latest post for the best GPU recommendations!\n\n<figure class=\"kg-card kg-bookmark-card\"><a class=\"kg-bookmark-container\" href=\"/budget-friendly-local-ai-hardware-for-running-ollama/\"><div class=\"kg-bookmark-content\"><div class=\"kg-bookmark-title\">Budget-Friendly Local AI Hardware for Running Ollama</div><div class=\"kg-bookmark-description\">Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.</div><div class=\"kg-bookmark-metadata\"><img class=\"kg-bookmark-icon\" src=\"https://static.ghost.org/v5.0.0/images/link-icon.svg\" alt=\"\"><span class=\"kg-bookmark-author\">RoboDodd</span><span class=\"kg-bookmark-publisher\">Tim Dodd</span></div></div><div class=\"kg-bookmark-thumbnail\"><img src=\"/images/thumbnail/Screenshot-2025-01-29-121414.webp\" alt=\"\" onerror=\"this.style.display = 'none'\"></div></a></figure>\n\n## Conclusion {#conclusion}\n\nIf you’re running AI models and want a power-efficient yet performant setup, the Mac Mini M4 is an excellent choice. With DeepSeek running on Ollama, it’s now easier than ever to run LLMs locally without needing a high-end NVIDIA GPU.\n\nHave you tried running DeepSeek on your Mac with Ollama? Let me know your experience in the comments!\n\nIf you want a sleek web-based interface for managing your AI models, you can integrate Open WebUI, a feature-rich self-hosted AI platform."
+}

@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+.env
+.env.local
+*.log
+.vite/
+editor/dist/
+
+# Local-only
+content/drafts/
+*.ghost*.json

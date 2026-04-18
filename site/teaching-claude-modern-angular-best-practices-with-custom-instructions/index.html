@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching Claude Modern Angular Best Practices with Custom Instructions — RoboDodd</title>
+  <meta name="description" content="Configure Claude AI to automatically generate modern Angular 20 code with signals, standalone components, and new control flow syntax.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Teaching Claude Modern Angular Best Practices with Custom Instructions — RoboDodd">
+  <meta property="og:description" content="Configure Claude AI to automatically generate modern Angular 20 code with signals, standalone components, and new control flow syntax.">
+  <meta property="og:url" content="https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
+  <meta property="og:image" content="https://robododd.com/images/2025/10/computer-a.jpg">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2025-10-26T22:55:01.000Z">
+  <meta property="article:modified_time" content="2025-10-26T22:55:01.000Z">  <meta property="article:tag" content="Angular">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/angular/">Angular</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2025-10-26T22:55:01.000Z">Oct 26, 2025</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>2 min read</span>
+      </div>
+      <h1 class="post-full-title">Teaching Claude Modern Angular Best Practices with Custom Instructions</h1>
+      <p class="post-full-subtitle">Configure Claude AI to automatically generate modern Angular 20 code with signals, standalone components, and new control flow syntax.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <h2 id="supercharge-your-angular-development-with-ai-powered-code-generation">Supercharge Your Angular Development with AI-Powered Code Generation</h2>
+<p>As you may know, you can use custom instruction files (like <code>.claude/instructions.md</code> or <code>claude.md</code>) to guide Claude on what’s important for your project. I’ve put together comprehensive instructions that will help Claude generate modern, high-quality Angular code using the latest features.</p>
+<p>You can add these instructions directly to your project’s custom instruction file, or create a separate file called <code>angular-best-practices.md</code> and reference it in your main instruction file like this</p>
+<div class="pre-wrapper"><pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">###</span> Angular Development</span>
+
+For detailed Angular guidelines including modern syntax, signals, and control flow, see <span class="token bold"><span class="token punctuation">**</span><span class="token content"><span class="token url">[<span class="token content">angular-best-practices.md</span>](<span class="token url">angular-best-practices.md</span>)</span></span><span class="token punctuation">**</span></span>.
+Use these best practices whenever you're working with Angular.
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="angular-20-best-practices-for-ai-code-generation">Angular 20 Best Practices for AI Code Generation</h2>
+<p>Below are the complete instructions you can use in your project. Simply copy this into your <code>angular-best-practices.md</code> file:</p>
+<div class="pre-wrapper"><pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Angular Best Practices</span>
+
+This document contains Angular-specific coding standards and modern syntax guidelines for the project.
+
+<span class="token title important"><span class="token punctuation">##</span> Modern Angular Syntax</span>
+
+<span class="token title important"><span class="token punctuation">###</span> Standalone Components</span>
+
+Always generate standalone components:
+
+```bash
+ng generate component <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">&gt;</span></span> --standalone
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="signals-input-syntax">Signals Input Syntax</h3>
+<p><strong>ALWAYS use the modern Angular signals input syntax instead of @Input decorators:</strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ✅ Correct - Modern signals input syntax</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">{</span>
+    myInput <span class="token operator">=</span> <span class="token generic-function"><span class="token function">input</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyType<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Optional input</span>
+    requiredInput <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">required</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyType<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Required input</span>
+
+    <span class="token function">ngOnInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> value <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">myInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Access with parentheses</span>
+        <span class="token keyword">const</span> required <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">requiredInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Access with parentheses</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ❌ Avoid - Old @Input decorator syntax</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">{</span>
+    <span class="token decorator"><span class="token at operator">@</span><span class="token function">Input</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> myInput<span class="token operator">:</span> MyType<span class="token punctuation">;</span>
+    <span class="token decorator"><span class="token at operator">@</span><span class="token function">Input</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span> required<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span> requiredInput<span class="token operator">:</span> MyType<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Use <code>input&lt;Type&gt;()</code> for optional inputs</li>
+<li>Use <code>input.required&lt;Type&gt;()</code> for required inputs</li>
+<li>Access input values with parentheses: <code>this.myInput()</code></li>
+<li>This provides better type safety and integrates with Angular’s signal-based reactivity</li>
+</ul>
+<h3 id="reactive-ui-updates-with-signals">Reactive UI Updates with Signals</h3>
+<p><strong>Use Angular signals for reactive state management that automatically updates the UI:</strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ✅ Correct - Using signals for reactive state</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">DashboardComponent</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> logger <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>LogService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    currentUser <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span>User <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    loading <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">boolean</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Computed values update automatically</span>
+    isAdmin <span class="token operator">=</span> <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">currentUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">?.</span>role <span class="token operator">===</span> UserRole<span class="token punctuation">.</span>Admin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Effect runs when signals change</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">effect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">isAdmin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">'[DashboardComponent] User is admin'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- Template automatically updates when signals change --&gt;</span>
+@if (isAdmin()) {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Admin content<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+} @if (loading()) {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Loading...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+}
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="control-flow-syntax">Control Flow Syntax</h3>
+<p><strong>ALWAYS use the modern Angular control flow syntax instead of structural directives:</strong></p>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- ✅ Correct - New control flow syntax --&gt;</span>
+@if (condition) {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Content when true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+} @else if (otherCondition) {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Alternative content<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+} @else {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Fallback content<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+} @for (item of items(); track item.id) {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>{{ item.name }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+} @empty {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>No items found<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+} @switch (status()) { @case ('loading') {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Loading...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+} @case ('error') {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Error occurred<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+} @default {
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Content loaded<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+} }
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- ❌ Avoid - Old structural directive syntax --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">*ngIf</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>condition<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Content<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">*ngFor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>let item of items; trackBy: trackById<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>{{ item.name }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">[ngSwitch]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">*ngSwitchCase</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>loading'<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Loading...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><strong>Key Benefits:</strong></p>
+<ul>
+<li>Better performance and smaller bundle sizes</li>
+<li>Improved type checking and IDE support</li>
+<li>More readable and maintainable templates</li>
+<li>Built-in empty states with @empty</li>
+</ul>
+<h2 id="state-management">State Management</h2>
+<h3 id="services-with-behaviorsubjects">Services with BehaviorSubjects</h3>
+<p>Use services with BehaviorSubjects for traditional state management:</p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// Common pattern in services</span>
+<span class="token keyword">private</span> dataSubject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BehaviorSubject<span class="token operator">&lt;</span>Data<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> data$ <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>dataSubject<span class="token punctuation">.</span><span class="token function">asObservable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="prefer-signals-for-new-code">Prefer Signals for New Code</h3>
+<p>For new components and services, prefer using Angular signals over traditional RxJS patterns where appropriate. Signals provide better ergonomics and performance for synchronous state.</p>
+<h2 id="component-guidelines">Component Guidelines</h2>
+<h3 id="loading-states">Loading States</h3>
+<p>Use skeleton loaders instead of spinners when loading data to provide a better user experience. Skeleton screens show the layout structure while content loads, reducing perceived wait time.</p>
+<h2 id="testing">Testing</h2>
+<ul>
+<li><strong>Frontend Tests</strong>: Jasmine/Karma or Jest</li>
+<li>Focus on component logic and service methods</li>
+<li>Test reactive state with signals</li>
+<li>Test control flow logic</li>
+</ul>
+<h2 id="system-requirements">System Requirements</h2>
+<h3 id="nodejs-version-requirements">Node.js Version Requirements</h3>
+<p><strong>Angular 20 requires specific Node.js versions:</strong></p>
+<ul>
+<li><strong>Node.js 20.x</strong>: Minimum version 20.19</li>
+<li><strong>Node.js 22.x</strong>: Minimum version 22.12 (recommended)</li>
+<li><strong>Node.js 24.x</strong>: Supported from version 24.0 (latest LTS)</li>
+</ul>
+<p><strong>Important Notes:</strong></p>
+<ul>
+<li>Node.js 18.x is no longer supported (reached EOL March 27, 2025)</li>
+<li>Node.js 22.0 to 22.10 are not supported</li>
+<li>Use <code>node --version</code> to check your current Node.js version</li>
+</ul>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">
+## Conclusion {#conclusion}
+
+By adding these Angular best practices to your project's custom instructions, Claude will automatically generate modern, high-quality Angular code that follows the latest conventions and patterns. This ensures consistency across your codebase and helps you take full advantage of Angular's newest features like signals, modern control flow, and standalone components.
+
+Simply copy the instructions above into your project's instruction file and start building with Angular 20!</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/angular/">Angular</a>,               <a href="/tag/angular-20/">Angular 20</a>,               <a href="/tag/claude-ai/">Claude AI</a>,               <a href="/tag/ai-assisted-development/">AI-Assisted Development</a>,               <a href="/tag/ai-code-generation/">AI Code Generation</a>,               <a href="/tag/ai-pair-programming/">AI Pair Programming</a>          </aside>
+      </article>
+
+    <aside class="read-more-wrap">
+    <h3 class="read-more-heading">Read more</h3>
+    <div class="read-more">
+              <article class="post-card">
+    <a class="post-card-image-link" href="/google-places-autocomplete-directive-angular-21/">
+    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/google-places-autocomplete-directive-angular-21/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">Google Places Autocomplete Directive – Angular 21</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard
+  navigation, and parsed address output.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2026-02-13T22:49:45.000Z">Feb 13, 2026</time>
+      <span class="post-card-meta-length">5 min read</span>
+    </footer>
+  </div>
+</article>
+              <article class="post-card">
+    <a class="post-card-image-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">Dynamic Environment Variables in Angular: A Docker-Ready Solution</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Learn how to inject environment variables into Angular apps at runtime using Docker - no more rebuilds for config changes! Complete guide with code examples.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-05-24T20:00:46.000Z">May 24, 2025</time>
+      <span class="post-card-meta-length">3 min read</span>
+    </footer>
+  </div>
+</article>
+              <article class="post-card">
+    <a class="post-card-image-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
+    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">10 Must-Have VS Code Extensions for Angular Developers in 2025</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code in 2025</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-04-03T17:18:26.000Z">Apr 3, 2025</time>
+      <span class="post-card-meta-length">3 min read</span>
+    </footer>
+  </div>
+</article>
+          </div>
+  </aside>
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

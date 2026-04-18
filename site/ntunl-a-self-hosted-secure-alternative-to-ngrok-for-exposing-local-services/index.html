@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NTunl: An open Self-Hosted, Secure Alternative to ngrok for Exposing Local Services — RoboDodd</title>
+  <meta name="description" content="NTunl is a self-hosted alternative to ngrok, offering secure tunneling for local services with SSL, custom domains, and request inspection. Perfect for developers seeking control and flexibility.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/ntunl-a-self-hosted-secure-alternative-to-ngrok-for-exposing-local-services/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="NTunl: An open Self-Hosted, Secure Alternative to ngrok for Exposing Local Services — RoboDodd">
+  <meta property="og:description" content="NTunl is a self-hosted alternative to ngrok, offering secure tunneling for local services with SSL, custom domains, and request inspection. Perfect for developers seeking control and flexibility.">
+  <meta property="og:url" content="https://robododd.com/ntunl-a-self-hosted-secure-alternative-to-ngrok-for-exposing-local-services/">
+  <meta property="og:image" content="https://robododd.com/images/2024/11/hyper-1.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-11-13T14:51:52.000Z">
+  <meta property="article:modified_time" content="2024-11-13T14:51:52.000Z">  <meta property="article:tag" content="dotnet">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/dotnet/">dotnet</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2024-11-13T14:51:52.000Z">Nov 13, 2024</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+      <h1 class="post-full-title">NTunl: An open Self-Hosted, Secure Alternative to ngrok for Exposing Local Services</h1>
+      <p class="post-full-subtitle">NTunl is a self-hosted alternative to ngrok, offering secure tunneling for local services with SSL, custom domains, and request inspection. Perfect for developers seeking control and flexibility.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2024/11/hyper-1.webp" alt="NTunl: An open Self-Hosted, Secure Alternative to ngrok for Exposing Local Services" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>If you’ve ever needed to expose a local server to the public internet, you’re likely familiar with <strong>ngrok</strong>, a popular tool for creating secure tunnels. However, relying on external services for tunneling isn’t always ideal, particularly when you want control over your data and setup. That’s why I developed <strong>NTunl</strong>, a self-hosted alternative to ngrok that gives you full control over your secure tunnels. Let’s dive into what NTunl offers, how it works, and how to set it up.</p>
+<h3 id="what-is-ntunl">What is NTunl?</h3>
+<p><strong>NTunl</strong> is a C# project built with .NET 8, designed to make secure tunneling straightforward and self-sufficient. With NTunl, you can expose any local or private service to the public internet, all from your own environment. Whether it’s a development server, internal tool, or IoT device, NTunl enables you to manage access securely with features comparable to those found in commercial solutions.</p>
+<h3 id="key-features">Key Features</h3>
+<p>NTunl is equipped with several powerful features:</p>
+<ul>
+<li><strong>Secure Tunneling</strong>: NTunl allows you to securely tunnel your localhost or any other private services to a public domain with SSL support, including options to permit or deny invalid certificates.</li>
+<li><strong>Flexible Configuration</strong>: Both server and client configurations are highly customizable, giving you control over SSL, domains, subdomains, headers, and more.</li>
+<li><strong>Domain and Subdomain Management</strong>: You can easily set up and manage custom domains and subdomains.</li>
+<li><strong>Request Inspection</strong>: Enable the Inspector to view and monitor HTTP requests via a web interface, making debugging and monitoring convenient.</li>
+<li><strong>Self-Hosted Solution</strong>: Keep your data within your own infrastructure by hosting NTunl on your own server, or leverage Docker for easy setup.</li>
+</ul>
+<p>The Docker image for NTunl is available on <a href="https://hub.docker.com/repository/docker/timdoddcool/ntunl-host/general" target="_blank" rel="noopener noreferrer">Docker Hub</a>, making it easy to integrate with various environments.</p>
+<h3 id="how-ntunl-works">How NTunl Works</h3>
+<p>NTunl consists of two primary components: the <strong>NTunl Server</strong> and the <strong>NTunl Client</strong>.</p>
+<ol>
+<li><strong>NTunl Server</strong>: This component is responsible for managing the tunnels and exposing them to a public interface. Clients connect to the NTunl Server to establish tunnels.</li>
+<li><strong>NTunl Client</strong>: The client connects to the server to expose local or private services to the public internet. You can set up custom domains, SSL settings, and headers for each tunnel. Here’s an example configuration:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"Logging"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"LogLevel"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"Default"</span><span class="token operator">:</span> <span class="token string">"Debug"</span><span class="token punctuation">,</span>
+            <span class="token property">"Microsoft"</span><span class="token operator">:</span> <span class="token string">"Warning"</span><span class="token punctuation">,</span>
+            <span class="token property">"Microsoft.Hosting.Lifetime"</span><span class="token operator">:</span> <span class="token string">"Information"</span><span class="token punctuation">,</span>
+            <span class="token property">"System.Net.Http.HttpClient"</span><span class="token operator">:</span> <span class="token string">"Warning"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"Tunnels"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"SslEnabled"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+            <span class="token property">"AllowInvalidCertificates"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">"NtunlAddress"</span><span class="token operator">:</span> <span class="token string">"tunnel.mysite.com:443"</span><span class="token punctuation">,</span>
+            <span class="token property">"Address"</span><span class="token operator">:</span> <span class="token string">"https://robododd.com"</span><span class="token punctuation">,</span>
+            <span class="token property">"HostHeader"</span><span class="token operator">:</span> <span class="token string">"robododd.com"</span><span class="token punctuation">,</span>
+            <span class="token property">"CustomHeader"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"RewriteUrlEnabled"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">"RewriteUrlPattern"</span><span class="token operator">:</span> <span class="token string">"https://(mysite|www.mysite2)\\.com"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"Inspector"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"Enabled"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token number">6900</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>This configuration enables SSL, sets a custom host header, and includes optional URL rewriting, giving you flexibility in how your services appear publicly.</p>
+<h3 id="ntunl-server-configuration">NTunl Server Configuration</h3>
+<p>The NTunl Server configuration is highly customizable, allowing you to tailor settings to your specific needs. Below is an example of a typical configuration file (<code>appsettings.json</code>) for the NTunl Server:</p>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"Logging"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"LogLevel"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"Default"</span><span class="token operator">:</span> <span class="token string">"Information"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"AllowedHosts"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+    <span class="token property">"TunnelHost"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"HostName"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+        <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token number">8001</span><span class="token punctuation">,</span>
+        <span class="token property">"ClientDomain"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"Domain"</span><span class="token operator">:</span> <span class="token string">"mysite.com"</span><span class="token punctuation">,</span>
+            <span class="token property">"SubDomains"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"apple"</span><span class="token punctuation">,</span> <span class="token string">"banana"</span><span class="token punctuation">,</span> <span class="token string">"cherry"</span><span class="token punctuation">,</span> <span class="token string">"elderberry"</span> <span class="token punctuation">]</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token property">"Ssl"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"Enabled"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">"AcceptInvalidCertificates"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"HttpHost"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"HostName"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+        <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token number">9200</span><span class="token punctuation">,</span>
+        <span class="token property">"Headers"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">"BlackList"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"cf-*"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"IpHeaderName"</span><span class="token operator">:</span> <span class="token string">"X-Forwarded-For"</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h4 id="configuration-breakdown">Configuration Breakdown</h4>
+<ul>
+<li><strong>Logging</strong>: Configures the log level. In this example, the default level is set to <code>Information</code>, but you can adjust this as needed for more or less verbosity.</li>
+<li><strong>AllowedHosts</strong>: Specifies which hosts are allowed to connect. Setting <code>*</code> allows all hosts.</li>
+<li><strong>TunnelHost</strong>: Defines the primary settings for the tunnel:
+<ul>
+<li><strong>HostName</strong>: The hostname to bind to, with <code>*</code> binding to all hostnames.</li>
+<li><strong>Port</strong>: The port the tunnel listens on (here set to 8001).</li>
+<li><strong>ClientDomain</strong>: When a client connects, a random subdomain will be chosen for that client to use.</li>
+<li><strong>Ssl</strong>: Controls SSL settings:
+<ul>
+<li><strong>Enabled</strong>: Toggle SSL on or off.</li>
+<li><strong>AcceptInvalidCertificates</strong>: If set to <code>true</code>, NTunl will accept invalid SSL certificates. This can be useful for testing but is generally not recommended for production.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>HttpHost</strong>: Configures HTTP host settings, particularly useful for controlling headers:
+<ul>
+<li><strong>HostName</strong> and <strong>Port</strong>: Similar to <code>TunnelHost</code>, specifying the hostname and port to bind.</li>
+<li><strong>Headers</strong>:
+<ul>
+<li><strong>BlackList</strong>: Lists headers to block; here, any headers starting with <code>cf-</code> will be blacklisted.</li>
+<li><strong>IpHeaderName</strong>: Specifies the header to use for identifying the client’s IP address, typically <code>X-Forwarded-For</code> in reverse proxy setups.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>This flexible configuration enables you to set up your NTunl Server to match your requirements precisely, from SSL handling to domain management and header control.</p>
+<h3 id="getting-started-with-ntunl">Getting Started with NTunl</h3>
+<p>Before you begin, make sure you have the .NET 8 SDK installed on your machine.</p>
+<h4 id="installation-and-setup">Installation and Setup</h4>
+<ol>
+<li><strong>Clone the Repository</strong>:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/timothydodd/ntunl.git
+<span class="token builtin class-name">cd</span> ntunl
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<ol start="2">
+<li><strong>Build the Solution</strong>:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">dotnet build
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<ol start="3">
+<li>Run the Ntunl Server on a machine with public access:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">cd</span> src/NTunlServer
+dotnet run
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<ol start="4">
+<li>Run the NTunl Client on a Machine that hosts a service you want to make public:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">cd</span> src/NTunlClient
+dotnet run
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>With the server running, the NTunl client will connect and expose your local services according to the configuration you define.</p>
+<h3 id="final-thoughts">Final Thoughts</h3>
+<p>NTunl brings the power of secure tunneling to your fingertips, all within a self-hosted environment. Whether you’re a developer looking for more control over your setup or a business needing to securely expose internal services, NTunl has the features and flexibility to meet your needs.</p>
+<p>Ready to give it a try? Head over to the <a href="https://hub.docker.com/repository/docker/timdoddcool/ntunl-host/general" target="_blank" rel="noopener noreferrer">NTunl Docker Hub</a> or <a href="https://github.com/timothydodd/ntunl" target="_blank" rel="noopener noreferrer">NTunl GitHub repository</a> and get started today.</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/dotnet/">dotnet</a>,               <a href="/tag/home-lab/">Home Lab</a>,               <a href="/tag/cyber-security/">Cyber Security</a>,               <a href="/tag/devops/">DevOps</a>,               <a href="/tag/ssl/">SSL</a>,               <a href="/tag/networking/">Networking</a>,               <a href="/tag/ngrok/">ngrok</a>,               <a href="/tag/ntunl/">ntunl</a>          </aside>
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

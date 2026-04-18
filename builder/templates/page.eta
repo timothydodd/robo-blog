@@ -1,0 +1,16 @@
+<main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <h1 class="post-full-title"><%= it.page.title %></h1>
+      <% if (it.page.excerpt) { %><p class="post-full-custom-excerpt"><%= it.page.excerpt %></p><% } %>
+    </header>
+    <% if (it.page.feature_image) { %>
+    <figure class="post-full-image">
+      <img src="<%= it.page.feature_image %>" alt="<%= it.page.feature_image_alt || it.page.title %>" loading="eager" decoding="async">
+    </figure>
+    <% } %>
+    <section class="post-full-content gh-content gh-canvas">
+      <%~ it.page.content_html %>
+    </section>
+  </article>
+</main>

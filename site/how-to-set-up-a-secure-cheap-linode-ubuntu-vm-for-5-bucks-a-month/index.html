@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month — RoboDodd</title>
+  <meta name="description" content="Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! ">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month — RoboDodd">
+  <meta property="og:description" content="Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! ">
+  <meta property="og:url" content="https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/">
+  <meta property="og:image" content="https://robododd.com/images/2025/02/Screenshot-2025-02-18-155559.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2025-02-18T20:58:20.000Z">
+  <meta property="article:modified_time" content="2025-02-27T16:20:40.000Z">  <meta property="article:tag" content="Linux">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/linux/">Linux</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2025-02-18T20:58:20.000Z">Feb 18, 2025</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>2 min read</span>
+      </div>
+      <h1 class="post-full-title">How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month</h1>
+      <p class="post-full-subtitle">Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! </p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2025/02/Screenshot-2025-02-18-155559.webp" alt="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>Need to setup a <strong>super cheap</strong> virtual machine? I got you. Linode offers <strong>$5/month</strong> VMs (<a href="https://www.linode.com/lp/free-credit-100/" target="_blank" rel="noopener noreferrer">or <strong>free with a $100 credit</strong>—don’t miss that</a>). Let’s get one up and running <strong>fast</strong> while making it <strong>secure</strong> so hackers don’t have a field day.</p>
+<hr>
+<h2 id="step-1-create-your-linode">Step 1: Create Your Linode</h2>
+<p>Go to <a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode</a> and sign up.</p>
+<p>Click <strong>Linodes → Create Linode</strong>.</p>
+<p><img src="/images/2025/02/image-18.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Pick a <strong>region</strong> close to you (lower latency = good).</p>
+<p>Select <strong>Ubuntu</strong> as the OS.</p>
+<p>Choose <strong>Shared CPU → Nanode 1GB ($5/month)</strong>.</p>
+<p><img src="/images/2025/02/image-19.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Set a <strong>strong password</strong> (seriously, this is public!).</p>
+<p><img src="/images/2025/02/image-20.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Click <strong>Create Node</strong>.</p>
+<p><img src="/images/2025/02/image-21.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Once it’s running, copy the <strong>SSH access</strong> from the dashboard.</p>
+<p><img src="/images/2025/02/image-22.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<hr>
+<h2 id="step-2-first-login">Step 2: First Login</h2>
+<p>Fire up <strong>PowerShell (Windows)</strong> or <strong>Terminal (Mac/Linux)</strong> and run:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> root@your-vm-ip
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>✅ Accept the <strong>SHA fingerprint</strong>.<br>
+✅ Enter the <strong>password</strong> you just created.</p>
+<p><img src="/images/2025/02/image-23.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Congrats, you’re in. Now, let’s <strong>lock this thing down</strong>.</p>
+<hr>
+<h2 id="%F0%9F%8F%B0-step-3-secure-your-vm-no-more-root-no-passwords">? Step 3: Secure Your VM (No More Root, No Passwords!)</h2>
+<p><strong>Create a new user</strong> (because using <code>root</code> is <strong>bad practice</strong>):</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">adduser robo
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>✔️ Set a password (skip the extra profile questions by pressing Enter).</p>
+<p><img src="/images/2025/02/image-24.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><strong>Give them admin power</strong>:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">sudo</span> robo
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><strong>Log out and log back in as your new user</strong>:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">logout</span>
+<span class="token function">ssh</span> robo@your-vm-ip
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>? Now you’re using a <strong>non-root account</strong>.</p>
+<hr>
+<h2 id="step-4-set-up-ssh-key-authentication-no-more-passwords">Step 4: Set Up SSH Key Authentication (No More Passwords!)</h2>
+<p><strong>Create an SSH key on your local machine (logout if your still on your vm)</strong>:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-b</span> <span class="token number">4096</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>✔️ Choose a filename (or just hit Enter).<br>
+✔️ <strong>Set a passphrase</strong> (optional, but good for security).<br>
+✔️ Find your new key (<code>id_ed25519.pub</code> or <code>id_rsa.pub</code> in <code>~/.ssh</code>).</p>
+<p><strong>Copy the key to your VM</strong>:</p>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">scp ~/.ssh/id_ed25519.pub robo@your-vm-ip:~/.ssh/authorized_keys
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>? Now, log back in <strong>without using a password</strong>:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> robo@your-vm-ip
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>If you set a <strong>passphrase</strong>, enter it. Otherwise, you’re in <strong>password-free</strong>.</p>
+<hr>
+<h2 id="step-5-lock-down-ssh-no-root-no-password-logins">Step 5: Lock Down SSH (No Root, No Password Logins)</h2>
+<p>Edit the SSH config:</p>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">sudo nano /etc/ssh/sshd_config
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>? Change these settings:</p>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">Port 890  # Pick a random port, not 22
+PermitRootLogin no
+PasswordAuthentication no
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><img src="/images/2025/02/image-26.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-27.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-28.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>? Save (<code>CTRL + S</code>), exit (<code>CTRL + X</code>)</p>
+<hr>
+<h2 id="step-6-reboot-confirm">Step 6: Reboot &amp; Confirm</h2>
+<p>Reboot your Linode:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">reboot</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Check the Linode <strong>dashboard</strong> to see when it’s back up. Then, try logging in:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> robo@your-vm-ip <span class="token parameter variable">-p</span> <span class="token number">890</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>If that works, congrats! You now have a <strong>super secure</strong> and <strong>cheap</strong> Linode VM.</p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>✅ <strong>$5/month server? Check.</strong><br>
+✅ <strong>No root login? Check.</strong><br>
+✅ <strong>No password logins? Check.</strong><br>
+✅ <strong>Changed SSH port? Check.</strong></p>
+<p>Your <strong>Linode is now secure</strong> and ready for action. Whether you’re hosting a site, running a bot, or just messing around, <strong>nobody’s brute-forcing their way in</strong>.</p>
+<p>? <strong>Next Steps</strong>:<br>
+Want to make it even better? Install <strong>UFW (Uncomplicated Firewall)</strong>, set up <strong>fail2ban</strong>, or add <strong>automatic updates</strong>. But that’s a story for another day.</p>
+<hr>
+<p>Let me know if you need <strong>help</strong> or have <strong>suggestions</strong> in the comments!</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/linux/">Linux</a>,               <a href="/tag/linode/">Linode</a>,               <a href="/tag/virtualmachine/">VirtualMachine</a>,               <a href="/tag/ubuntu/">ubuntu</a>,               <a href="/tag/cyber-security/">Cyber Security</a>,               <a href="/tag/devops/">DevOps</a>,               <a href="/tag/ssh/">SSH</a>          </aside>
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

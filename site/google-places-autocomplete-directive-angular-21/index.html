@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Places Autocomplete Directive – Angular 21 — RoboDodd</title>
+  <meta name="description" content="Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard
+  navigation, and parsed address output.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/google-places-autocomplete-directive-angular-21/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Google Places Autocomplete Directive – Angular 21 — RoboDodd">
+  <meta property="og:description" content="Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard
+  navigation, and parsed address output.">
+  <meta property="og:url" content="https://robododd.com/google-places-autocomplete-directive-angular-21/">
+  <meta property="og:image" content="https://robododd.com/images/2026/02/google-places.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-02-13T22:49:45.000Z">
+  <meta property="article:modified_time" content="2026-02-13T22:49:45.000Z">  <meta property="article:tag" content="Angular">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/angular/">Angular</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2026-02-13T22:49:45.000Z">Feb 13, 2026</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+      <h1 class="post-full-title">Google Places Autocomplete Directive – Angular 21</h1>
+      <p class="post-full-subtitle">Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard
+  navigation, and parsed address output.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>Google Places Autocomplete is a common requirement for address forms. While Google provides a ready-made widget, it’s difficult to style and doesn’t play well with Angular’s reactive forms. In this guide, we’ll build a <strong>custom autocomplete directive</strong> from scratch using Google’s newer <code>AutocompleteSuggestion</code> API — giving us full control over the UI while leveraging Google’s powerful address matching.</p>
+<h2 id="what-were-building">What We’re Building</h2>
+<ul>
+<li>A reusable Angular <strong>directive</strong> that attaches to any <code>&lt;input&gt;</code> element</li>
+<li>A fully custom dropdown (no Google widget — we own the HTML and CSS)</li>
+<li>Keyboard navigation (arrow keys, Enter, Escape)</li>
+<li>Debounced input to minimize API calls</li>
+<li>Parsed, typed address output via an Angular <code>output()</code> signal</li>
+<li>Lazy-loaded Google Maps SDK (only loads when the directive is used)</li>
+</ul>
+<p>Here’s what it looks like in action:</p>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>
+  <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span>
+  <span class="token attr-name">libGooglePlaces</span>
+  <span class="token attr-name">(placeChanged)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onAddressSelected($event)<span class="token punctuation">"</span></span>
+  <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Start typing an address...<span class="token punctuation">"</span></span>
+<span class="token punctuation">/&gt;</span></span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>Angular 21 (standalone components)</li>
+<li>A Google Cloud project with the <strong>Places API (New)</strong> enabled</li>
+<li>A Google API key with Places API access</li>
+</ul>
+<h2 id="step-1-install-google-maps-types">Step 1: Install Google Maps Types</h2>
+<p>First, install the TypeScript type definitions for the Google Maps API:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> --save-dev @types/google.maps
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Then add the types to your <code>tsconfig.json</code> (or <code>tsconfig.app.json</code>):</p>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"types"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"google.maps"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>This gives us full type safety when working with <code>google.maps.places.*</code> classes.</p>
+<h2 id="step-2-create-the-address-model">Step 2: Create the Address Model</h2>
+<p>Define a typed interface for the parsed address data. This is what our directive will emit when a user selects a suggestion.</p>
+<p><strong><code>models/google-place-address.ts</code></strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">GooglePlaceAddress</span> <span class="token punctuation">{</span>
+  streetNumber<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  route<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  streetAddress<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  city<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  stateCode<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  stateName<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  postalCode<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  formattedAddress<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>The key fields:</p>
+<ul>
+<li><code>streetAddress</code> — combined street number + route (e.g., “123 Main St”)</li>
+<li><code>stateCode</code> — short form like “FL”</li>
+<li><code>stateName</code> — long form like “Florida”</li>
+<li><code>formattedAddress</code> — the full address string from Google</li>
+</ul>
+<h2 id="step-3-create-an-injection-token-for-the-api-key">Step 3: Create an Injection Token for the API Key</h2>
+<p>We don’t want to hardcode the API key in our directive. Instead, we’ll use Angular’s dependency injection with an <code>InjectionToken</code>.</p>
+<p><strong><code>services/google-places.token.ts</code></strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> InjectionToken <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">const</span> <span class="token constant">GOOGLE_PLACES_API_KEY</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InjectionToken<span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">&gt;</span></span><span class="token punctuation">(</span>
+  <span class="token string">'GOOGLE_PLACES_API_KEY'</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Register it in your app config:</p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// app.config.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> ApplicationConfig<span class="token punctuation">,</span> provideBrowserGlobalErrorListeners <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> <span class="token constant">GOOGLE_PLACES_API_KEY</span> <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./services/google-places.token'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> environment <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'../environments/environment'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">const</span> appConfig<span class="token operator">:</span> ApplicationConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+  providers<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token function">provideBrowserGlobalErrorListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      provide<span class="token operator">:</span> <span class="token constant">GOOGLE_PLACES_API_KEY</span><span class="token punctuation">,</span>
+      useValue<span class="token operator">:</span> environment<span class="token punctuation">.</span>google<span class="token punctuation">.</span>placesApiKey<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>And set the key in your environment file:</p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// environments/environment.ts</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> environment <span class="token operator">=</span> <span class="token punctuation">{</span>
+  google<span class="token operator">:</span> <span class="token punctuation">{</span>
+    placesApiKey<span class="token operator">:</span> <span class="token string">'YOUR_GOOGLE_API_KEY'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="step-4-create-the-google-places-loader-service">Step 4: Create the Google Places Loader Service</h2>
+<p>This service lazily loads the Google Maps JavaScript SDK. It ensures the script is only loaded once, even if multiple directives exist on the page.</p>
+<p><strong><code>services/google-places-loader.service.ts</code></strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">/// &lt;reference types="google.maps" /&gt;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> inject<span class="token punctuation">,</span> Injectable <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> <span class="token constant">GOOGLE_PLACES_API_KEY</span> <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./google-places.token'</span><span class="token punctuation">;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Injectable</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span> providedIn<span class="token operator">:</span> <span class="token string">'root'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">GooglePlacesLoaderService</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> apiKey <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span><span class="token constant">GOOGLE_PLACES_API_KEY</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> optional<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> loadPromise<span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">&gt;</span> <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token comment">// If no API key is configured, fail gracefully</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>apiKey<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">reject</span><span class="token punctuation">(</span><span class="token string">'Google Places API key is not configured'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Return existing promise if already loading/loaded</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Check if Google Maps is already available (e.g., loaded by another script)</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>
+      <span class="token keyword">typeof</span> google <span class="token operator">!==</span> <span class="token string">'undefined'</span> <span class="token operator">&amp;&amp;</span>
+      google<span class="token punctuation">.</span>maps <span class="token operator">&amp;&amp;</span>
+      google<span class="token punctuation">.</span>maps<span class="token punctuation">.</span>places
+    <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise <span class="token operator">=</span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Dynamically create and append the script tag</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">(</span>resolve<span class="token punctuation">,</span> reject<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> script <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'script'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      script<span class="token punctuation">.</span>src <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">https://maps.googleapis.com/maps/api/js?key=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>apiKey<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&amp;libraries=places&amp;v=weekly&amp;loading=async</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      script<span class="token punctuation">.</span>async <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+      script<span class="token punctuation">.</span>defer <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+      script<span class="token punctuation">.</span><span class="token function-variable function">onload</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      script<span class="token punctuation">.</span><span class="token function-variable function">onerror</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token comment">// Allow retry on failure</span>
+        <span class="token function">reject</span><span class="token punctuation">(</span><span class="token string">'Failed to load Google Maps script'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+      document<span class="token punctuation">.</span>head<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>loadPromise<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Key design decisions:</p>
+<ul>
+<li><strong><code>optional: true</code></strong> on the inject — if no API key is provided, the service fails gracefully</li>
+<li><strong>Single load</strong> — the promise is cached so the script is only appended once</li>
+<li><strong>Error recovery</strong> — on failure, <code>loadPromise</code> resets to <code>null</code> so a retry is possible</li>
+<li><strong><code>loading=async</code></strong> — uses Google’s recommended async loading</li>
+</ul>
+<h2 id="step-5-build-the-directive">Step 5: Build the Directive</h2>
+<p>This is the core of the implementation. Rather than using Google’s <code>Autocomplete</code> widget (which renders its own dropdown and is hard to style), we use the <code>AutocompleteSuggestion.fetchAutocompleteSuggestions()</code> API and render our own dropdown.</p>
+<p><strong><code>directives/google-places.directive.ts</code></strong></p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">/// &lt;reference types="google.maps" /&gt;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+  Directive<span class="token punctuation">,</span>
+  ElementRef<span class="token punctuation">,</span>
+  inject<span class="token punctuation">,</span>
+  OnDestroy<span class="token punctuation">,</span>
+  OnInit<span class="token punctuation">,</span>
+  output<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> GooglePlaceAddress <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'../models/google-place-address'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> GooglePlacesLoaderService <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'../services/google-places-loader.service'</span><span class="token punctuation">;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Directive</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  selector<span class="token operator">:</span> <span class="token string">'[libGooglePlaces]'</span><span class="token punctuation">,</span>
+  standalone<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  host<span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">'(input)'</span><span class="token operator">:</span> <span class="token string">'onInput($event)'</span><span class="token punctuation">,</span>
+    <span class="token string-property property">'(keydown)'</span><span class="token operator">:</span> <span class="token string">'onKeydown($event)'</span><span class="token punctuation">,</span>
+    <span class="token string-property property">'(focus)'</span><span class="token operator">:</span> <span class="token string">'onFocus()'</span><span class="token punctuation">,</span>
+    <span class="token string-property property">'[attr.autocomplete]'</span><span class="token operator">:</span> <span class="token string">'"off"'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">GooglePlacesDirective</span> <span class="token keyword">implements</span> <span class="token class-name">OnInit</span><span class="token punctuation">,</span> OnDestroy <span class="token punctuation">{</span>
+  placeChanged <span class="token operator">=</span> <span class="token generic-function"><span class="token function">output</span><span class="token generic class-name"><span class="token operator">&lt;</span>GooglePlaceAddress<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> el <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>ElementRef<span class="token operator">&lt;</span>HTMLInputElement<span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> loader <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>GooglePlacesLoaderService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">private</span> isLoaded <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> debounceTimer<span class="token operator">:</span> ReturnType<span class="token operator">&lt;</span><span class="token keyword">typeof</span> setTimeout<span class="token operator">&gt;</span> <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> suggestions<span class="token operator">:</span> google<span class="token punctuation">.</span>maps<span class="token punctuation">.</span>places<span class="token punctuation">.</span>AutocompleteSuggestion<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> selectedIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> dropdownEl<span class="token operator">:</span> HTMLDivElement <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> outsideClickHandler<span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>e<span class="token operator">:</span> MouseEvent<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token function">ngOnInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>el<span class="token punctuation">.</span>nativeElement<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'autocomplete'</span><span class="token punctuation">,</span> <span class="token string">'off'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>loader<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>isLoaded <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">ngOnDestroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>debounceTimer<span class="token punctuation">)</span> <span class="token function">clearTimeout</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>debounceTimer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">onInput</span><span class="token punctuation">(</span>event<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> value <span class="token operator">=</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span>target <span class="token keyword">as</span> HTMLInputElement<span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>debounceTimer<span class="token punctuation">)</span> <span class="token function">clearTimeout</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>debounceTimer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>isLoaded <span class="token operator">||</span> value<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>debounceTimer <span class="token operator">=</span> <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">fetchSuggestions</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">onFocus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>suggestions<span class="token punctuation">.</span>length <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">showDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">onKeydown</span><span class="token punctuation">(</span>event<span class="token operator">:</span> KeyboardEvent<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl <span class="token operator">||</span> <span class="token keyword">this</span><span class="token punctuation">.</span>suggestions<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> <span class="token string">'ArrowDown'</span><span class="token operator">:</span>
+        event<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>
+          <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
+          <span class="token keyword">this</span><span class="token punctuation">.</span>suggestions<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">updateSelection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token string">'ArrowUp'</span><span class="token operator">:</span>
+        event<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">updateSelection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token string">'Enter'</span><span class="token operator">:</span>
+        event<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">selectSuggestion</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>suggestions<span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+      <span class="token keyword">case</span> <span class="token string">'Escape'</span><span class="token operator">:</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token function">fetchSuggestions</span><span class="token punctuation">(</span>input<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> <span class="token punctuation">{</span> suggestions <span class="token punctuation">}</span> <span class="token operator">=</span>
+        <span class="token keyword">await</span> google<span class="token punctuation">.</span>maps<span class="token punctuation">.</span>places<span class="token punctuation">.</span>AutocompleteSuggestion<span class="token punctuation">.</span><span class="token function">fetchAutocompleteSuggestions</span><span class="token punctuation">(</span>
+          <span class="token punctuation">{</span>
+            input<span class="token punctuation">,</span>
+            includedPrimaryTypes<span class="token operator">:</span> <span class="token punctuation">[</span>
+              <span class="token string">'street_address'</span><span class="token punctuation">,</span>
+              <span class="token string">'premise'</span><span class="token punctuation">,</span>
+              <span class="token string">'subpremise'</span><span class="token punctuation">,</span>
+              <span class="token string">'route'</span><span class="token punctuation">,</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            includedRegionCodes<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'us'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            language<span class="token operator">:</span> <span class="token string">'en'</span><span class="token punctuation">,</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">this</span><span class="token punctuation">.</span>suggestions <span class="token operator">=</span> suggestions<span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>suggestions<span class="token punctuation">.</span>length <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">showDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token keyword">async</span> <span class="token function">selectSuggestion</span><span class="token punctuation">(</span>
+    prediction<span class="token operator">:</span> google<span class="token punctuation">.</span>maps<span class="token punctuation">.</span>places<span class="token punctuation">.</span>AutocompleteSuggestion
+  <span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token keyword">void</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> place <span class="token operator">=</span> prediction<span class="token punctuation">.</span>placePrediction<span class="token operator">!</span><span class="token punctuation">.</span><span class="token function">toPlace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">await</span> place<span class="token punctuation">.</span><span class="token function">fetchFields</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        fields<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'addressComponents'</span><span class="token punctuation">,</span> <span class="token string">'formattedAddress'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">const</span> address <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">parsePlace</span><span class="token punctuation">(</span>place<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>el<span class="token punctuation">.</span>nativeElement<span class="token punctuation">.</span>value <span class="token operator">=</span> address<span class="token punctuation">.</span>streetAddress<span class="token punctuation">;</span>
+
+      <span class="token keyword">this</span><span class="token punctuation">.</span>placeChanged<span class="token punctuation">.</span><span class="token function">emit</span><span class="token punctuation">(</span>address<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">'Error fetching place details:'</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">parsePlace</span><span class="token punctuation">(</span>place<span class="token operator">:</span> google<span class="token punctuation">.</span>maps<span class="token punctuation">.</span>places<span class="token punctuation">.</span>Place<span class="token punctuation">)</span><span class="token operator">:</span> GooglePlaceAddress <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> components <span class="token operator">=</span> place<span class="token punctuation">.</span>addressComponents <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> get <span class="token operator">=</span> <span class="token punctuation">(</span>type<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> nameType<span class="token operator">:</span> <span class="token string">'long'</span> <span class="token operator">|</span> <span class="token string">'short'</span> <span class="token operator">=</span> <span class="token string">'long'</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> component <span class="token operator">=</span> components<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> c<span class="token punctuation">.</span>types<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> nameType <span class="token operator">===</span> <span class="token string">'short'</span>
+        <span class="token operator">?</span> component<span class="token operator">?.</span>shortText <span class="token operator">||</span> <span class="token string">''</span>
+        <span class="token operator">:</span> component<span class="token operator">?.</span>longText <span class="token operator">||</span> <span class="token string">''</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> streetNumber <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'street_number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> route <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'route'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      streetNumber<span class="token punctuation">,</span>
+      route<span class="token punctuation">,</span>
+      streetAddress<span class="token operator">:</span> <span class="token punctuation">[</span>streetNumber<span class="token punctuation">,</span> route<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>Boolean<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      city<span class="token operator">:</span>
+        <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'locality'</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'sublocality_level_1'</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'administrative_area_level_2'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      stateCode<span class="token operator">:</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'administrative_area_level_1'</span><span class="token punctuation">,</span> <span class="token string">'short'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      stateName<span class="token operator">:</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'administrative_area_level_1'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      postalCode<span class="token operator">:</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'postal_code'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      formattedAddress<span class="token operator">:</span> place<span class="token punctuation">.</span>formattedAddress <span class="token operator">||</span> <span class="token string">''</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// --- Dropdown DOM management ---</span>
+
+  <span class="token keyword">private</span> <span class="token function">showDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">createDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">renderSuggestions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">positionDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">createDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span>className <span class="token operator">=</span> <span class="token string">'google-places-dropdown'</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Close dropdown when clicking outside</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function-variable function">outsideClickHandler</span> <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> MouseEvent<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>
+        <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token operator">?.</span><span class="token function">contains</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>target <span class="token keyword">as</span> Node<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+        e<span class="token punctuation">.</span>target <span class="token operator">!==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>el<span class="token punctuation">.</span>nativeElement
+      <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'mousedown'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>outsideClickHandler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">renderSuggestions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>suggestions
+      <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> prediction <span class="token operator">=</span> s<span class="token punctuation">.</span>placePrediction<span class="token operator">!</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+          &lt;div class="google-places-item</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>i <span class="token operator">===</span> <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">?</span> <span class="token string">' selected'</span> <span class="token operator">:</span> <span class="token string">''</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">"
+               data-index="</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>i<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">"&gt;
+            &lt;span class="google-places-main"&gt;</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>prediction<span class="token punctuation">.</span>mainText<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/span&gt;
+            &lt;span class="google-places-secondary"&gt; </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>prediction<span class="token punctuation">.</span>secondaryText<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/span&gt;
+          &lt;/div&gt;</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Bind click and hover events to each item</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'.google-places-item'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      item<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'mousedown'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        e<span class="token punctuation">.</span><span class="token function">preventDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Prevent input blur</span>
+        <span class="token keyword">const</span> index <span class="token operator">=</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>
+          <span class="token punctuation">(</span>e<span class="token punctuation">.</span>currentTarget <span class="token keyword">as</span> HTMLElement<span class="token punctuation">)</span><span class="token punctuation">.</span>dataset<span class="token punctuation">[</span><span class="token string">'index'</span><span class="token punctuation">]</span><span class="token operator">!</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">selectSuggestion</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>suggestions<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      item<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'mouseenter'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">=</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>
+          <span class="token punctuation">(</span>e<span class="token punctuation">.</span>currentTarget <span class="token keyword">as</span> HTMLElement<span class="token punctuation">)</span><span class="token punctuation">.</span>dataset<span class="token punctuation">[</span><span class="token string">'index'</span><span class="token punctuation">]</span><span class="token operator">!</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">updateSelection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">positionDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> rect <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>el<span class="token punctuation">.</span>nativeElement<span class="token punctuation">.</span><span class="token function">getBoundingClientRect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span>style<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      position<span class="token operator">:</span> <span class="token string">'fixed'</span><span class="token punctuation">,</span>
+      top<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>rect<span class="token punctuation">.</span>bottom <span class="token operator">+</span> <span class="token number">2</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+      left<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>rect<span class="token punctuation">.</span>left<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+      width<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>rect<span class="token punctuation">.</span>width<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+      zIndex<span class="token operator">:</span> <span class="token string">'10100'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">updateSelection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span><span class="token function">querySelectorAll</span><span class="token punctuation">(</span><span class="token string">'.google-places-item'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      item<span class="token punctuation">.</span>classList<span class="token punctuation">.</span><span class="token function">toggle</span><span class="token punctuation">(</span><span class="token string">'selected'</span><span class="token punctuation">,</span> i <span class="token operator">===</span> <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> <span class="token function">removeDropdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>dropdownEl <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>outsideClickHandler<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      document<span class="token punctuation">.</span><span class="token function">removeEventListener</span><span class="token punctuation">(</span><span class="token string">'mousedown'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>outsideClickHandler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>outsideClickHandler <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>suggestions <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>selectedIndex <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="why-not-use-googlemapsplacesautocomplete">Why Not Use <code>google.maps.places.Autocomplete</code>?</h3>
+<p>The legacy <code>Autocomplete</code> widget creates its own <code>&lt;div class="pac-container"&gt;</code> dropdown. Problems with this approach:</p>
+<ol>
+<li><strong>Styling is painful</strong> — you’re fighting Google’s inline styles and shadow DOM</li>
+<li><strong>z-index battles</strong> — the <code>.pac-container</code> often renders behind modals or dialogs</li>
+<li><strong>No keyboard events</strong> — you can’t customize keyboard behavior</li>
+<li><strong>Limited output</strong> — you get a place object but can’t control the dropdown UX</li>
+</ol>
+<p>By using <code>AutocompleteSuggestion.fetchAutocompleteSuggestions()</code>, we get the raw suggestion data and build our own dropdown, giving us full control.</p>
+<h2 id="step-6-add-global-styles">Step 6: Add Global Styles</h2>
+<p>Since the dropdown is appended to <code>document.body</code> (outside Angular’s component tree), we need global styles. Add these to your global stylesheet (<code>styles.scss</code>):</p>
+<div class="pre-wrapper"><pre class="language-scss"><code class="language-scss"><span class="token selector">.google-places-dropdown </span><span class="token punctuation">{</span>
+  <span class="token property">background-color</span><span class="token punctuation">:</span> #fff<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> 1px solid #dee2e6<span class="token punctuation">;</span>
+  <span class="token property">border-radius</span><span class="token punctuation">:</span> 0.25rem<span class="token punctuation">;</span>
+  <span class="token property">box-shadow</span><span class="token punctuation">:</span> 0 4px 12px <span class="token function">rgba</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0.15<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token property">max-height</span><span class="token punctuation">:</span> 300px<span class="token punctuation">;</span>
+  <span class="token property">overflow-y</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+
+  <span class="token selector">.google-places-item </span><span class="token punctuation">{</span>
+    <span class="token property">padding</span><span class="token punctuation">:</span> 8px 12px<span class="token punctuation">;</span>
+    <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+    <span class="token property">border-top</span><span class="token punctuation">:</span> 1px solid #dee2e6<span class="token punctuation">;</span>
+    <span class="token property">font-size</span><span class="token punctuation">:</span> 14px<span class="token punctuation">;</span>
+    <span class="token property">line-height</span><span class="token punctuation">:</span> 1.4<span class="token punctuation">;</span>
+
+    <span class="token selector"><span class="token parent important">&amp;</span>:first-child </span><span class="token punctuation">{</span>
+      <span class="token property">border-top</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token selector"><span class="token parent important">&amp;</span>:hover,
+    <span class="token parent important">&amp;</span>.selected </span><span class="token punctuation">{</span>
+      <span class="token property">background-color</span><span class="token punctuation">:</span> #f5f5f5<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">.google-places-main </span><span class="token punctuation">{</span>
+      <span class="token property">font-weight</span><span class="token punctuation">:</span> 500<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">.google-places-secondary </span><span class="token punctuation">{</span>
+      <span class="token property">color</span><span class="token punctuation">:</span> #6c757d<span class="token punctuation">;</span>
+      <span class="token property">font-size</span><span class="token punctuation">:</span> 13px<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="step-7-use-it-in-a-component">Step 7: Use It in a Component</h2>
+<p>Now the fun part — using the directive in a component with reactive forms.</p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Component <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/core'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+  FormBuilder<span class="token punctuation">,</span>
+  FormGroup<span class="token punctuation">,</span>
+  ReactiveFormsModule<span class="token punctuation">,</span>
+  Validators<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@angular/forms'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> GooglePlacesDirective <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./directives/google-places.directive'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> GooglePlaceAddress <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./models/google-place-address'</span><span class="token punctuation">;</span>
+
+<span class="token decorator"><span class="token at operator">@</span><span class="token function">Component</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  selector<span class="token operator">:</span> <span class="token string">'app-address-form'</span><span class="token punctuation">,</span>
+  standalone<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  imports<span class="token operator">:</span> <span class="token punctuation">[</span>ReactiveFormsModule<span class="token punctuation">,</span> GooglePlacesDirective<span class="token punctuation">]</span><span class="token punctuation">,</span>
+  template<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+    &lt;form [formGroup]="form"&gt;
+      &lt;div&gt;
+        &lt;label for="street"&gt;Street Address&lt;/label&gt;
+        &lt;input
+          id="street"
+          type="text"
+          formControlName="streetAddress"
+          libGooglePlaces
+          (placeChanged)="onAddressSelected($event)"
+          placeholder="Start typing an address..."
+        /&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label for="city"&gt;City&lt;/label&gt;
+        &lt;input id="city" type="text" formControlName="city" /&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label for="state"&gt;State&lt;/label&gt;
+        &lt;input id="state" type="text" formControlName="state" /&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label for="zip"&gt;Zip Code&lt;/label&gt;
+        &lt;input id="zip" type="text" formControlName="zipCode" /&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">AddressFormComponent</span> <span class="token punctuation">{</span>
+  form<span class="token operator">:</span> FormGroup<span class="token punctuation">;</span>
+
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token keyword">private</span> fb<span class="token operator">:</span> FormBuilder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>form <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>fb<span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      streetAddress<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      city<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      state<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      zipCode<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> Validators<span class="token punctuation">.</span>required<span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">onAddressSelected</span><span class="token punctuation">(</span>address<span class="token operator">:</span> GooglePlaceAddress<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>form<span class="token punctuation">.</span><span class="token function">patchValue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      streetAddress<span class="token operator">:</span> address<span class="token punctuation">.</span>streetAddress<span class="token punctuation">,</span>
+      city<span class="token operator">:</span> address<span class="token punctuation">.</span>city<span class="token punctuation">,</span>
+      state<span class="token operator">:</span> address<span class="token punctuation">.</span>stateCode<span class="token punctuation">,</span>
+      zipCode<span class="token operator">:</span> address<span class="token punctuation">.</span>postalCode<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Mark fields as dirty so validation and change detection pick them up</span>
+    Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>form<span class="token punctuation">.</span>controls<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>form<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token operator">?.</span><span class="token function">markAsDirty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>That’s it. When a user types into the street address field, suggestions appear in our custom dropdown. When they select one, all four form fields are populated automatically.</p>
+<h2 id="step-8-restrict-by-region-optional">Step 8: Restrict by Region (Optional)</h2>
+<p>The directive is configured for US addresses only via <code>includedRegionCodes: ['us']</code>. To support other countries, you could make this an input:</p>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// In the directive</span>
+countries <span class="token operator">=</span> <span class="token generic-function"><span class="token function">input</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'us'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// In fetchSuggestions</span>
+includedRegionCodes<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">countries</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Then use it:</p>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">libGooglePlaces</span> <span class="token attr-name">[countries]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>['us', 'ca']<span class="token punctuation">"</span></span> <span class="token attr-name">(placeChanged)</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>onAddressSelected($event)<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="how-it-works-under-the-hood">How It Works Under the Hood</h2>
+<p>Here’s the flow when a user interacts with the autocomplete:</p>
+<p><img src="/images/2026/02/image-3.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Two API calls are made per selection:</p>
+<ol>
+<li><code>fetchAutocompleteSuggestions</code> — returns suggestions as the user types (called on each debounced keystroke)</li>
+<li><code>fetchFields</code> — fetches full place details when a suggestion is selected (called once per selection)</li>
+</ol>
+<h2 id="common-gotchas">Common Gotchas</h2>
+<h3 id="1-no-more-ngzone">1. No More NgZone</h3>
+<p>Angular 21 is zoneless by default — <code>Zone.js</code> is no longer included in new projects. In previous Angular versions, you needed <code>NgZone.run()</code> to re-enter Angular’s zone after Google’s API callbacks, otherwise change detection wouldn’t fire. With zoneless change detection, this is no longer necessary. The directive’s dropdown is built with direct DOM manipulation (no Angular templates), and <code>output().emit()</code> automatically triggers change detection in the parent component through Angular’s template listener mechanism. If you’re migrating an older project, you can safely remove <code>NgZone</code> from directives like this one.</p>
+<h3 id="2-browser-autocomplete">2. Browser Autocomplete</h3>
+<p>Browsers aggressively show their own address autocomplete on inputs named “address”, “street”, etc. Setting <code>autocomplete="off"</code> helps, but isn’t always enough. The directive sets it both via <code>host</code> binding and in <code>ngOnInit</code> for maximum compatibility.</p>
+<h3 id="3-dropdown-z-index">3. Dropdown z-index</h3>
+<p>The dropdown uses <code>z-index: 10100</code> and <code>position: fixed</code>. This ensures it appears above modals, dialogs, and other overlays. Adjust the z-index if your app uses different stacking levels.</p>
+<h3 id="4-click-outside">4. Click Outside</h3>
+<p>We listen for <code>mousedown</code> (not <code>click</code>) on document to close the dropdown. This is because <code>mousedown</code> fires before the input’s <code>blur</code> event, allowing us to prevent blur when the user clicks a suggestion.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Building a custom autocomplete gives you full control over the UX while still leveraging Google’s powerful address matching. The directive pattern keeps it reusable — drop `libGooglePlaces` on any input and handle the `(placeChanged)` event. No wrapper components, no configuration objects, just a directive and an event.<br>
+The complete example project is available on</p>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://github.com/timothydodd/blog-samples/tree/main/google-places" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">blog-samples/google-places at main · timothydodd/blog-samples</div><div class="kg-bookmark-description">Contribute to timothydodd/blog-samples development by creating an account on GitHub.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/images/icon/pinned-octocat-093da3e6fa40-2.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">GitHub</span><span class="kg-bookmark-publisher">timothydodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/blog-samples" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/angular/">Angular</a>,               <a href="/tag/google-places-api/">Google Places API</a>,               <a href="/tag/typescript/">TypeScript</a>,               <a href="/tag/directives/">Directives</a>          </aside>
+      </article>
+
+    <aside class="read-more-wrap">
+    <h3 class="read-more-heading">Read more</h3>
+    <div class="read-more">
+              <article class="post-card">
+    <a class="post-card-image-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
+    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">Teaching Claude Modern Angular Best Practices with Custom Instructions</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Configure Claude AI to automatically generate modern Angular 20 code with signals, standalone components, and new control flow syntax.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-10-26T22:55:01.000Z">Oct 26, 2025</time>
+      <span class="post-card-meta-length">2 min read</span>
+    </footer>
+  </div>
+</article>
+              <article class="post-card">
+    <a class="post-card-image-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">Dynamic Environment Variables in Angular: A Docker-Ready Solution</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Learn how to inject environment variables into Angular apps at runtime using Docker - no more rebuilds for config changes! Complete guide with code examples.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-05-24T20:00:46.000Z">May 24, 2025</time>
+      <span class="post-card-meta-length">3 min read</span>
+    </footer>
+  </div>
+</article>
+              <article class="post-card">
+    <a class="post-card-image-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
+    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
+                <h2 class="post-card-title">10 Must-Have VS Code Extensions for Angular Developers in 2025</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code in 2025</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-04-03T17:18:26.000Z">Apr 3, 2025</time>
+      <span class="post-card-meta-length">3 min read</span>
+    </footer>
+  </div>
+</article>
+          </div>
+  </aside>
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

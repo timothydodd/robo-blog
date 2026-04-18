@@ -1,0 +1,727 @@
+[
+  {
+    "slug": "3d-printing",
+    "name": "3D Printing",
+    "description": null
+  },
+  {
+    "slug": "ai",
+    "name": "AI",
+    "description": null
+  },
+  {
+    "slug": "ai-assisted-development",
+    "name": "AI-Assisted Development",
+    "description": null
+  },
+  {
+    "slug": "ai-code-generation",
+    "name": "AI Code Generation",
+    "description": null
+  },
+  {
+    "slug": "ai-pair-programming",
+    "name": "AI Pair Programming",
+    "description": null
+  },
+  {
+    "slug": "airflow",
+    "name": "Airflow",
+    "description": null
+  },
+  {
+    "slug": "amd",
+    "name": "AMD",
+    "description": null
+  },
+  {
+    "slug": "angular",
+    "name": "Angular",
+    "description": null
+  },
+  {
+    "slug": "angular-20",
+    "name": "Angular 20",
+    "description": null
+  },
+  {
+    "slug": "apple",
+    "name": "Apple",
+    "description": null
+  },
+  {
+    "slug": "atomic",
+    "name": "Atomic",
+    "description": null
+  },
+  {
+    "slug": "avalonia-ui",
+    "name": "Avalonia UI",
+    "description": null
+  },
+  {
+    "slug": "azure-application-gateway",
+    "name": "Azure Application Gateway",
+    "description": null
+  },
+  {
+    "slug": "azure-cdn",
+    "name": "Azure CDN",
+    "description": null
+  },
+  {
+    "slug": "azure-front-door",
+    "name": "Azure Front Door",
+    "description": null
+  },
+  {
+    "slug": "beelink",
+    "name": "Beelink",
+    "description": null
+  },
+  {
+    "slug": "beelink-eq12",
+    "name": "Beelink EQ12",
+    "description": null
+  },
+  {
+    "slug": "beelink-eq13",
+    "name": "Beelink EQ13",
+    "description": null
+  },
+  {
+    "slug": "buying-guide",
+    "name": "Buying Guide",
+    "description": null
+  },
+  {
+    "slug": "c",
+    "name": "C#",
+    "description": null
+  },
+  {
+    "slug": "certificates",
+    "name": "Certificates",
+    "description": null
+  },
+  {
+    "slug": "channel-master-preamp",
+    "name": "Channel Master PreAmp",
+    "description": null
+  },
+  {
+    "slug": "chrome",
+    "name": "Chrome",
+    "description": null
+  },
+  {
+    "slug": "claude-3-7-sonnet",
+    "name": "Claude 3.7 Sonnet",
+    "description": null
+  },
+  {
+    "slug": "claude-ai",
+    "name": "Claude AI",
+    "description": null
+  },
+  {
+    "slug": "clean-code",
+    "name": "Clean Code",
+    "description": null
+  },
+  {
+    "slug": "cloud-computing",
+    "name": "Cloud Computing",
+    "description": null
+  },
+  {
+    "slug": "cloudflare",
+    "name": "Cloudflare",
+    "description": null
+  },
+  {
+    "slug": "cloudflare-storage-connector",
+    "name": "Cloudflare Storage Connector",
+    "description": null
+  },
+  {
+    "slug": "configuration-management",
+    "name": "Configuration-Management",
+    "description": null
+  },
+  {
+    "slug": "containerization",
+    "name": "Containerization",
+    "description": null
+  },
+  {
+    "slug": "cord-cutting",
+    "name": "Cord Cutting",
+    "description": null
+  },
+  {
+    "slug": "css-styling",
+    "name": "CSS Styling",
+    "description": null
+  },
+  {
+    "slug": "cuda",
+    "name": "CUDA",
+    "description": null
+  },
+  {
+    "slug": "cyber-security",
+    "name": "Cyber Security",
+    "description": null
+  },
+  {
+    "slug": "cyberboy",
+    "name": "Cyberboy",
+    "description": null
+  },
+  {
+    "slug": "cyberdeck",
+    "name": "Cyberdeck",
+    "description": null
+  },
+  {
+    "slug": "data-migration",
+    "name": "data-migration",
+    "description": null
+  },
+  {
+    "slug": "database",
+    "name": "database",
+    "description": null
+  },
+  {
+    "slug": "deep-learning",
+    "name": "Deep Learning",
+    "description": null
+  },
+  {
+    "slug": "deepseek",
+    "name": "DeepSeek",
+    "description": null
+  },
+  {
+    "slug": "devops",
+    "name": "DevOps",
+    "description": null
+  },
+  {
+    "slug": "directives",
+    "name": "Directives",
+    "description": null
+  },
+  {
+    "slug": "disaster-recovery",
+    "name": "Disaster Recovery",
+    "description": null
+  },
+  {
+    "slug": "diy",
+    "name": "DIY",
+    "description": null
+  },
+  {
+    "slug": "dns",
+    "name": "DNS",
+    "description": null
+  },
+  {
+    "slug": "dns-failover",
+    "name": "DNS Failover",
+    "description": null
+  },
+  {
+    "slug": "docker",
+    "name": "Docker",
+    "description": null
+  },
+  {
+    "slug": "dotnet",
+    "name": "dotnet",
+    "description": null
+  },
+  {
+    "slug": "email",
+    "name": "email",
+    "description": null
+  },
+  {
+    "slug": "environment-variables",
+    "name": "Environment-Variables",
+    "description": null
+  },
+  {
+    "slug": "eslint",
+    "name": "ESLint",
+    "description": null
+  },
+  {
+    "slug": "fathers-day-2025",
+    "name": "Fathers Day 2025",
+    "description": null
+  },
+  {
+    "slug": "front-end-development",
+    "name": "Front-End Development",
+    "description": null
+  },
+  {
+    "slug": "full-text-search",
+    "name": "full-text-search",
+    "description": null
+  },
+  {
+    "slug": "gamingpc",
+    "name": "GamingPC",
+    "description": null
+  },
+  {
+    "slug": "generative-art",
+    "name": "Generative Art",
+    "description": null
+  },
+  {
+    "slug": "ghost-blog",
+    "name": "Ghost Blog",
+    "description": null
+  },
+  {
+    "slug": "ghost-blog-customization",
+    "name": "Ghost Blog Customization",
+    "description": null
+  },
+  {
+    "slug": "ghost-tag",
+    "name": "Ghost",
+    "description": null
+  },
+  {
+    "slug": "gift-guide-for-men",
+    "name": "Gift guide for men",
+    "description": null
+  },
+  {
+    "slug": "github",
+    "name": "GitHub",
+    "description": null
+  },
+  {
+    "slug": "github-copilot",
+    "name": "GitHub Copilot",
+    "description": null
+  },
+  {
+    "slug": "google-places-api",
+    "name": "Google Places API",
+    "description": null
+  },
+  {
+    "slug": "grafana",
+    "name": "Grafana",
+    "description": null
+  },
+  {
+    "slug": "hardware",
+    "name": "Hardware",
+    "description": null
+  },
+  {
+    "slug": "hdhomerun",
+    "name": "HDHomeRun",
+    "description": null
+  },
+  {
+    "slug": "high-availability",
+    "name": "High Availability",
+    "description": null
+  },
+  {
+    "slug": "home-automation",
+    "name": "Home Automation",
+    "description": null
+  },
+  {
+    "slug": "home-hacks",
+    "name": "Home Hacks",
+    "description": null
+  },
+  {
+    "slug": "home-lab",
+    "name": "Home Lab",
+    "description": null
+  },
+  {
+    "slug": "homelab",
+    "name": "homelab",
+    "description": null
+  },
+  {
+    "slug": "image-generation",
+    "name": "Image Generation",
+    "description": null
+  },
+  {
+    "slug": "ios",
+    "name": "IOS",
+    "description": null
+  },
+  {
+    "slug": "iot",
+    "name": "IOT",
+    "description": null
+  },
+  {
+    "slug": "javascript",
+    "name": "JavaScript",
+    "description": null
+  },
+  {
+    "slug": "k3s",
+    "name": "K3s",
+    "description": null
+  },
+  {
+    "slug": "kubernetes",
+    "name": "Kubernetes",
+    "description": null
+  },
+  {
+    "slug": "linode",
+    "name": "Linode",
+    "description": null
+  },
+  {
+    "slug": "linting",
+    "name": "Linting",
+    "description": null
+  },
+  {
+    "slug": "linux",
+    "name": "Linux",
+    "description": null
+  },
+  {
+    "slug": "local-ai",
+    "name": "Local AI",
+    "description": null
+  },
+  {
+    "slug": "local-language-models",
+    "name": "Local Language Models",
+    "description": null
+  },
+  {
+    "slug": "log-monitoring",
+    "name": "Log Monitoring",
+    "description": null
+  },
+  {
+    "slug": "loki",
+    "name": "Loki",
+    "description": null
+  },
+  {
+    "slug": "longhorn",
+    "name": "longhorn",
+    "description": null
+  },
+  {
+    "slug": "mac-mini-m4",
+    "name": "Mac Mini M4",
+    "description": null
+  },
+  {
+    "slug": "machine-learning",
+    "name": "Machine Learning",
+    "description": null
+  },
+  {
+    "slug": "macos",
+    "name": "macOS",
+    "description": null
+  },
+  {
+    "slug": "mdm",
+    "name": "MDM",
+    "description": null
+  },
+  {
+    "slug": "metallb",
+    "name": "MetalLb",
+    "description": null
+  },
+  {
+    "slug": "microsoft-azure",
+    "name": "Microsoft Azure",
+    "description": null
+  },
+  {
+    "slug": "migration",
+    "name": "Migration",
+    "description": null
+  },
+  {
+    "slug": "modular-pc-stand",
+    "name": "Modular PC Stand",
+    "description": null
+  },
+  {
+    "slug": "mqtt",
+    "name": "MQTT",
+    "description": null
+  },
+  {
+    "slug": "mssql",
+    "name": "mssql",
+    "description": null
+  },
+  {
+    "slug": "net",
+    "name": ".Net",
+    "description": null
+  },
+  {
+    "slug": "networking",
+    "name": "Networking",
+    "description": null
+  },
+  {
+    "slug": "nfs-server",
+    "name": "NFS Server",
+    "description": null
+  },
+  {
+    "slug": "nginx",
+    "name": "NGINX",
+    "description": null
+  },
+  {
+    "slug": "ngrok",
+    "name": "ngrok",
+    "description": null
+  },
+  {
+    "slug": "ntunl",
+    "name": "ntunl",
+    "description": null
+  },
+  {
+    "slug": "nvidia",
+    "name": "NVIDIA",
+    "description": null
+  },
+  {
+    "slug": "nzxt",
+    "name": "NZXT",
+    "description": null
+  },
+  {
+    "slug": "ollama",
+    "name": "Ollama",
+    "description": null
+  },
+  {
+    "slug": "ollama-ai",
+    "name": "Ollama AI",
+    "description": null
+  },
+  {
+    "slug": "open-source",
+    "name": "Open Source",
+    "description": null
+  },
+  {
+    "slug": "open-webui",
+    "name": "Open WebUI",
+    "description": null
+  },
+  {
+    "slug": "over-the-air-tv",
+    "name": "Over-the-Air TV",
+    "description": null
+  },
+  {
+    "slug": "pcmodding",
+    "name": "PCModding",
+    "description": null
+  },
+  {
+    "slug": "persistent-volume",
+    "name": "persistent-volume",
+    "description": null
+  },
+  {
+    "slug": "pfsesnse",
+    "name": "pfsesnse",
+    "description": null
+  },
+  {
+    "slug": "plex",
+    "name": "plex",
+    "description": null
+  },
+  {
+    "slug": "plex-dvr",
+    "name": "Plex DVR",
+    "description": null
+  },
+  {
+    "slug": "powershell",
+    "name": "PowerShell",
+    "description": null
+  },
+  {
+    "slug": "prettier",
+    "name": "Prettier",
+    "description": null
+  },
+  {
+    "slug": "programming",
+    "name": "Programming",
+    "description": null
+  },
+  {
+    "slug": "promtail",
+    "name": "Promtail",
+    "description": null
+  },
+  {
+    "slug": "pulumi",
+    "name": "Pulumi",
+    "description": null
+  },
+  {
+    "slug": "pvc",
+    "name": "pvc",
+    "description": null
+  },
+  {
+    "slug": "python",
+    "name": "Python",
+    "description": null
+  },
+  {
+    "slug": "raspberry-pi",
+    "name": "Raspberry Pi",
+    "description": null
+  },
+  {
+    "slug": "reverse-proxy",
+    "name": "reverse-proxy",
+    "description": null
+  },
+  {
+    "slug": "self-hosted",
+    "name": "self-hosted",
+    "description": null
+  },
+  {
+    "slug": "sendgrid",
+    "name": "sendgrid",
+    "description": null
+  },
+  {
+    "slug": "sql",
+    "name": "sql",
+    "description": null
+  },
+  {
+    "slug": "ssh",
+    "name": "SSH",
+    "description": null
+  },
+  {
+    "slug": "ssl",
+    "name": "SSL",
+    "description": null
+  },
+  {
+    "slug": "stable-diffusion",
+    "name": "Stable Diffusion",
+    "description": null
+  },
+  {
+    "slug": "storage",
+    "name": "storage",
+    "description": null
+  },
+  {
+    "slug": "tech-gifts-for-dads",
+    "name": "Tech gifts for dads",
+    "description": null
+  },
+  {
+    "slug": "text-editor",
+    "name": "Text Editor",
+    "description": null
+  },
+  {
+    "slug": "tv-antenna-guide",
+    "name": "TV Antenna Guide",
+    "description": null
+  },
+  {
+    "slug": "typescript",
+    "name": "TypeScript",
+    "description": null
+  },
+  {
+    "slug": "ubuntu",
+    "name": "ubuntu",
+    "description": null
+  },
+  {
+    "slug": "utility",
+    "name": "Utility",
+    "description": null
+  },
+  {
+    "slug": "virtualmachine",
+    "name": "VirtualMachine",
+    "description": null
+  },
+  {
+    "slug": "visual-studio-code",
+    "name": "Visual Studio Code",
+    "description": null
+  },
+  {
+    "slug": "vs-code",
+    "name": "VS Code",
+    "description": null
+  },
+  {
+    "slug": "vs-code-extensions",
+    "name": "VS Code Extensions",
+    "description": null
+  },
+  {
+    "slug": "web-development",
+    "name": "Web Development",
+    "description": null
+  },
+  {
+    "slug": "windows",
+    "name": "Windows",
+    "description": null
+  },
+  {
+    "slug": "windows-11",
+    "name": "Windows 11",
+    "description": null
+  },
+  {
+    "slug": "windows-11-install",
+    "name": "Windows 11 install",
+    "description": null
+  },
+  {
+    "slug": "windows-powershell",
+    "name": "Windows PowerShell",
+    "description": null
+  }
+]

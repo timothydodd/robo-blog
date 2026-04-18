@@ -1,0 +1,21 @@
+{
+  "title": "3D-Printed Low-Poly Mesh Panel for NZXT H510 Elite – Better Airflow",
+  "slug": "custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel",
+  "status": "published",
+  "published_at": "2025-03-10T17:44:24.000Z",
+  "updated_at": "2025-03-10T21:28:21.000Z",
+  "created_at": "2025-03-10T17:03:33.000Z",
+  "feature_image": "/images/2025/03/2025-03-10_17-18-58_617.webp",
+  "feature_image_alt": null,
+  "feature_image_caption": null,
+  "excerpt": "Enhance your NZXT H510 Elite with a 3D-printed low-poly panel for better airflow and a unique look. Follow this guide to print, and assemble your front panel.",
+  "tags": [
+    "3d-printing",
+    "nzxt",
+    "airflow",
+    "gamingpc",
+    "pcmodding"
+  ],
+  "featured": false,
+  "content": "If you're looking to improve airflow for your NZXT H510 Elite case while adding a custom aesthetic, this 3D-printed low-poly front mesh panel is a great project. I designed a frame and assembled the rest of the pieces using hot glue. Once printed, all the parts fit together like a puzzle for an easy and satisfying build.\n\n? **Download the 3D Files on Thingiverse:** [https://www.thingiverse.com/thing:6975045](https://www.thingiverse.com/thing:6975045)\n\n<figure class=\"kg-card kg-gallery-card kg-width-wide\"><div class=\"kg-gallery-container\"><div class=\"kg-gallery-row\"><div class=\"kg-gallery-image\"><img src=\"/images/2025/03/-8ERjbyjSb-LCGzS5xBI7A.jpg\" width=\"928\" height=\"1237\" loading=\"lazy\" alt=\"\"></div><div class=\"kg-gallery-image\"><img src=\"/images/2025/03/5oXmUzBjQ-6pOF7uSYE37g.webp\" width=\"928\" height=\"1237\" loading=\"lazy\" alt=\"\"></div></div></div></figure>\n\n## **Step 1: Printing the Frame Pieces** {#step-1-printing-the-frame-pieces}\n\nYou'll need to print the following frame components:\n\n-   **Side-L1**\n-   **Side-L2**\n-   **Side-R1**\n-   **Side-R2**\n-   **Top**\n-   **Bottom**\n\n**Printing Orientation:**\n\n-   Ensure the **flange** is positioned on the top.\n-   The **magnet holes** should be facing downward.\n\nWhen assembled, the flange should sit flush against the frame of the case.\n\n![](/images/2025/03/image.png)\n\n---\n\n## **Step 2: Assembling the Frame** {#step-2-assembling-the-frame}\n\n1.  **Test Fit** – Before gluing, dry-fit all the pieces together to ensure alignment.\n2.  **Apply Hot Glue** – Once satisfied, glue each piece one at a time for a secure fit.\n3.  **Positioning the Polygon Pieces** – The low-poly panels should fit along the flange.\n\n![](/images/2025/03/DmqQ12ysSTWDZGBglkX53A.jpg)\n\n---\n\n## **Step 3: Printing the Low-Poly Panels** {#step-3-printing-the-low-poly-panels}\n\nNext, print the polygonal design pieces labeled **P1 - P9**.\n\n### **Printing Orientation:** {#printing-orientation}\n\n-   Print **with the flange slot facing down**.\n-   Disable the **top and bottom layers** in your slicer settings (see below).\n\n![](/images/2025/03/image-1.png)\n\n---\n\n### **Print Settings for Bambu Labs Printers** {#print-settings-for-bambu-labs-printers}\n\n1.  Open **Bambu Slicer**.\n2.  Go to the **Strength** tab.\n3.  Set **Top Shell Layers** and **Bottom Shell Layers** to **0**.\n4.  Choose a **Sparse Infill Pattern** for different mesh designs.\n\n![](/images/2025/03/image-2.png)\n\n## **Shopping List** {#shopping-list}\n\nTo complete this project, you'll need the following:\n\n-   ? **10x1mm Magnets** – [Amazon Link](https://amzn.to/4hjpYJr)\n-   ? **10x2mm Magnets** – [Amazon Link](https://amzn.to/3DwuXsm)\n-   ? **Hot Glue Gun** – [Amazon Link](https://amzn.to/4ifZtpx)\n-   ? **Super Glue** – [Amazon Link](https://amzn.to/4ixBOk4)\n\n---\n\nThis project not only enhances your PC's cooling but also gives it a unique, custom look. If you try this build, share your results in the comments or tag me on social media!"
+}

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget-Friendly Local AI Hardware for Running Ollama — RoboDodd</title>
+  <meta name="description" content="Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Budget-Friendly Local AI Hardware for Running Ollama — RoboDodd">
+  <meta property="og:description" content="Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.">
+  <meta property="og:url" content="https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama/">
+  <meta property="og:image" content="https://robododd.com/images/2025/01/Screenshot-2025-01-29-121414.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2025-01-29T17:20:12.000Z">
+  <meta property="article:modified_time" content="2025-08-05T17:44:42.000Z">  <meta property="article:tag" content="Ollama AI">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/ollama-ai/">Ollama AI</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2025-01-29T17:20:12.000Z">Jan 29, 2025</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+      <h1 class="post-full-title">Budget-Friendly Local AI Hardware for Running Ollama</h1>
+      <p class="post-full-subtitle">Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2025/01/Screenshot-2025-01-29-121414.webp" alt="Budget-Friendly Local AI Hardware for Running Ollama" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>If you’re looking to run <strong>Ollama</strong> and <strong>LLMs (Large Language Models)</strong> locally without spending a fortune, you’ll need a <strong>GPU with good VRAM, CUDA (for NVIDIA), or ROCm (for AMD)</strong>. Choosing the right GPU can make a big difference in performance and model compatibility.</p>
+<p>I personally use an <strong>MSI RTX 2080 SUPER</strong>, and it runs <strong>Deepseek-R1</strong> smoothly. But if you’re looking for <strong>budget-friendly alternatives</strong>, I’ve compiled a list of solid options that balance <strong>performance, affordability, and availability</strong>.</p>
+<hr>
+<h2 id="why-a-good-gpu-matters-for-local-ai"><strong>Why a Good GPU Matters for Local AI?</strong></h2>
+<p>LLMs require <strong>high memory bandwidth and computational power</strong> to run efficiently. The two main factors to consider when choosing a GPU for AI workloads are:</p>
+<ul>
+<li><strong>VRAM (Video Memory):</strong> The more VRAM, the larger the models you can run. <strong>At least 8GB</strong> is recommended, but <strong>12GB or more</strong> is ideal for smooth performance.</li>
+<li><strong>CUDA vs. ROCm:</strong> <strong>NVIDIA GPUs</strong> use <strong>CUDA</strong> and <strong>TensorRT</strong>, which offer better AI optimization and software support. <strong>AMD GPUs</strong> rely on <strong>ROCm</strong>, which has <strong>improved AI support on Linux</strong> but is still less mature than NVIDIA’s ecosystem.</li>
+</ul>
+<hr>
+<h2 id="best-budget-nvidia-gpus-cuda-based"><strong>Best Budget NVIDIA GPUs (CUDA-Based)</strong></h2>
+<p>NVIDIA cards are the preferred choice for AI workloads due to <strong>CUDA and TensorRT support</strong>. They tend to have <strong>better software compatibility</strong> for local AI models like <strong>LLaMA, Mistral, Deepseek, and more</strong>.</p>
+<h3 id="rtx-3060-12gb-vrambest-budget-pick"><strong>RTX 3060 (12GB VRAM) - Best Budget Pick</strong></h3>
+<p>✅ <strong>Best budget option with 12GB VRAM</strong>, allowing you to run larger models smoothly.<br>
+✅ <strong>Good efficiency and power usage</strong>, making it ideal for AI without huge power draw.<br>
+<strong>Typically priced at $250-$350 (used or new).</strong></p>
+<p>**Amazon Links: (**updated 8/5/2025)</p>
+<ul>
+<li><a href="https://amzn.to/4jBgVWv" target="_blank" rel="noopener noreferrer">ASUS RTX 3060</a> ($329.99)</li>
+<li><a href="https://amzn.to/42ArUcS" target="_blank" rel="noopener noreferrer">Gigabyte RTX 3060</a> ($349.99)</li>
+<li><a href="https://amzn.to/3XnZWhh" target="_blank" rel="noopener noreferrer">MSI RTX 3060</a> ($299)</li>
+</ul>
+<hr>
+<h3 id="rtx-2060-super-8gb-vramsolid-budget-option"><strong>RTX 2060 Super (8GB VRAM) - Solid Budget Option</strong></h3>
+<ul>
+<li>✅ <strong>Decent CUDA performance</strong> for smaller LLMs.</li>
+<li>✅ <strong>Can be found for $180-$250 (used).</strong></li>
+<li>❌ <strong>Less VRAM than the 3060</strong>, so it struggles with larger models.</li>
+</ul>
+<hr>
+<h3 id="rtx-3050-8gb-vramentry-level-choice"><strong>RTX 3050 (8GB VRAM) - Entry-Level Choice</strong></h3>
+<ul>
+<li>✅ <strong>Low power consumption</strong>, great for small AI projects.</li>
+<li>❌ <strong>Slower than the RTX 3060</strong> but can still handle lightweight models.</li>
+<li><strong>Costs $170-</strong>$329 <strong>new.</strong></li>
+</ul>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/3CRYLiW" target="_blank" rel="noopener noreferrer">ASUS Dual GeForce RTX 3050</a> 8Gb ($329)</li>
+</ul>
+<hr>
+<h2 id="best-budget-amd-gpus-rocm-based"><strong>Best Budget AMD GPUs (ROCm-Based)</strong></h2>
+<p>AMD’s <strong>ROCm ecosystem</strong> is improving, but it’s still not as polished as NVIDIA’s CUDA. If you’re using <strong>Linux</strong>, these GPUs are solid choices for <strong>budget AI setups</strong>.</p>
+<h3 id="rx-6700-xt-12gb-vrambest-amd-budget-pick"><strong>RX 6700 XT (12GB VRAM) - Best AMD Budget Pick</strong></h3>
+<p>✅ <strong>Best AMD card for LLMs due to its 12GB VRAM.</strong><br>
+✅ <strong>Better performance than RTX 3060 in raw compute power.</strong><br>
+<strong>Costs $250-$300 (used).</strong></p>
+<hr>
+<h3 id="rx-6750-xt-12gb-vramslightly-faster-than-6700-xt"><strong>RX 6750 XT (12GB VRAM) - Slightly Faster Than 6700 XT</strong></h3>
+<p>✅ <strong>Improved memory bandwidth over the RX 6700 XT.</strong><br>
+✅ <strong>Solid AI performance for ROCm-supported models.</strong><br>
+❌ <strong>Requires Linux for best AI compatibility.</strong></p>
+<hr>
+<h3 id="rx-6600-xt-8gb-vrambudget-amd-pick"><strong>RX 6600 XT (8GB VRAM) - Budget AMD Pick</strong></h3>
+<p>✅ <strong>Decent AI performance but limited VRAM for large models.</strong><br>
+<strong>Costs $180-$220.</strong></p>
+<p>Amazon Link**:**</p>
+<ul>
+<li><a href="https://amzn.to/4laCFYT" target="_blank" rel="noopener noreferrer">AMD RX 6600 XT</a> ($219)</li>
+</ul>
+<hr>
+<h2 id="best-overall-picks-for-budget-ai-setups"><strong>Best Overall Picks for Budget AI Setups</strong></h2>
+<ul>
+<li><strong>For NVIDIA:</strong> <strong>RTX 3060 (12GB)</strong> is the best option, as it <strong>balances price, VRAM, and software support</strong>.</li>
+<li><strong>For AMD:</strong> <strong>RX 6700 XT (12GB)</strong> is the best choice <strong>if you’re using Linux and can configure ROCm</strong>.</li>
+</ul>
+<p>? <strong>If you need an AI-capable machine on a budget, these GPUs will give you solid performance for local LLMs without breaking the bank.</strong></p>
+<hr>
+<h2 id="full-systems">Full Systems</h2>
+<h3 id="apple-2024-mac-mini-desktop">Apple 2024 Mac Mini Desktop</h3>
+<p>I’ve currently started messing around with the Mac mini as an AI server and It actually runs better than my Main computer which runs a Geforce GTX 2080 Super. My main pc with the GTX 2080 Super gets about 30 tokens per second, I tested the Mac Mini and it gets around 40. I currently use strictly as an AI server, I’m going to write an article about this in the future.</p>
+<p><img src="/images/2025/02/image-16.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p>Key Features (Low End Model)</p>
+<h4 id="cpu">CPU</h4>
+<ul>
+<li>10-core CPU with 4&nbsp;performance cores and 6&nbsp;efficiency cores</li>
+<li>10-core GPU</li>
+<li>Hardware-accelerated ray tracing</li>
+<li>16-core Neural&nbsp;Engine</li>
+<li>120GB/s memory bandwidth</li>
+</ul>
+<h4 id="memory">Memory</h4>
+<p>16 GB</p>
+<p>Price: $560 - $599</p>
+<p>Link: <a href="https://amzn.to/4b52E0K" target="_blank" rel="noopener noreferrer">Amazon</a> ($547)</p>
+<h2 id="jetson-orin-nano-super">Jetson Orin Nano Super</h2>
+<p>If your looking into the Nvidia Jetson Orin Nano , Stop. I originally had it listed here, but after testing the thing and doing some research, its not great for LLM. Its more of a super computer for robotics.</p>
+<hr>
+<h2 id="final-thoughts"><strong>Final Thoughts</strong></h2>
+<p>If you’re looking for <strong>budget-friendly GPUs for Ollama and local AI</strong>, your choice depends on <strong>your operating system and model needs</strong>:</p>
+<ul>
+<li><strong>For best AI compatibility (Windows &amp; Linux):</strong> <strong>RTX 3060 (12GB)</strong> is the best option.</li>
+<li><strong>For best AMD budget performance (Linux only):</strong> <strong>RX 6700 XT (12GB)</strong> works great if you can configure ROCm.</li>
+</ul>
+<p>? <strong>Looking for more AI hardware recommendations? Drop a comment below!</strong> ?</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/ollama-ai/">Ollama AI</a>,               <a href="/tag/hardware/">Hardware</a>,               <a href="/tag/nvidia/">NVIDIA</a>,               <a href="/tag/amd/">AMD</a>,               <a href="/tag/ai/">AI</a>,               <a href="/tag/home-lab/">Home Lab</a>,               <a href="/tag/buying-guide/">Buying Guide</a>,               <a href="/tag/apple/">Apple</a>          </aside>
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

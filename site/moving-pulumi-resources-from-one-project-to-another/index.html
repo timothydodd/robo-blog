@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moving Pulumi Resources from one project to another — RoboDodd</title>
+  <meta name="description" content="Learn how to painlessly transfer Pulumi resources between projects.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/moving-pulumi-resources-from-one-project-to-another/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Moving Pulumi Resources from one project to another — RoboDodd">
+  <meta property="og:description" content="Learn how to painlessly transfer Pulumi resources between projects.">
+  <meta property="og:url" content="https://robododd.com/moving-pulumi-resources-from-one-project-to-another/">
+  <meta property="og:image" content="https://robododd.com/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-01-09T19:49:28.000Z">
+  <meta property="article:modified_time" content="2024-01-09T19:55:17.000Z">  <meta property="article:tag" content="Pulumi">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/pulumi/">Pulumi</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2024-01-09T19:49:28.000Z">Jan 9, 2024</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>1 min read</span>
+      </div>
+      <h1 class="post-full-title">Moving Pulumi Resources from one project to another</h1>
+      <p class="post-full-subtitle">Learn how to painlessly transfer Pulumi resources between projects.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp" alt="Moving Pulumi Resources from one project to another" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>Moving Pulumi resources from one project to another can be a complex process. If you’ve ever found yourself navigating this challenge, worry not; I’ve compiled a step-by-step guide that can serve as a lifeline for anyone in a similar situation.</p>
+<h3 id="target-the-pulumi-project">Target the Pulumi Project:</h3>
+<p>Begin by selecting the Pulumi project that you wish to export resources from. To do this, use the following command:</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">pulumi stack <span class="token function">select</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="export-resources">Export Resources:</h3>
+<p>Next, export all the resources from your selected stack into a JSON file. Use the following command:</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">pulumi stack export <span class="token operator">--</span>file test<span class="token punctuation">.</span>json
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="normalize-the-exported-file">Normalize the Exported File:</h3>
+<p>To ensure a cleaner and more manageable format, copy the provided PowerShell script into your project and run it.</p>
+<p>Note that you should replace ‘test.json’ in line 1 with the actual filename used for export:</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell"><span class="token variable">$file</span> = <span class="token string">'test.json'</span>
+<span class="token comment"># Read the JSON file and convert it to an object</span>
+<span class="token variable">$jsonData</span> = <span class="token function">Get-Content</span> <span class="token operator">-</span>Path <span class="token variable">$file</span> <span class="token punctuation">|</span> <span class="token function">ConvertFrom-Json</span>
+<span class="token variable">$resources</span> = <span class="token variable">$jsonData</span><span class="token punctuation">.</span>deployment<span class="token punctuation">.</span>resources
+<span class="token variable">$convertedResources</span> = <span class="token function">New-Object</span> System<span class="token punctuation">.</span>Collections<span class="token punctuation">.</span>ArrayList
+
+<span class="token comment"># Loop through each resource and delete it</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$resource</span> in <span class="token variable">$resources</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token function">Write-Host</span> <span class="token string">"Processing resource: <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$resource</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span></span>"</span>
+    <span class="token comment"># Check if the "id" property exists and its value starts with "subscription"</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$null</span> <span class="token operator">-ne</span> <span class="token variable">$resource</span><span class="token punctuation">.</span>PSObject<span class="token punctuation">.</span>Properties<span class="token punctuation">[</span><span class="token string">"id"</span><span class="token punctuation">]</span> <span class="token operator">-and</span> <span class="token variable">$resource</span><span class="token punctuation">.</span>id<span class="token punctuation">.</span>StartsWith<span class="token punctuation">(</span><span class="token string">"/subscription"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    
+        <span class="token comment"># Split the string by "::" and get the last part</span>
+        <span class="token variable">$parts</span> = <span class="token variable">$resource</span><span class="token punctuation">.</span>urn <span class="token operator">-</span>split <span class="token string">"::"</span>
+        <span class="token variable">$name</span> = <span class="token variable">$parts</span><span class="token punctuation">[</span><span class="token operator">-</span>1<span class="token punctuation">]</span>
+
+        <span class="token variable">$nResource</span> = <span class="token namespace">[PSCustomObject]</span>@<span class="token punctuation">{</span>
+            <span class="token function">type</span> = <span class="token variable">$resource</span><span class="token punctuation">.</span><span class="token function">type</span>
+            id   = <span class="token variable">$resource</span><span class="token punctuation">.</span>id
+            name = <span class="token variable">$name</span>
+        <span class="token punctuation">}</span>
+        <span class="token variable">$convertedResources</span><span class="token punctuation">.</span>Add<span class="token punctuation">(</span><span class="token variable">$nResource</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token variable">$fileName</span> = <span class="token function">Split-Path</span> <span class="token operator">-</span>Path <span class="token variable">$file</span> <span class="token operator">-</span>Leaf
+<span class="token variable">$convertedResources</span> <span class="token punctuation">|</span> <span class="token function">ConvertTo-Json</span> <span class="token punctuation">|</span> <span class="token function">Set-Content</span> <span class="token operator">-</span>Path <span class="token punctuation">(</span><span class="token variable">$fileName</span> <span class="token operator">+</span> <span class="token string">"-normalized.json"</span><span class="token punctuation">)</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Run the above PowerShell script</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell"><span class="token punctuation">.</span><span class="token operator">/</span>normalize-export<span class="token punctuation">.</span>ps1
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="review-and-customize">Review and Customize:</h3>
+<p>After running the script, examine the ‘export.json-normalized.json’ file. Here, you can remove any resources that you do not intend to import into the new project.</p>
+<h3 id="import-resources-into-the-new-project">Import Resources into the New Project:</h3>
+<p>In your new project, select the stack where you want to import the resources. Repeat the entire process for each stack you need to import by using the following command:</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">pulumi import <span class="token operator">-</span>f test<span class="token punctuation">.</span>json-normalized<span class="token punctuation">.</span>json
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="verify-changes">Verify Changes:</h3>
+<p>Once you’ve completed the import process, execute a ‘pulumi preview’ in your new project. This should indicate minimal to no changes.</p>
+<h3 id="cleanup-the-old-project">Cleanup the Old Project:</h3>
+<p>To finalize the migration, remove the resource state from the old project. You can use the provided script, ensuring that you set the project name and stack name within the file.</p>
+<p>These values are crucial for building pulumi URNs. The script only outputs the necessary commands, but you can modify it to execute them for you.</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell"><span class="token comment"># Pulumi stack name</span>
+<span class="token variable">$project</span> = <span class="token string">"old-project-name"</span>
+<span class="token variable">$stackName</span> = <span class="token string">"dev"</span>
+<span class="token comment"># Path to the JSON file containing a list of resource names to delete</span>
+<span class="token variable">$jsonFile</span> = <span class="token string">"./to-remove/<span class="token variable">$stackName</span>.json"</span>
+
+<span class="token comment"># Check if the JSON file exists</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">-not</span> <span class="token punctuation">(</span><span class="token function">Test-Path</span> <span class="token variable">$jsonFile</span> <span class="token operator">-</span>PathType Leaf<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">Write-Host</span> <span class="token string">"Error: JSON file '<span class="token variable">$jsonFile</span>' not found."</span>
+    <span class="token keyword">exit</span> 1
+<span class="token punctuation">}</span>
+
+<span class="token comment"># Read the JSON file and convert it to an object</span>
+<span class="token variable">$jsonData</span> = <span class="token function">Get-Content</span> <span class="token operator">-</span>Path <span class="token variable">$jsonFile</span> <span class="token punctuation">|</span> <span class="token function">ConvertFrom-Json</span>
+<span class="token variable">$resources</span> = <span class="token variable">$jsonData</span><span class="token punctuation">.</span>resources
+<span class="token variable">$reversedResources</span> = @<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token variable">$i</span> = <span class="token punctuation">(</span><span class="token variable">$resources</span><span class="token punctuation">.</span>Count <span class="token operator">-</span> 1<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token variable">$i</span> <span class="token operator">-ge</span> 0<span class="token punctuation">;</span> <span class="token variable">$i</span><span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token variable">$reversedResources</span> <span class="token operator">+=</span> <span class="token variable">$resources</span><span class="token punctuation">[</span><span class="token variable">$i</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># Confirm with the user before proceeding</span>
+<span class="token variable">$resourceNames</span> = <span class="token variable">$reversedResources</span> <span class="token punctuation">|</span> <span class="token function">ForEach-Object</span> <span class="token punctuation">{</span> <span class="token variable">$_</span><span class="token punctuation">.</span>name <span class="token punctuation">}</span>
+<span class="token comment"># Confirm with the user before proceeding</span>
+<span class="token variable">$confirmation</span> = <span class="token function">Read-Host</span> <span class="token string">"This will delete the following resources from the Pulumi stack '<span class="token variable">$stackName</span>': <span class="token function">$<span class="token punctuation">(</span><span class="token variable">$resourceNames</span> <span class="token operator">-join</span> <span class="token string">', '</span><span class="token punctuation">)</span></span>. Are you sure you want to continue? (y/n)"</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$confirmation</span> <span class="token operator">-ne</span> <span class="token string">"y"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">Write-Host</span> <span class="token string">"Operation canceled."</span>
+    <span class="token keyword">exit</span> 0
+<span class="token punctuation">}</span>
+
+<span class="token comment"># Loop through each resource and delete it</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token variable">$resource</span> in <span class="token variable">$reversedResources</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token variable">$resourceType</span> = <span class="token variable">$resource</span><span class="token punctuation">.</span><span class="token function">type</span>
+    <span class="token variable">$resourceName</span> = <span class="token variable">$resource</span><span class="token punctuation">.</span>name
+
+    <span class="token comment"># Construct the resource identifier (you might need to adjust this based on your actual naming conventions)</span>
+    <span class="token variable">$resourceIdentifier</span> = <span class="token string">"urn:pulumi:<span class="token variable">$stackName</span>::<span class="token variable">$project</span>::<span class="token variable">$resourceType</span>::<span class="token variable">$resourceName</span>"</span>
+
+    <span class="token function">Write-Host</span> pulumi state delete <span class="token variable">$resourceIdentifier</span>
+    <span class="token comment"># pulumi state delete $resourceIdentifier</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">Write-Host</span> <span class="token string">"Resources successfully deleted from the stack."</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>That’s it! Hopefully, this guide will save you valuable time during your resource migration process.</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/pulumi/">Pulumi</a>,               <a href="/tag/powershell/">PowerShell</a>,               <a href="/tag/migration/">Migration</a>,               <a href="/tag/cloud-computing/">Cloud Computing</a>,               <a href="/tag/devops/">DevOps</a>          </aside>
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

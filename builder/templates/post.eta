@@ -1,0 +1,48 @@
+<main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+        <% if (it.post.primary_tag) { %>
+          <a class="post-full-meta-tag" href="/tag/<%= it.post.primary_tag.slug %>/"><%= it.post.primary_tag.name %></a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <% } %>
+        <time datetime="<%= it.post.published_at %>"><%= it.post.published_at_formatted %></time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span><%= it.post.reading_time %> min read</span>
+      </div>
+      <h1 class="post-full-title"><%= it.post.title %></h1>
+      <% if (it.post.subtitle) { %><p class="post-full-subtitle"><%= it.post.subtitle %></p><% } %>
+    </header>
+
+    <% if (it.post.feature_image) { %>
+    <figure class="post-full-image">
+      <img src="<%= it.post.feature_image %>" alt="<%= it.post.feature_image_alt || it.post.title %>" loading="eager" decoding="async">
+      <% if (it.post.feature_image_caption) { %><figcaption><%= it.post.feature_image_caption %></figcaption><% } %>
+    </figure>
+    <% } %>
+
+    <section class="post-full-content gh-content gh-canvas">
+      <%~ it.post.content_html %>
+    </section>
+
+    <% if (it.post.tags && it.post.tags.length > 1) { %>
+    <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+      <% it.post.tags.forEach(function(t, i){ %>
+        <a href="/tag/<%= t.slug %>/"><%= t.name %></a><%= i < it.post.tags.length - 1 ? ', ' : '' %>
+      <% }) %>
+    </aside>
+    <% } %>
+  </article>
+
+  <% if (it.related && it.related.length) { %>
+  <aside class="read-more-wrap">
+    <h3 class="read-more-heading">Read more</h3>
+    <div class="read-more">
+      <% it.related.forEach(function(p){ %>
+        <%~ include('_post-card', { post: p, size: 'small' }) %>
+      <% }) %>
+    </div>
+  </aside>
+  <% } %>
+</main>

@@ -1,0 +1,29 @@
+{
+  "name": "robo-blog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Static blog system for robododd.com: Ghost import → JSON source → static HTML build → Azure Blob deploy.",
+  "scripts": {
+    "import": "node tools/import-ghost.mjs",
+    "optimize-images": "node tools/optimize-images.mjs",
+    "build": "node builder/build.mjs",
+    "preview": "npx --yes serve site -l 4000 --no-port-switching",
+    "dev": "npm --prefix editor run dev"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "cheerio": "^1.0.0",
+    "eta": "^4.5.1",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-prism": "^3.0.1",
+    "postcss": "^8.5.10",
+    "prismjs": "^1.30.0",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.2.2",
+    "turndown": "^7.2.0",
+    "turndown-plugin-gfm": "^1.0.2"
+  }
+}

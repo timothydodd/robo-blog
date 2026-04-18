@@ -1,0 +1,15 @@
+<main class="site-main" id="main">
+  <div class="post-feed">
+    <% it.posts.forEach(function(p, i){ %>
+      <%~ include('_post-card', { post: p, size: (it.isFirstPage && i === 0) ? 'large' : 'small' }) %>
+    <% }) %>
+  </div>
+
+  <% if (it.pagination.totalPages > 1) { %>
+  <nav class="pagination" aria-label="Pagination">
+    <% if (it.pagination.prev) { %><a class="pagination-prev" rel="prev" href="<%= it.pagination.prev %>">&larr; Newer posts</a><% } else { %><span></span><% } %>
+    <span class="pagination-location">Page <%= it.pagination.current %> of <%= it.pagination.totalPages %></span>
+    <% if (it.pagination.next) { %><a class="pagination-next" rel="next" href="<%= it.pagination.next %>">Older posts &rarr;</a><% } else { %><span></span><% } %>
+  </nav>
+  <% } %>
+</main>

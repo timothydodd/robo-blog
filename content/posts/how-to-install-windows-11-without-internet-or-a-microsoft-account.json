@@ -1,0 +1,19 @@
+{
+  "title": "How to Bypass Windows 11 Microsoft Account Requirement",
+  "slug": "how-to-install-windows-11-without-internet-or-a-microsoft-account",
+  "status": "published",
+  "published_at": "2025-04-17T13:44:05.000Z",
+  "updated_at": "2025-05-09T13:53:18.000Z",
+  "created_at": "2025-04-17T13:14:07.000Z",
+  "feature_image": "/images/2025/04/Screenshot-2025-04-17-094030.webp",
+  "feature_image_alt": null,
+  "feature_image_caption": null,
+  "excerpt": "Install Windows 11 without internet or a Microsoft account using this quick trick with  a simple command.",
+  "tags": [
+    "windows",
+    "windows-11",
+    "windows-11-install"
+  ],
+  "featured": false,
+  "content": "Want to skip the internet connection and Microsoft account requirement during a Windows 11 install? Here’s how to do it in just a few easy steps:\n\n### Steps: {#steps}\n\n1.  **Start the Windows 11 installation** as usual.\n\n![](/images/2025/04/image-8.webp)\n\n2\\. When you reach the **“Is this right country or region?”** or welcome screen, press:  \n`Shift + F10` — this opens a command prompt.\n\n![](/images/2025/04/image-9.png)\n\n3.  In the console, type:\n\n```bash\nstart ms-cxh:localonly\n```\n\nand press **Enter**.\n\n4\\. You’ll now be able to **create a local user account**.  \nJust enter a **Username** — other fields can be left blank.\n\n![](/images/2025/04/image-10.png)\n\n5\\. Continue the installation as normal — **no Microsoft account or internet required**."
+}

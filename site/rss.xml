@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RoboDodd</title>
+    <link>https://robododd.com/</link>
+    <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 Apr 2026 01:52:12 GMT</lastBuildDate>
+    <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Building a Static Blog to Replace Ghost</title>
+      <description>I replaced my self-hosted Ghost blog with a static site — cheaper, faster, and with almost no attack surface. Here&apos;s the stack and how you can do the same.</description>
+      <link>https://robododd.com/building-a-static-blog-to-replace-ghost/</link>
+      <guid isPermaLink="true">https://robododd.com/building-a-static-blog-to-replace-ghost/</guid>
+      <pubDate>Fri, 17 Apr 2026 23:30:00 GMT</pubDate>
+      <category>Web Development</category>
+    </item>
+    <item>
+      <title>Google Places Autocomplete Directive – Angular 21</title>
+      <description>Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard
+  navigation, and parsed address output.</description>
+      <link>https://robododd.com/google-places-autocomplete-directive-angular-21/</link>
+      <guid isPermaLink="true">https://robododd.com/google-places-autocomplete-directive-angular-21/</guid>
+      <pubDate>Fri, 13 Feb 2026 22:49:45 GMT</pubDate>
+      <category>Angular</category>
+    </item>
+    <item>
+      <title>NoteMode: An Open-Source Notepad++ Alternative After the Security Incident</title>
+      <description>Looking for a Notepad++ alternative? Flit is an open source, cross-platform text editor with syntax highlighting, session persistence, and dual themes.</description>
+      <link>https://robododd.com/flit-an-open-source-notepad-alternative-built-after-the-security-incident/</link>
+      <guid isPermaLink="true">https://robododd.com/flit-an-open-source-notepad-alternative-built-after-the-security-incident/</guid>
+      <pubDate>Wed, 04 Feb 2026 17:33:03 GMT</pubDate>
+      <category>Text Editor</category>
+    </item>
+    <item>
+      <title>Migrating Azure Front Door to Cloudflare Storage Connectors</title>
+      <description>Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.</description>
+      <link>https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/</link>
+      <guid isPermaLink="true">https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/</guid>
+      <pubDate>Wed, 12 Nov 2025 18:00:21 GMT</pubDate>
+      <category>Cloudflare</category>
+    </item>
+    <item>
+      <title>Recover from Azure Front Door Outages: A Quick Guide</title>
+      <description>Azure Front Door down? Learn how to quickly set up Azure Application Gateway and Traffic Manager to restore your site and prevent future outages.</description>
+      <link>https://robododd.com/how-to-recover-when-azure-front-door-goes-down-a-quick-migration-guide/</link>
+      <guid isPermaLink="true">https://robododd.com/how-to-recover-when-azure-front-door-goes-down-a-quick-migration-guide/</guid>
+      <pubDate>Wed, 29 Oct 2025 21:45:01 GMT</pubDate>
+      <category>Azure Front Door</category>
+    </item>
+    <item>
+      <title>Teaching Claude Modern Angular Best Practices with Custom Instructions</title>
+      <description>Configure Claude AI to automatically generate modern Angular 20 code with signals, standalone components, and new control flow syntax.</description>
+      <link>https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/</link>
+      <guid isPermaLink="true">https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/</guid>
+      <pubDate>Sun, 26 Oct 2025 22:55:01 GMT</pubDate>
+      <category>Angular</category>
+    </item>
+    <item>
+      <title>Building a Custom SQL Server Docker Image with Full-Text Search Support</title>
+      <description>Learn how to create a custom SQL Server 2022 Docker image with Full-Text Search, publish it to Docker Hub, and use it for fast, scalable text search.</description>
+      <link>https://robododd.com/building-a-custom-sql-server-docker-image-with-full-text-search-support/</link>
+      <guid isPermaLink="true">https://robododd.com/building-a-custom-sql-server-docker-image-with-full-text-search-support/</guid>
+      <pubDate>Tue, 16 Sep 2025 22:45:52 GMT</pubDate>
+      <category>sql</category>
+    </item>
+    <item>
+      <title>3D Printed Baking Soda Bracket for Your Garbage Can</title>
+      <description>A simple 3D print to hold a box of baking soda in your garbage can—perfect for reducing odors in garages or enclosed spaces.</description>
+      <link>https://robododd.com/3d-printed-baking-soda-bracket-for-your-garbage-can/</link>
+      <guid isPermaLink="true">https://robododd.com/3d-printed-baking-soda-bracket-for-your-garbage-can/</guid>
+      <pubDate>Tue, 05 Aug 2025 17:12:18 GMT</pubDate>
+      <category>3D Printing</category>
+    </item>
+    <item>
+      <title>Replace SendGrid Parse with a Free Cloudflare Worker Email Parser</title>
+      <description> Build a free SendGrid Parse replacement using Cloudflare Workers. Parse and forward emails to your API with        
+  zero monthly costs and easy setup.</description>
+      <link>https://robododd.com/replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser/</link>
+      <guid isPermaLink="true">https://robododd.com/replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser/</guid>
+      <pubDate>Sat, 05 Jul 2025 18:39:57 GMT</pubDate>
+      <category>sendgrid</category>
+    </item>
+    <item>
+      <title>My Top 2025 Amazon Father’s Day Tech Gifts</title>
+      <description>Top Father&apos;s Day tech gift picks for 2025—tested and approved! Perfect gadgets for dads who love smart, practical gear.</description>
+      <link>https://robododd.com/my-top-2025-amazon-fathers-day-tech-gifts/</link>
+      <guid isPermaLink="true">https://robododd.com/my-top-2025-amazon-fathers-day-tech-gifts/</guid>
+      <pubDate>Wed, 04 Jun 2025 22:02:35 GMT</pubDate>
+      <category>Fathers Day 2025</category>
+    </item>
+    <item>
+      <title>Dynamic Environment Variables in Angular: A Docker-Ready Solution</title>
+      <description>Learn how to inject environment variables into Angular apps at runtime using Docker - no more rebuilds for config changes! Complete guide with code examples.</description>
+      <link>https://robododd.com/dynamic-environment-variables-in-angular-a-docker-ready-solution/</link>
+      <guid isPermaLink="true">https://robododd.com/dynamic-environment-variables-in-angular-a-docker-ready-solution/</guid>
+      <pubDate>Sat, 24 May 2025 20:00:46 GMT</pubDate>
+      <category>Angular</category>
+    </item>
+    <item>
+      <title>Make Your k3s Local Storage Persistent with Longhorn</title>
+      <description>Learn how to install Longhorn in k3s and migrate from local-path PVCs to resilient, node-independent Longhorn volumes.</description>
+      <link>https://robododd.com/make-your-k3s-local-storage-persistent-with-longhorn/</link>
+      <guid isPermaLink="true">https://robododd.com/make-your-k3s-local-storage-persistent-with-longhorn/</guid>
+      <pubDate>Sat, 10 May 2025 18:49:21 GMT</pubDate>
+      <category>K3s</category>
+    </item>
+    <item>
+      <title>How to Bypass Windows 11 Microsoft Account Requirement</title>
+      <description>Install Windows 11 without internet or a Microsoft account using this quick trick with  a simple command.</description>
+      <link>https://robododd.com/how-to-install-windows-11-without-internet-or-a-microsoft-account/</link>
+      <guid isPermaLink="true">https://robododd.com/how-to-install-windows-11-without-internet-or-a-microsoft-account/</guid>
+      <pubDate>Thu, 17 Apr 2025 13:44:05 GMT</pubDate>
+      <category>Windows</category>
+    </item>
+    <item>
+      <title>How to Set Up Cloudflare Tunnels for k3s Without MetalLB</title>
+      <description>Expose k3s services with Cloudflare Tunnels—no MetalLB, no LAN IPs, no firewall hassle. Simple, secure remote access in minutes.</description>
+      <link>https://robododd.com/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/</link>
+      <guid isPermaLink="true">https://robododd.com/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/</guid>
+      <pubDate>Wed, 09 Apr 2025 20:57:45 GMT</pubDate>
+      <category>K3s</category>
+    </item>
+    <item>
+      <title>10 Must-Have VS Code Extensions for Angular Developers in 2025</title>
+      <description>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code in 2025</description>
+      <link>https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</link>
+      <guid isPermaLink="true">https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</guid>
+      <pubDate>Thu, 03 Apr 2025 17:18:26 GMT</pubDate>
+      <category>Angular</category>
+    </item>
+    <item>
+      <title>Angular 19 Essentials: First Steps for New Developers</title>
+      <description>Transform from complete beginner to Angular 19 developer with this step-by-step guide to setting up your environment and building your first web application.</description>
+      <link>https://robododd.com/angular-19-essentials-first-steps-for-new-developers/</link>
+      <guid isPermaLink="true">https://robododd.com/angular-19-essentials-first-steps-for-new-developers/</guid>
+      <pubDate>Wed, 26 Mar 2025 18:39:36 GMT</pubDate>
+      <category>Angular</category>
+    </item>
+    <item>
+      <title>Setting Up Eclipse Mosquitto (MQTT) on K3s: A Complete Guide</title>
+      <description>Deploy Eclipse Mosquitto on K3s with persistent storage for a lightweight, reliable MQTT broker perfect for your IoT projects and smart home automation.</description>
+      <link>https://robododd.com/setting-up-eclipse-mosquitto-mqtt-on-k3s-a-complete-guide/</link>
+      <guid isPermaLink="true">https://robododd.com/setting-up-eclipse-mosquitto-mqtt-on-k3s-a-complete-guide/</guid>
+      <pubDate>Thu, 20 Mar 2025 22:18:14 GMT</pubDate>
+      <category>MQTT</category>
+    </item>
+    <item>
+      <title>3D-Printed Modular Rack for Mac Mini M4 &amp; Beelink EQ12/EQ13</title>
+      <description>3D-print a modular, screw-free rack for your Mac Mini M4 &amp; Beelink EQ12/EQ13. Stack securely, optimize airflow, and keep your setup organized!</description>
+      <link>https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</link>
+      <guid isPermaLink="true">https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</guid>
+      <pubDate>Tue, 11 Mar 2025 01:29:22 GMT</pubDate>
+      <category>3D Printing</category>
+    </item>
+    <item>
+      <title>3D-Printed Low-Poly Mesh Panel for NZXT H510 Elite – Better Airflow</title>
+      <description>Enhance your NZXT H510 Elite with a 3D-printed low-poly panel for better airflow and a unique look. Follow this guide to print, and assemble your front panel.</description>
+      <link>https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</link>
+      <guid isPermaLink="true">https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</guid>
+      <pubDate>Mon, 10 Mar 2025 17:44:24 GMT</pubDate>
+      <category>3D Printing</category>
+    </item>
+    <item>
+      <title>How to Enable Claude 3.7 Sonnet in GitHub Copilot (Pro &amp; Organization Guide for VS Code)</title>
+      <description>Learn how to enable Claude 3.7 Sonnet in GitHub Copilot for VS Code. Use Copilot Chat with this AI model in your organization. Quick guide to get started! </description>
+      <link>https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</link>
+      <guid isPermaLink="true">https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</guid>
+      <pubDate>Fri, 28 Feb 2025 16:57:22 GMT</pubDate>
+      <category>GitHub Copilot</category>
+    </item>
+  </channel>
+</rss>

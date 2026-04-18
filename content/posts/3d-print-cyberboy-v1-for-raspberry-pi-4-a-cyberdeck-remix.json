@@ -1,0 +1,20 @@
+{
+  "title": "3D Print Cyberboy v1 for Raspberry Pi 4: A Cyberdeck Remix",
+  "slug": "3d-print-cyberboy-v1-for-raspberry-pi-4-a-cyberdeck-remix",
+  "status": "published",
+  "published_at": "2025-02-23T03:26:51.000Z",
+  "updated_at": "2025-03-03T20:01:27.000Z",
+  "created_at": "2025-02-23T01:46:30.000Z",
+  "feature_image": "/images/2025/02/ahOGb6UGSueuoIEqJPHYAg.jpg",
+  "feature_image_alt": null,
+  "feature_image_caption": null,
+  "excerpt": "Build a custom Raspberry Pi 4 Cyberboy / cyberdeck remix with updated ports, battery, and 3D printable parts.",
+  "tags": [
+    "3d-printing",
+    "cyberdeck",
+    "raspberry-pi",
+    "cyberboy"
+  ],
+  "featured": false,
+  "content": "I recently discovered an awesome project on Thingiverse—a handheld computer (or cyberdeck) called **Cyberboy v1.0** by Rauven. You can check out the original design [here](https://www.thingiverse.com/thing:6921480). Although the original was designed for the Raspberry Pi 5, I decided to create a remix version specifically for the Raspberry Pi 4 using some different parts.\n\nWhile this project isn’t cheap, it was incredibly fun to build. For those looking for a more budget-friendly option, Rauven also provides an AliExpress parts list with lower-cost alternatives.\n\n---\n\n**What’s New in This Remix?**\n\n-   Modified port configuration (some added and some removed) for the Raspberry Pi 4\n-   Modified internal holder to accommodate the LCD I used. I think it was a tad different, but it should also support the original LCD.\n-   Uses a different battery and UPS by MakerFocus\n-   Includes printable parts to hold the new battery (battery-holder, left-holder, right-holder)\n\n**Printing Tips**  \nAll of the new parts can be printed without supports.  \nModified parts are pretty support friendly, I used tree supports for some of the ports, but you might be able to get away with none at all.\n\n## 3D printable Files {#3d-printable-files}\n\nYou can download the 3D printing files at Thingiverse.\n\n[https://www.thingiverse.com/thing:6958720](https://www.thingiverse.com/thing:6958720)\n\n## Item list / Shopping List {#item-list-shopping-list}\n\nHere’s a list of the components I used for my remix:\n\n-   **720pc Screws Set:** [Buy on Amazon](https://amzn.to/3ERjjZD)\n-   **Button Switch Mini:** [Buy on Amazon](https://amzn.to/4ie3VoB)\n-   **USB Type C Panel Mount:** [Buy on Amazon](https://amzn.to/4i8THWr)\n-   **20 Sets JST 2.0 PH 4 Pin Connector Plug:** [Buy on Amazon](https://amzn.to/3EJTIS7)\n-   **USB C Short Flat Cable:** [Buy on Amazon](https://amzn.to/3QxzRs6)\n-   **USB C Female to USB Male Adapter:** [Buy on Amazon](https://amzn.to/4ba3pFL)\n-   **Rii Mini Bluetooth Keyboard:** [Buy on Amazon](https://amzn.to/4i8i7PM)\n-   **4.3 Inch Raspberry Pi Screen:** [Buy on Amazon](https://amzn.to/3QvvBcw)\n-   **Raspberry Pi 4 Battery Pack UPS:** [Buy on Amazon](https://amzn.to/41r199E)\n\n## Photos of the Device {#photos-of-the-device}\n\n<figure class=\"kg-card kg-gallery-card kg-width-wide\"><div class=\"kg-gallery-container\"><div class=\"kg-gallery-row\"><div class=\"kg-gallery-image\"><img src=\"/images/2025/02/BGiCVVPwQyeiR3SXxetJiQ-1.webp\" width=\"928\" height=\"1237\" loading=\"lazy\" alt=\"\"></div><div class=\"kg-gallery-image\"><img src=\"/images/2025/02/L_BNQuVpRM2_SkSFLQPgSA.jpg\" width=\"778\" height=\"500\" loading=\"lazy\" alt=\"\"></div><div class=\"kg-gallery-image\"><img src=\"/images/2025/02/jfjkbd8DRYmg1S2Q4GTOAA.webp\" width=\"928\" height=\"1237\" loading=\"lazy\" alt=\"\"></div></div></div></figure>\n\n### Conclusion {#conclusion}\n\nHappy building, and let me know if you have any questions or need further guidance!"
+}

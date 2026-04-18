@@ -1,0 +1,19 @@
+{
+  "title": "Simplifying Local Network IP Assignment for Kubernetes with MetalLB",
+  "slug": "network-metallb",
+  "status": "published",
+  "published_at": "2024-07-02T11:13:22.000Z",
+  "updated_at": "2024-07-02T13:00:38.000Z",
+  "created_at": "2024-07-02T10:50:18.000Z",
+  "feature_image": "/images/2024/07/metal.jpg",
+  "feature_image_alt": null,
+  "feature_image_caption": null,
+  "excerpt": "Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.",
+  "tags": [
+    "kubernetes",
+    "networking",
+    "home-lab"
+  ],
+  "featured": false,
+  "content": "In this article, I'll guide you through setting up MetalLB, a network load-balancer that allows you to assign local area network (LAN) IP addresses to your Kubernetes deployments. This setup is particularly useful for environments where a cloud provider's load balancer is unavailable or unnecessary.\n\n## Prerequisites {#prerequisites}\n\nPlease be aware that you must Disable servicelib and traefik when installing your master node.\n\n```\nexport INSTALL_K3S_EXEC=\"--disable servicelb --disable traefik\"\n```\n\nMore Information at [https://docs.k3s.io/installation/packaged-components](https://docs.k3s.io/installation/packaged-components)\n\n## Install MetalLb {#install-metallb}\n\nI'll be using MetalLB version 0.13.7. The command below will apply the MetalLB manifest to your K3s setup:\n\n```yaml\nkubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml\n```\n\n### Creating an Address Pool {#creating-an-address-pool}\n\nNext, we need to create an address pool. This pool should not conflict with any existing DHCP settings on your local network. Create a new file called `metallb-layer2.yaml` with the following content:\n\n```yaml\napiVersion: metallb.io/v1beta1\nkind: IPAddressPool\nmetadata:\n  name: main-pool\n  namespace: metallb-system\nspec:\n  addresses:\n    - 192.168.2.200-192.168.2.245\n  autoAssign: true\n---\napiVersion: metallb.io/v1beta1\nkind: L2Advertisement\nmetadata:\n  name: main-ad\n  namespace: metallb-system\nspec:\n  ipAddressPools:\n    - main-pool\n```\n\n### Applying the Address Pool Configuration {#applying-the-address-pool-configuration}\n\nApply the configuration with the following command:\n\n```yaml\nkubectl apply -f metallb-layer2.yaml\n```\n\n### Creating Load Balancer Manifests {#creating-load-balancer-manifests}\n\nAfter setting up the address pool, you can create load balancer manifests for other services that will request an IP within the specified range. For example, in my [article on deploying a Ghost blog](/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/), there's a section that sets up a load balancer manifest. You can create a similar manifest for any service you want to use a local network address.\n\n```yaml\napiVersion: v1\nkind: Service\nmetadata:\n  name: ghost-app-lb\nspec:\n  selector:\n    app: ghost-app\n  ports:\n    - port: 80\n      targetPort: 2368\n      name: http\n      protocol: TCP\n  type: LoadBalancer\n  loadBalancerIP: 192.168.2.239\n```\n\n### Conclusion {#conclusion}\n\nBy following these steps, you'll have MetalLB configured to provide network load-balancing with local IP addresses in your Kubernetes environment. This setup is ideal for development and testing scenarios where using a cloud provider's load balancer might not be feasible."
+}

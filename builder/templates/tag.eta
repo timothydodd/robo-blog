@@ -1,0 +1,15 @@
+<section class="site-hero site-hero-tag">
+  <div class="site-hero-inner">
+    <h1 class="site-hero-title"><%= it.tag.name %></h1>
+    <% if (it.tag.description) { %><p class="site-hero-description"><%= it.tag.description %></p><% } %>
+    <p class="site-hero-meta"><%= it.posts.length %> <%= it.posts.length === 1 ? 'post' : 'posts' %></p>
+  </div>
+</section>
+
+<main class="site-main" id="main">
+  <div class="post-feed">
+    <% it.posts.forEach(function(p){ %>
+      <%~ include('_post-card', { post: p, size: 'small' }) %>
+    <% }) %>
+  </div>
+</main>

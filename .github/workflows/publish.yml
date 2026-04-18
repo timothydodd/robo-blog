@@ -1,0 +1,42 @@
+name: publish
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/publish.yml"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Sync site/ to $web container
+        run: |
+          az storage blob upload-batch \
+            --account-name "${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
+            --destination '$web' \
+            --source ./site \
+            --overwrite \
+            --content-cache-control "public, max-age=300"
+
+      - name: Purge CDN (if configured)
+        if: ${{ secrets.AZURE_CDN_PROFILE != '' }}
+        run: |
+          az cdn endpoint purge \
+            --resource-group "${{ secrets.AZURE_RG }}" \
+            --profile-name "${{ secrets.AZURE_CDN_PROFILE }}" \
+            --name "${{ secrets.AZURE_CDN_ENDPOINT }}" \
+            --content-paths '/*' \
+            --no-wait

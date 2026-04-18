@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Replace SendGrid Parse with a Free Cloudflare Worker Email Parser — RoboDodd</title>
+  <meta name="description" content=" Build a free SendGrid Parse replacement using Cloudflare Workers. Parse and forward emails to your API with        
+  zero monthly costs and easy setup.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Replace SendGrid Parse with a Free Cloudflare Worker Email Parser — RoboDodd">
+  <meta property="og:description" content=" Build a free SendGrid Parse replacement using Cloudflare Workers. Parse and forward emails to your API with        
+  zero monthly costs and easy setup.">
+  <meta property="og:url" content="https://robododd.com/replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser/">
+  <meta property="og:image" content="https://robododd.com/images/2025/07/sendgrid1.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2025-07-05T18:39:57.000Z">
+  <meta property="article:modified_time" content="2025-07-05T18:39:57.000Z">  <meta property="article:tag" content="sendgrid">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/sendgrid/">sendgrid</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2025-07-05T18:39:57.000Z">Jul 5, 2025</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+      <h1 class="post-full-title">Replace SendGrid Parse with a Free Cloudflare Worker Email Parser</h1>
+      <p class="post-full-subtitle"> Build a free SendGrid Parse replacement using Cloudflare Workers. Parse and forward emails to your API with        
+  zero monthly costs and easy setup.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2025/07/sendgrid1.webp" alt="Replace SendGrid Parse with a Free Cloudflare Worker Email Parser" loading="eager" decoding="async">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+      <p>SendGrid recently announced they’re discontinuing their free Email Plan, forcing developers to migrate to paid plans. I wanted to move off of the Email Parser because I’m not sure if that will be paid only as well. If you’re looking for a cost-effective alternative, Cloudflare Workers provide an excellent solution for parsing and forwarding emails to your API.</p>
+<h2 id="why-choose-cloudflare-workers">Why Choose Cloudflare Workers?</h2>
+<ul>
+<li><strong>Free Tier</strong>: 100,000 requests per day at no cost</li>
+<li><strong>Global Distribution</strong>: Low latency worldwide</li>
+<li><strong>Easy Setup</strong>: Deploy in minutes</li>
+<li><strong>Full Control</strong>: Customize parsing logic as needed</li>
+<li><strong>Reliable</strong>: Built on Cloudflare’s robust infrastructure</li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before starting, ensure you have:</p>
+<ol>
+<li>A Cloudflare account (free tier works fine)</li>
+<li>A domain managed by Cloudflare</li>
+<li>Node.js installed locally</li>
+<li>An API endpoint to receive parsed emails</li>
+</ol>
+<h2 id="step-1-clone-and-customize-the-project">Step 1: Clone and Customize the Project</h2>
+<p><strong>Important</strong>: This project uses “Mailvoid” as an example name. You’ll want to rename everything to match your application.</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/timothydodd/mailvoid-cloudflare-worker.git
+<span class="token builtin class-name">cd</span> mailvoid-cloudflare-worker
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="rename-for-your-project">Rename for Your Project</h3>
+<p>Since “Mailvoid” is specific to the original project, customize the naming:</p>
+<ol>
+<li><strong>Update&nbsp;<code>package.json</code></strong>:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"your-app-email-forwarder"</span><span class="token punctuation">,</span>
+  <span class="token property">"description"</span><span class="token operator">:</span> <span class="token string">"Cloudflare Worker to forward emails to YourApp API"</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<ol start="2">
+<li><strong>Update&nbsp;<code>wrangler.toml</code></strong>:</li>
+</ol>
+<div class="pre-wrapper"><pre class="language-toml"><code class="language-toml"><span class="token key property">name</span> <span class="token punctuation">=</span> <span class="token string">"your-app-email-forwarder"</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<ol start="3">
+<li><strong>Rename environment variables</strong>&nbsp;(optional but recommended):
+<ul>
+<li><code>MAILVOID_API_URL</code>&nbsp;→&nbsp;<code>YOUR_APP_API_URL</code></li>
+<li><code>MAILVOID_API_KEY</code>&nbsp;→&nbsp;<code>YOUR_APP_API_KEY</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="step-2-customize-the-worker-code">Step 2: Customize the Worker Code</h2>
+<p>The main worker code is in&nbsp;<code>src/index.js</code>. Here’s what it does:</p>
+<h3 id="email-processing-flow">Email Processing Flow:</h3>
+<ol>
+<li><strong>Receives email</strong>&nbsp;via Cloudflare’s email routing</li>
+<li><strong>Extracts content</strong>&nbsp;from the raw email stream</li>
+<li><strong>Structures data</strong>&nbsp;into JSON format</li>
+<li><strong>Forwards to your API</strong>&nbsp;with proper headers</li>
+<li><strong>Handles errors</strong>&nbsp;gracefully</li>
+</ol>
+<h3 id="key-features">Key Features:</h3>
+<ul>
+<li>Extracts all email headers</li>
+<li>Reads raw email content</li>
+<li>Includes sender/recipient information</li>
+<li>Comprehensive error logging</li>
+<li>Configurable API endpoint</li>
+</ul>
+<h3 id="required-code-changes">Required Code Changes:</h3>
+<p><strong>1. Update Environment Variable Names</strong>&nbsp;(if you renamed them):<br>
+In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// Change this line:</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>env<span class="token punctuation">.</span><span class="token constant">MAILVOID_API_URL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">// To:</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>env<span class="token punctuation">.</span><span class="token constant">YOUR_APP_API_URL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+<span class="token comment">// And change this line:</span>
+<span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>env<span class="token punctuation">.</span><span class="token constant">MAILVOID_API_URL</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+<span class="token comment">// To:</span>
+<span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>env<span class="token punctuation">.</span><span class="token constant">YOUR_APP_API_URL</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+
+<span class="token comment">// And change this line:</span>
+<span class="token string-property property">'X-Api-Key'</span><span class="token operator">:</span> env<span class="token punctuation">.</span><span class="token constant">MAILVOID_API_KEY</span><span class="token punctuation">,</span>
+<span class="token comment">// To:</span>
+<span class="token string-property property">'X-Api-Key'</span><span class="token operator">:</span> env<span class="token punctuation">.</span><span class="token constant">YOUR_APP_API_KEY</span><span class="token punctuation">,</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><strong>2. Customize API Headers</strong>: Modify the fetch request headers in&nbsp;<code>src/index.js:55-61</code>:</p>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>env<span class="token punctuation">.</span><span class="token constant">YOUR_APP_API_URL</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token string">'POST'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">headers</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token string-property property">'Content-Type'</span><span class="token operator">:</span> <span class="token string">'application/json'</span><span class="token punctuation">,</span>
+    <span class="token string-property property">'X-Api-Key'</span><span class="token operator">:</span> env<span class="token punctuation">.</span><span class="token constant">YOUR_APP_API_KEY</span><span class="token punctuation">,</span>  <span class="token comment">// Change this header name</span>
+    <span class="token string-property property">'User-Agent'</span><span class="token operator">:</span> <span class="token string">'Your-Custom-Agent/1.0'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">body</span><span class="token operator">:</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>emailData<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><strong>3. Modify Email Data Structure</strong>: Update the&nbsp;<code>emailData</code>&nbsp;object in&nbsp;<code>src/index.js:34-40</code>:</p>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> emailData <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">from</span><span class="token operator">:</span> message<span class="token punctuation">.</span>from<span class="token punctuation">,</span>
+  <span class="token literal-property property">to</span><span class="token operator">:</span> message<span class="token punctuation">.</span>to<span class="token punctuation">,</span>
+  <span class="token literal-property property">subject</span><span class="token operator">:</span> message<span class="token punctuation">.</span>headers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'subject'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment">// Add subject extraction</span>
+  <span class="token literal-property property">headers</span><span class="token operator">:</span> Object<span class="token punctuation">.</span><span class="token function">fromEntries</span><span class="token punctuation">(</span>message<span class="token punctuation">.</span>headers<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">raw</span><span class="token operator">:</span> emailContent<span class="token punctuation">,</span>
+  <span class="token literal-property property">rawSize</span><span class="token operator">:</span> message<span class="token punctuation">.</span>rawSize <span class="token operator">||</span> emailContent<span class="token punctuation">.</span>length<span class="token punctuation">,</span>
+  <span class="token literal-property property">timestamp</span><span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toISOString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">// Add timestamp</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="step-3-upload-your-customized-project-to-github">Step 3: Upload Your Customized Project to GitHub</h2>
+<p>After making your customizations, create your own GitHub repository:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Initialize git if not already done</span>
+<span class="token function">git</span> init
+
+<span class="token comment"># Add your changes</span>
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Initial commit with customizations"</span>
+
+<span class="token comment"># Create a new repository on GitHub and push</span>
+<span class="token function">git</span> remote <span class="token function">add</span> origin https://github.com/yourusername/your-app-email-forwarder.git
+<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin main
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="step-4-setup-worker-on-cloudflare">Step 4: Setup Worker on Cloudflare</h2>
+<p>Instead of using the CLI deployment, we’ll use Cloudflare’s GitHub integration for easier management:</p>
+<h3 id="deploy-via-cloudflare-dashboard">Deploy via Cloudflare Dashboard</h3>
+<ol>
+<li>Go to&nbsp;<strong>Cloudflare Dashboard</strong>&nbsp;&gt;&nbsp;<strong>Workers &amp; Pages</strong></li>
+<li>Click&nbsp;<strong>Create Application</strong></li>
+<li>Select&nbsp;<strong>Pages</strong>&nbsp;tab &gt;&nbsp;<strong>Connect to Git</strong></li>
+<li><strong>Connect your GitHub account</strong>&nbsp;if not already connected</li>
+<li><strong>Select your repository</strong>&nbsp;with the worker code</li>
+<li>Configure the build settings:
+<ul>
+<li><strong>Project name</strong>: your-app-email-forwarder</li>
+<li><strong>Production branch</strong>: main</li>
+<li><strong>Build command</strong>: Leave empty (not needed for workers)</li>
+<li><strong>Build output directory</strong>: Leave empty</li>
+</ul>
+</li>
+<li>Click&nbsp;<strong>Save and Deploy</strong></li>
+</ol>
+<p><img src="/images/2025/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<h3 id="configure-environment-variables">Configure Environment Variables</h3>
+<ol>
+<li>Go to your&nbsp;<strong>project settings</strong>&nbsp;in Cloudflare Dashboard</li>
+<li>Navigate to&nbsp;<strong>Settings</strong>&nbsp;&gt;&nbsp;<strong>Environment Variables</strong></li>
+<li>Add your variables:
+<ul>
+<li><code>MAILVOID_API_URL</code>&nbsp;(or your renamed version): Your API endpoint</li>
+<li><code>MAILVOID_API_KEY</code>&nbsp;(or your renamed version): Your API key</li>
+</ul>
+</li>
+<li>Click&nbsp;<strong>Save</strong></li>
+</ol>
+<p><img src="/images/2025/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<h2 id="step-5-configure-email-routing">Step 5: Configure Email Routing</h2>
+<p><strong>Note</strong>: Since we’re using Cloudflare’s GitHub integration, the deployment and configuration is handled automatically. You don’t need to manually run deployment commands.</p>
+<h3 id="setup-email-routing-in-cloudflare-dashboard">Setup Email Routing in Cloudflare Dashboard</h3>
+<p>Now that your worker is deployed, connect it to email routing:</p>
+<ol>
+<li>Go to&nbsp;<strong>Email Routing</strong>&nbsp;in your Cloudflare Dashboard</li>
+<li>Click&nbsp;<strong>Get Started</strong>&nbsp;and verify your domain</li>
+</ol>
+<p><img src="/images/2025/07/image-4.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<ol start="3">
+<li>Navigate to&nbsp;<strong>Routing Rules</strong></li>
+<li><strong>Enable Catch-all Address</strong>:
+<ul>
+<li>Toggle on the catch-all address option</li>
+<li>This will capture all emails sent to your domain</li>
+</ul>
+</li>
+<li><strong>Configure Action</strong>:
+<ul>
+<li>Select&nbsp;<strong>Action</strong>: “Send to Worker”</li>
+<li><strong>Select Worker</strong>: Choose your deployed worker from the dropdown</li>
+</ul>
+</li>
+<li><strong>Save</strong>&nbsp;your routing configuration</li>
+</ol>
+<p><img src="/images/2025/07/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<h2 id="step-6-test-your-setup">Step 6: Test Your Setup</h2>
+<h3 id="local-testing">Local Testing</h3>
+<p>Test the worker logic locally:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">node</span> test-email.js
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="live-testing">Live Testing</h3>
+<ol>
+<li>Send an email to any address at your domain</li>
+<li>Check worker logs:&nbsp;<code>wrangler tail</code></li>
+<li>Verify your API received the parsed email</li>
+</ol>
+<h3 id="monitor-logs">Monitor Logs</h3>
+<p>Watch real-time logs during testing:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">wrangler <span class="token function">tail</span> <span class="token parameter variable">--format</span><span class="token operator">=</span>pretty
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="expected-email-data-format">Expected Email Data Format</h2>
+<p>Your API will receive emails in this JSON structure:</p>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"from"</span><span class="token operator">:</span> <span class="token string">"sender@example.com"</span><span class="token punctuation">,</span>
+  <span class="token property">"to"</span><span class="token operator">:</span> <span class="token string">"recipient@yourdomain.com"</span><span class="token punctuation">,</span>
+  <span class="token property">"headers"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"subject"</span><span class="token operator">:</span> <span class="token string">"Email Subject"</span><span class="token punctuation">,</span>
+    <span class="token property">"content-type"</span><span class="token operator">:</span> <span class="token string">"text/plain; charset=utf-8"</span><span class="token punctuation">,</span>
+    <span class="token property">"dkim-signature"</span><span class="token operator">:</span> <span class="token string">"v=1; a=rsa-sha256; ..."</span><span class="token punctuation">,</span>
+    <span class="token property">"received-spf"</span><span class="token operator">:</span> <span class="token string">"pass"</span><span class="token punctuation">,</span>
+    <span class="token property">"x-spam-score"</span><span class="token operator">:</span> <span class="token string">"0.1"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"raw"</span><span class="token operator">:</span> <span class="token string">"Full raw email content including headers and body"</span><span class="token punctuation">,</span>
+  <span class="token property">"rawSize"</span><span class="token operator">:</span> <span class="token number">1024</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-issues">Common Issues:</h3>
+<p><strong>1. Environment Variables Not Set</strong></p>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">Error: MAILVOID_API_URL not configured
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Solution: Double-check your environment variables are set correctly.</p>
+<p><strong>2. API Endpoint Unreachable</strong></p>
+<div class="pre-wrapper"><pre class="language-text"><code class="language-text">Error: Failed to forward email: 500
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Solution: Verify your API endpoint is accessible and accepts POST requests.</p>
+<p><strong>3. Email Not Routing to Worker</strong></p>
+<ul>
+<li>Ensure email routing is enabled in Cloudflare Dashboard</li>
+<li>Check that your routing rules match the email pattern</li>
+<li>Verify your domain’s MX records are set correctly</li>
+</ul>
+<p><strong>4. Worker Not Receiving Emails</strong></p>
+<ul>
+<li>Check the worker is deployed and active</li>
+<li>Verify the email routing custom action points to your worker</li>
+<li>Test with&nbsp;<code>wrangler tail</code>&nbsp;to see if requests reach your worker</li>
+</ul>
+<h3 id="debug-mode">Debug Mode</h3>
+<p>Enable verbose logging by adding console.log statements:</p>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'=� Email received:'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">from</span><span class="token operator">:</span> message<span class="token punctuation">.</span>from<span class="token punctuation">,</span>
+  <span class="token literal-property property">to</span><span class="token operator">:</span> message<span class="token punctuation">.</span>to<span class="token punctuation">,</span>
+  <span class="token literal-property property">headers</span><span class="token operator">:</span> Object<span class="token punctuation">.</span><span class="token function">fromEntries</span><span class="token punctuation">(</span>message<span class="token punctuation">.</span>headers<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="advanced-customizations">Advanced Customizations</h2>
+<h3 id="add-email-parsing">Add Email Parsing</h3>
+<p>Extract specific content from emails:</p>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token comment">// Parse HTML content</span>
+<span class="token keyword">const</span> htmlMatch <span class="token operator">=</span> emailContent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Content-Type: text\/html[\s\S]*?\n\n([\s\S]*?)(?=\n--|\n\r\n|\Z)</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> htmlContent <span class="token operator">=</span> htmlMatch <span class="token operator">?</span> htmlMatch<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Parse plain text</span>
+<span class="token keyword">const</span> textMatch <span class="token operator">=</span> emailContent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Content-Type: text\/plain[\s\S]*?\n\n([\s\S]*?)(?=\n--|\n\r\n|\Z)</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> textContent <span class="token operator">=</span> textMatch <span class="token operator">?</span> textMatch<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="add-attachment-detection">Add Attachment Detection</h3>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> hasAttachments <span class="token operator">=</span> emailContent<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span><span class="token string">'Content-Disposition: attachment'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> attachmentCount <span class="token operator">=</span> <span class="token punctuation">(</span>emailContent<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Content-Disposition: attachment</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h3 id="add-spam-filtering">Add Spam Filtering</h3>
+<div class="pre-wrapper"><pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> spamScore <span class="token operator">=</span> message<span class="token punctuation">.</span>headers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'x-spam-score'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> spamThreshold <span class="token operator">=</span> <span class="token number">5.0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>spamScore <span class="token operator">&amp;&amp;</span> <span class="token function">parseFloat</span><span class="token punctuation">(</span>spamScore<span class="token punctuation">)</span> <span class="token operator">&gt;</span> spamThreshold<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'=� Email rejected: spam score too high'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  message<span class="token punctuation">.</span><span class="token function">setReject</span><span class="token punctuation">(</span><span class="token string">'Spam detected'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="production-considerations">Production Considerations</h2>
+<ol>
+<li><strong>Error Handling</strong>: The worker includes comprehensive error handling and logging</li>
+<li><strong>Rate Limiting</strong>: Cloudflare handles this automatically</li>
+<li><strong>Scalability</strong>: Workers scale automatically with your email volume</li>
+<li><strong>Monitoring</strong>: Use Cloudflare Analytics to monitor worker performance</li>
+<li><strong>Security</strong>: API keys are stored securely as environment variables</li>
+</ol>
+<p>[Screenshot: Cloudflare Analytics dashboard showing worker performance metrics and request volume]</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Migrating from SendGrid Parse to Cloudflare Workers provides a robust, cost-effective solution for email parsing. With the free tier handling 100,000 requests daily, most applications will run at zero cost while gaining better performance and control over their email processing pipeline.</p>
+<p>The setup process takes less than 30 minutes, and you’ll have a production-ready email parser that can handle your application’s growth without the recurring costs of traditional email parsing services.</p>
+<hr>
+<p><strong>Repository</strong>:&nbsp;<a href="https://github.com/timothydodd/mailvoid-cloudflare-worker" target="_blank" rel="noopener noreferrer">mailvoid-cloudflare-worker</a></p>
+<p><strong>Questions?</strong>&nbsp;Open an issue on the GitHub repository for support and feature requests.</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on:</strong>
+              <a href="/tag/sendgrid/">sendgrid</a>,               <a href="/tag/cloudflare/">Cloudflare</a>,               <a href="/tag/email/">email</a>,               <a href="/tag/github/">GitHub</a>          </aside>
+      </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>
