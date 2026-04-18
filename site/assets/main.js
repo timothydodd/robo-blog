@@ -35,6 +35,37 @@
   });
 
   // ---------------------------------------------------------------------------
+  // Reading progress bar — tracks scroll through the .post-full article only.
+  // CSS fills .reading-progress-bar via the --progress custom property.
+  // ---------------------------------------------------------------------------
+  (function () {
+    const article = document.querySelector(".post-full");
+    const root = document.documentElement;
+    if (!article) { root.style.setProperty("--progress", "0"); return; }
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const rect = article.getBoundingClientRect();
+      const viewH = window.innerHeight || root.clientHeight;
+      // Start counting when the top of the article crosses the top of the
+      // viewport; finish when the bottom crosses the bottom of the viewport.
+      const total = Math.max(1, rect.height - viewH);
+      const scrolled = Math.min(total, Math.max(0, -rect.top));
+      const p = Math.min(1, Math.max(0, scrolled / total));
+      root.style.setProperty("--progress", p.toFixed(4));
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  })();
+
+  // ---------------------------------------------------------------------------
   // Smooth-scroll in-page anchor links
   // ---------------------------------------------------------------------------
   document.addEventListener("click", function (e) {

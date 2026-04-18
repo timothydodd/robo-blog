@@ -27,9 +27,9 @@
 
     <% if (it.post.tags && it.post.tags.length > 1) { %>
     <aside class="post-full-tag-list gh-canvas">
-      <strong>More on:</strong>
-      <% it.post.tags.forEach(function(t, i){ %>
-        <a href="/tag/<%= t.slug %>/"><%= t.name %></a><%= i < it.post.tags.length - 1 ? ', ' : '' %>
+      <strong>More on</strong>
+      <% it.post.tags.forEach(function(t){ %>
+        <a href="/tag/<%= t.slug %>/"><%= t.name %></a>
       <% }) %>
     </aside>
     <% } %>
