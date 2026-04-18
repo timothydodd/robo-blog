@@ -269,6 +269,32 @@
   letter-spacing: -0.005em;
   line-height: 1;
 }
+
+/* ---------- Mobile polish (post header + canvas) ----------
+   Below 560px the post canvas gets slightly tighter padding, the
+   meta line shrinks so TAG · DATE · READ fits on a single line more
+   reliably, the TOC tightens its padding, and the header trims a bit
+   of vertical rhythm. Keeps everything breathing on 360px screens. */
+@media (max-width: 560px) {
+  .gh-canvas { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .post-full-image { padding: 0 1.25rem; }
+  .post-full-header { padding-bottom: 1.25rem; }
+  .post-full-topline {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .post-full-meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    gap: 0.4rem;
+  }
+  .post-full-byline-avatar { width: 26px; height: 26px; }
+  .post-full-byline-avatar--initials { font-size: 0.66rem; }
+  .post-full-byline-name { font-size: 0.8rem; }
+  .post-full-subtitle { font-size: 1rem; margin-top: 0.75rem; }
+  .post-toc { padding: 0.85rem 1rem; margin-bottom: 1.75rem; }
+  .post-toc > ol > li::before { margin-right: 0.4rem; }
+}
 .post-full-meta-tag { color: var(--color-accent); }
 .post-full-meta-tag:hover { color: var(--color-accent-deep); }
 .post-full-meta-sep { opacity: 0.45; font-weight: 400; }

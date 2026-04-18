@@ -1679,6 +1679,48 @@
   letter-spacing: -0.005em;
   line-height: 1;
 }
+@media (max-width: 560px) {
+  .gh-canvas {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  .post-full-image {
+    padding: 0 1.25rem;
+  }
+  .post-full-header {
+    padding-bottom: 1.25rem;
+  }
+  .post-full-topline {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .post-full-meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    gap: 0.4rem;
+  }
+  .post-full-byline-avatar {
+    width: 26px;
+    height: 26px;
+  }
+  .post-full-byline-avatar--initials {
+    font-size: 0.66rem;
+  }
+  .post-full-byline-name {
+    font-size: 0.8rem;
+  }
+  .post-full-subtitle {
+    font-size: 1rem;
+    margin-top: 0.75rem;
+  }
+  .post-toc {
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.75rem;
+  }
+  .post-toc > ol > li::before {
+    margin-right: 0.4rem;
+  }
+}
 .post-full-meta-tag {
   color: var(--color-accent);
 }

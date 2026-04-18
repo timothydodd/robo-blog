@@ -5,8 +5,16 @@
     <link>https://robododd.com/</link>
     <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Apr 2026 06:18:07 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 18 Apr 2026 17:25:51 GMT</lastBuildDate>
     <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</title>
+      <description>K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here&apos;s the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.</description>
+      <link>https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/</link>
+      <guid isPermaLink="true">https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/</guid>
+      <pubDate>Sat, 18 Apr 2026 17:25:07 GMT</pubDate>
+      <category>K3s</category>
+    </item>
     <item>
       <title>Building a Static Blog to Replace Ghost</title>
       <description>I replaced my self-hosted Ghost blog with a static site — cheaper, faster, and with almost no attack surface. Here&apos;s the stack and how you can do the same.</description>
@@ -160,14 +168,6 @@
       <guid isPermaLink="true">https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</guid>
       <pubDate>Mon, 10 Mar 2025 17:44:24 GMT</pubDate>
       <category>3D Printing</category>
-    </item>
-    <item>
-      <title>How to Enable Claude 3.7 Sonnet in GitHub Copilot (Pro &amp; Organization Guide for VS Code)</title>
-      <description>Learn how to enable Claude 3.7 Sonnet in GitHub Copilot for VS Code. Use Copilot Chat with this AI model in your organization. Quick guide to get started! </description>
-      <link>https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</link>
-      <guid isPermaLink="true">https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</guid>
-      <pubDate>Fri, 28 Feb 2025 16:57:22 GMT</pubDate>
-      <category>GitHub Copilot</category>
     </item>
   </channel>
 </rss>

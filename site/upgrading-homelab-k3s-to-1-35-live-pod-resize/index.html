@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts — RoboDodd</title>
+  <meta name="description" content="K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here's the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts — RoboDodd">
+  <meta property="og:description" content="K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here's the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.">
+  <meta property="og:url" content="https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
+  <meta property="og:image" content="https://robododd.com/images/2026/04/k3s-135-upgrade.jpg">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-04-18T17:25:07.549Z">
+  <meta property="article:modified_time" content="2026-04-18T17:25:07.549Z">  <meta property="article:tag" content="K3s">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/"},"headline":"Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts","description":"K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here's the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.","image":"https://robododd.com/images/2026/04/k3s-135-upgrade.jpg","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.jpg"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-18T17:25:07.549Z","dateModified":"2026-04-18T17:25:07.549Z","keywords":"K3s, Kubernetes, homelab, DevOps, Containerization","articleSection":"K3s"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+    <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+            <div class="post-full-topline">
+        <div class="post-full-meta">
+                      <a class="post-full-meta-tag" href="/tag/k3s/">K3s</a>
+            <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                    <time datetime="2026-04-18T17:25:07.549Z">Apr 18, 2026</time>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+          <span>4 min read</span>
+        </div>
+        <div class="post-full-byline">
+                    <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.jpg" alt="" width="28" height="28" decoding="async">
+                    <span class="post-full-byline-name">Tim Dodd</span>
+        </div>
+      </div>
+      <h1 class="post-full-title">Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</h1>
+      <p class="post-full-subtitle">K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here's the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2026/04/k3s-135-upgrade.jpg" alt="Abstract illustration of three K3s cluster nodes with one mid-resize, on the RoboDodd gradient" loading="eager" decoding="async" width="1316" height="814">
+          </figure>
+    
+    <section class="post-full-content gh-content gh-canvas">
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#whats-in-the-release" data-toc-link>What’s in the Release</a>
+                            </li>
+                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#on-an-older-minor-hop-dont-jump" data-toc-link>On an Older Minor? Hop, Don’t Jump</a>
+                            </li>
+                                                                            <li><a href="#ha-cluster-roll-dont-stop" data-toc-link>HA Cluster? Roll, Don’t Stop</a>
+                            </li>
+                                                                            <li><a href="#step-1-upgrade-the-server" data-toc-link>Step 1: Upgrade the Server</a>
+                            </li>
+                                                                            <li><a href="#step-2-upgrade-the-agents" data-toc-link>Step 2: Upgrade the Agents</a>
+                            </li>
+                                                                            <li><a href="#demo-1-in-place-pod-resize" data-toc-link>Demo 1: In-Place Pod Resize</a>
+                            </li>
+                                                                            <li><a href="#demo-2-oci-image-volume" data-toc-link>Demo 2: OCI Image Volume</a>
+                            </li>
+                                                                            <li><a href="#rollback-plan" data-toc-link>Rollback Plan</a>
+                            </li>
+                                                                            <li><a href="#takeaways" data-toc-link>Takeaways</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p><a href="https://docs.k3s.io/blog/2026/01/15/K3s-1.35-release" target="_blank" rel="noopener noreferrer">K3s 1.35</a> dropped on January 15, 2026, tracking upstream Kubernetes “Timbernetes.” Most of the release notes are the usual CRI/CNI/etcd churn, but two features are worth upgrading <em>today</em> for:</p>
+<ul>
+<li><strong>In-place pod resize</strong> is now GA — bump CPU/memory on a running pod without restarting it.</li>
+<li><strong>Image volumes</strong> are Stable — mount an OCI image as a read-only volume, so you can ship config blobs or model weights without baking them into container layers.</li>
+</ul>
+<p>For homelab use, those are both real quality-of-life wins. This post is the upgrade from 1.34 on a 3-node cluster, plus a demo of each feature.</p>
+<h2 id="whats-in-the-release">What’s in the Release</h2>
+<p>The headline changes worth flagging before you upgrade:</p>
+<ul>
+<li>Built on Go 1.25.</li>
+<li>Streaming protocol moved from SPDY → WebSockets. Affects <code>kubectl exec</code>, <code>port-forward</code>, and <code>attach</code>. Old kubectl clients may misbehave — upgrade kubectl too.</li>
+<li>CNI startup refactored into a first-class <code>Executor</code> interface. Shouldn’t matter for the stock Flannel/Calico users but watch your logs on first boot.</li>
+<li>Default branch of the K3s repo renamed <code>master</code> → <code>main</code>. Only matters if you’re pinning to a branch.</li>
+<li>In-place <code>resources.resize</code> → GA.</li>
+<li><code>image</code> volume type → Stable.</li>
+</ul>
+<hr>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>A K3s 1.34.x cluster (server + one or more agents)</li>
+<li>Root SSH to every node</li>
+<li><code>kubectl</code> and <code>etcdctl</code> handy</li>
+<li>A recent <strong>etcd snapshot</strong> — this is non-negotiable</li>
+</ul>
+<p>Take the snapshot first:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> k3s etcd-snapshot save <span class="token parameter variable">--name</span> pre-135
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="on-an-older-minor-hop-dont-jump">On an Older Minor? Hop, Don’t Jump</h2>
+<p>Kubernetes — and therefore K3s — only supports upgrading <strong>one minor version at a time</strong>. Going directly from 1.32 to 1.35 skips two minors and risks broken API versions, kubelet↔control-plane incompatibility, and etcd schema migrations that assume the intermediate hops happened.</p>
+<p>If you’re on 1.33 or earlier, do sequential hops first and come back to this guide for the final 1.34 → 1.35 step:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sfL</span> https://get.k3s.io <span class="token operator">|</span> <span class="token assign-left variable">INSTALL_K3S_CHANNEL</span><span class="token operator">=</span>v1.33 <span class="token function">sh</span> -   <span class="token comment"># then v1.34, then v1.35</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Between every hop: verify <code>kubectl get nodes</code> is <code>Ready</code>, confirm nothing’s <code>CrashLoopBackOff</code> with <code>kubectl get pods -A</code>, and take a fresh etcd snapshot. Two things to watch for along the way:</p>
+<ul>
+<li><strong>1.32 → 1.33:</strong> <code>autoscaling/v2beta*</code> and <code>flowcontrol.apiserver.k8s.io/v1beta3</code> finished removal. Re-apply any manifests still referencing them against the current API groups.</li>
+<li><strong>1.34 → 1.35:</strong> The streaming protocol flips from SPDY to WebSockets. Upgrade your local <code>kubectl</code> too or <code>exec</code>/<code>port-forward</code> will misbehave.</li>
+</ul>
+<p>A full 1.32 → 1.35 run takes ~15 minutes on a small homelab cluster.</p>
+<h2 id="ha-cluster-roll-dont-stop">HA Cluster? Roll, Don’t Stop</h2>
+<p>If you’re running <strong>multi-server HA</strong> — three (or more) nodes each running control plane + workload, sharing embedded etcd — you do <strong>not</strong> need to shut anything down. That’s the reason you built HA in the first place. K3s embedded etcd tolerates one server being offline at a time because quorum on a 3-node cluster is 2, so while one node is bouncing the other two keep serving the API and scheduling pods.</p>
+<p>Per-node procedure, one node at a time:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token comment"># On any node, first:</span>
+<span class="token function">sudo</span> k3s etcd-snapshot save <span class="token parameter variable">--name</span> pre-135
+
+<span class="token comment"># Then for each of the three nodes in turn:</span>
+kubectl cordon <span class="token operator">&lt;</span>node-name<span class="token operator">&gt;</span>                          <span class="token comment"># stop scheduling new pods here</span>
+<span class="token function">curl</span> <span class="token parameter variable">-sfL</span> https://get.k3s.io <span class="token operator">|</span> <span class="token assign-left variable">INSTALL_K3S_CHANNEL</span><span class="token operator">=</span>v1.35 <span class="token function">sh</span> -
+<span class="token comment"># wait for:</span>
+kubectl get nodes                                   <span class="token comment"># should show &lt;node-name&gt; Ready</span>
+kubectl get pods <span class="token parameter variable">-A</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-v</span> Running               <span class="token comment"># should be empty</span>
+kubectl uncordon <span class="token operator">&lt;</span>node-name<span class="token operator">&gt;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>The installer replaces the binary and restarts the <code>k3s</code> systemd unit in ~30–90 seconds. Workloads running on that node will have a brief interruption; if that matters for a specific deployment, add a <code>kubectl drain &lt;node-name&gt; --ignore-daemonsets --delete-emptydir-data</code> between cordon and the installer so pods migrate off first.</p>
+<p><strong>Do not</strong> run the installer on two servers in parallel. Losing two of three servers at once means losing etcd quorum, and the cluster freezes until the first one comes back.</p>
+<p>Once all three are on 1.35, verify:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> k3s kubectl get nodes <span class="token parameter variable">-o</span> wide
+<span class="token function">sudo</span> k3s kubectl version
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>If you’re on this topology, skip Step 1 and Step 2 below — they cover the single-server + agents topology — and go straight to the feature demos.</p>
+<h2 id="step-1-upgrade-the-server">Step 1: Upgrade the Server</h2>
+<p>On the control-plane node:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sfL</span> https://get.k3s.io <span class="token operator">|</span> <span class="token assign-left variable">INSTALL_K3S_CHANNEL</span><span class="token operator">=</span>v1.35 <span class="token function">sh</span> -
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>The installer stops the old service, drops the new binary in place, and restarts. Give it ~60 seconds and check:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> k3s kubectl get nodes
+<span class="token function">sudo</span> k3s kubectl version
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Server should report <code>v1.35.x+k3s1</code> and all nodes should still be <code>Ready</code>. Agents will keep running the old version until you upgrade them — that’s fine, K3s supports a one-minor-version skew.</p>
+<h2 id="step-2-upgrade-the-agents">Step 2: Upgrade the Agents</h2>
+<p>On each agent, one at a time:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sfL</span> https://get.k3s.io <span class="token operator">|</span> <span class="token punctuation">\</span>
+  <span class="token assign-left variable">INSTALL_K3S_CHANNEL</span><span class="token operator">=</span>v1.35 <span class="token punctuation">\</span>
+  <span class="token assign-left variable">K3S_URL</span><span class="token operator">=</span>https://<span class="token operator">&lt;</span>server-ip<span class="token operator">&gt;</span>:6443 <span class="token punctuation">\</span>
+  <span class="token assign-left variable">K3S_TOKEN</span><span class="token operator">=</span><span class="token operator">&lt;</span>your-token<span class="token operator">&gt;</span> <span class="token punctuation">\</span>
+  <span class="token function">sh</span> -
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Watch with <code>kubectl get nodes -w</code> from the server. When it flips back to <code>Ready</code>, move on to the next agent.</p>
+<hr>
+<h2 id="demo-1-in-place-pod-resize">Demo 1: In-Place Pod Resize</h2>
+<p>Deploy a Pi-hole pod with modest memory, then bump it live. Deployment:</p>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> pihole <span class="token punctuation">}</span>
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">app</span><span class="token punctuation">:</span> pihole <span class="token punctuation">}</span> <span class="token punctuation">}</span>
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">labels</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">app</span><span class="token punctuation">:</span> pihole <span class="token punctuation">}</span> <span class="token punctuation">}</span>
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> pihole
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> pihole/pihole<span class="token punctuation">:</span><span class="token number">2026.02</span>
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">requests</span><span class="token punctuation">:</span> <span class="token punctuation">{</span> <span class="token key atrule">cpu</span><span class="token punctuation">:</span> 100m<span class="token punctuation">,</span> <span class="token key atrule">memory</span><span class="token punctuation">:</span> 128Mi <span class="token punctuation">}</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>   <span class="token punctuation">{</span> <span class="token key atrule">cpu</span><span class="token punctuation">:</span> 500m<span class="token punctuation">,</span> <span class="token key atrule">memory</span><span class="token punctuation">:</span> 256Mi <span class="token punctuation">}</span>
+          <span class="token key atrule">resizePolicy</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">resourceName</span><span class="token punctuation">:</span> memory
+              <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> NotRequired
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>The <code>resizePolicy</code> block with <code>NotRequired</code> is what permits an in-place resize. Apply it, wait for the pod to come up, then bump memory:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">kubectl patch pod <span class="token operator">&lt;</span>pihole-pod<span class="token operator">&gt;</span> <span class="token parameter variable">--subresource</span> resize <span class="token parameter variable">--patch</span> <span class="token string">'
+{"spec":{"containers":[{"name":"pihole",
+  "resources":{
+    "requests":{"memory":"256Mi"},
+    "limits":{"memory":"512Mi"}}}]}}'</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Describe the pod — <code>RestartCount</code> stays <code>0</code> and <code>Status.Resources</code> reflects the new limits. No DNS blip, no Pi-hole restart, no GRUB of angry family members.</p>
+<h2 id="demo-2-oci-image-volume">Demo 2: OCI Image Volume</h2>
+<p>Say you want to ship a shared config bundle across several workloads without baking it into each container. Build a tiny OCI image with just the config:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span><span class="token string">'EOF'<span class="token bash punctuation"> <span class="token operator">&gt;</span> Dockerfile.config</span>
+FROM scratch
+COPY app-config.json /config/
+EOF</span>
+<span class="token function">docker</span> buildx build <span class="token parameter variable">-f</span> Dockerfile.config <span class="token parameter variable">-t</span> ghcr.io/timothydodd/homelab-config:v1 <span class="token parameter variable">--push</span> <span class="token builtin class-name">.</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Mount it as a volume:</p>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> app
+      <span class="token key atrule">image</span><span class="token punctuation">:</span> my<span class="token punctuation">-</span>app<span class="token punctuation">:</span>latest
+      <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> shared<span class="token punctuation">-</span>config
+          <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /etc/app
+          <span class="token key atrule">readOnly</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> shared<span class="token punctuation">-</span>config
+      <span class="token key atrule">image</span><span class="token punctuation">:</span>
+        <span class="token key atrule">reference</span><span class="token punctuation">:</span> ghcr.io/timothydodd/homelab<span class="token punctuation">-</span>config<span class="token punctuation">:</span>v1
+        <span class="token key atrule">pullPolicy</span><span class="token punctuation">:</span> IfNotPresent
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Kubelet pulls the image via the CRI, exposes its filesystem read-only, and the pod sees <code>/etc/app/app-config.json</code>. Rev the config? Push a new image tag and redeploy. Works for model weights, static assets, certificate bundles — anywhere you’d otherwise reach for a ConfigMap + base64 hack.</p>
+<hr>
+<h2 id="rollback-plan">Rollback Plan</h2>
+<p>If something goes sideways, K3s keeps the previous binary around:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">sudo</span> /usr/local/bin/k3s-uninstall.sh   <span class="token comment"># agents: k3s-agent-uninstall.sh</span>
+<span class="token function">curl</span> <span class="token parameter variable">-sfL</span> https://get.k3s.io <span class="token operator">|</span> <span class="token assign-left variable">INSTALL_K3S_CHANNEL</span><span class="token operator">=</span>v1.34 <span class="token function">sh</span> -
+<span class="token function">sudo</span> k3s server --cluster-init --etcd-snapshot-file<span class="token operator">=</span><span class="token operator">&lt;</span>your-snapshot<span class="token operator">&gt;</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>I haven’t needed it yet on a 1.34→1.35 hop but snapshot or pray.</p>
+<h2 id="takeaways">Takeaways</h2>
+<p>In-place resize alone was worth the upgrade — I’ve been restarting Pi-hole every time I wanted to give it more memory for its cache, and that’s a solved problem now. Image volumes take a beat to click, but once they do you’ll find config sprawl disappearing.</p>
+<p>Next up: wiring the image-volume pattern into my Ollama deployments so model weights are a pinned OCI reference instead of a 40 GB persistent volume I have to hand-manage. That’s a follow-up post.</p>
+    </section>
+
+        <aside class="post-full-tag-list gh-canvas">
+      <strong>More on</strong>
+              <a href="/tag/k3s/">K3s</a>
+              <a href="/tag/kubernetes/">Kubernetes</a>
+              <a href="/tag/homelab/">homelab</a>
+              <a href="/tag/devops/">DevOps</a>
+              <a href="/tag/containerization/">Containerization</a>
+          </aside>
+      </article>
+
+    <aside class="read-more-wrap">
+    <h3 class="read-more-heading">Read more</h3>
+    <div class="read-more">
+              <article class="post-card">
+    <a class="post-card-image-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">
+    <img class="post-card-image" src="/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg" alt="Make Your k3s Local Storage Persistent with Longhorn" loading="lazy" decoding="async" width="800" height="534">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">K3s</span></div>
+                <h2 class="post-card-title">Make Your k3s Local Storage Persistent with Longhorn</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Learn how to install Longhorn in k3s and migrate from local-path PVCs to resilient, node-independent Longhorn volumes.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-05-10T18:49:21.000Z">May 10, 2025</time>
+      <span class="post-card-meta-length">2 min read</span>
+    </footer>
+  </div>
+</article>
+              <article class="post-card">
+    <a class="post-card-image-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">
+    <img class="post-card-image" src="/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp" alt="How to Set Up Cloudflare Tunnels for k3s Without MetalLB" loading="lazy" decoding="async" width="1536" height="1024">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">K3s</span></div>
+                <h2 class="post-card-title">How to Set Up Cloudflare Tunnels for k3s Without MetalLB</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Expose k3s services with Cloudflare Tunnels—no MetalLB, no LAN IPs, no firewall hassle. Simple, secure remote access in minutes.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-04-09T20:57:45.000Z">Apr 9, 2025</time>
+      <span class="post-card-meta-length">2 min read</span>
+    </footer>
+  </div>
+</article>
+          </div>
+  </aside>
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>

@@ -7,6 +7,12 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://robododd.com/building-a-static-blog-to-replace-ghost/</loc>
     <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
@@ -470,7 +476,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/containerization/</loc>
-    <lastmod>2025-05-27</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -536,7 +542,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/devops/</loc>
-    <lastmod>2025-11-12</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -716,7 +722,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/homelab/</loc>
-    <lastmod>2025-04-09</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -746,13 +752,13 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/k3s/</loc>
-    <lastmod>2025-05-26</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/kubernetes/</loc>
-    <lastmod>2025-05-26</lastmod>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
