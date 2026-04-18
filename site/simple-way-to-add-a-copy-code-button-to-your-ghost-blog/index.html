@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-01-24T17:39:41.000Z">  <meta property="article:tag" content="Ghost Blog">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/simple-way-to-add-a-copy-code-button-to-your-ghost-blog/"},"headline":"Simple Way to Add a \"Copy Code\" Button to Your Ghost Blog","description":"Learn how to add a sleek 'Copy Code' button to your Ghost blog. This quick guide shows you how to use CSS and JavaScript to enhance your code snippets, with optional Font Awesome icons for extra style. Improve your blog’s user experience in just a few steps!","image":"https://robododd.com/images/2025/01/Screenshot-2025-01-24-123546.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-24T17:39:41.000Z","dateModified":"2025-01-24T17:39:41.000Z","keywords":"Ghost Blog, Web Development, CSS Styling, Ghost Blog Customization, JavaScript","articleSection":"Ghost Blog"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,22 +330,37 @@
       <p class="post-full-subtitle">Learn how to add a sleek 'Copy Code' button to your Ghost blog. This quick guide shows you how to use CSS and JavaScript to enhance your code snippets, with optional Font Awesome icons for extra style. Improve your blog’s user experience in just a few steps!</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/01/Screenshot-2025-01-24-123546.jpg" alt="Simple Way to Add a "Copy Code" Button to Your Ghost Blog" loading="eager" decoding="async">
+      <img src="/images/2025/01/Screenshot-2025-01-24-123546.jpg" alt="Simple Way to Add a "Copy Code" Button to Your Ghost Blog" loading="eager" decoding="async" width="1107" height="846">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Adding a “Copy Code” button to your blog posts can make it much easier for readers to copy and use your code snippets. Follow these steps to implement it on your Ghost blog.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#step-1-open-the-code-injection-settings" data-toc-link>Step 1: Open the Code Injection Settings</a>
+                            </li>
+                                                                            <li><a href="#step-2-add-styles-for-the-copy-button" data-toc-link>Step 2: Add Styles for the Copy Button</a>
+                            </li>
+                                                                            <li><a href="#step-3-add-javascript-for-the-button-functionality" data-toc-link>Step 3: Add JavaScript for the Button Functionality</a>
+                            <ol>
+                                                              <li><a href="#note-about-font-awesome-icons" data-toc-link>Note About Font Awesome Icons</a></li>
+                            </ol></li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Adding a “Copy Code” button to your blog posts can make it much easier for readers to copy and use your code snippets. Follow these steps to implement it on your Ghost blog.</p>
 <hr>
 <h2 id="step-1-open-the-code-injection-settings">Step 1: Open the Code Injection Settings</h2>
 <ol>
 <li>Go to your <strong>Ghost settings</strong> page.</li>
 <li>Scroll down to <strong>Advanced</strong> and select <strong>Code Injection</strong>.</li>
 </ol>
-<p><img src="/images/2025/01/image-3.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-3.png" alt="" loading="lazy" decoding="async" width="305" height="310" data-zoom=""></p>
 <ol start="3">
 <li>Click on the <strong>Code Injection Card</strong> to open it.</li>
 </ol>
-<p><img src="/images/2025/01/image-4.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-4.png" alt="" loading="lazy" decoding="async" width="582" height="780" data-zoom=""></p>
 <hr>
 <h2 id="step-2-add-styles-for-the-copy-button">Step 2: Add Styles for the Copy Button</h2>
 <p>In the <strong>Site Header</strong> section of the Code Injection settings, add the following code snippet. This includes the Font Awesome stylesheet (if you want to use icons) and the CSS styles for the “Copy Code” button:</p>

@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-05-26T14:51:40.000Z">  <meta property="article:tag" content="Angular">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/angular-19-essentials-first-steps-for-new-developers/"},"headline":"Angular 19 Essentials: First Steps for New Developers","description":"Transform from complete beginner to Angular 19 developer with this step-by-step guide to setting up your environment and building your first web application.","image":"https://robododd.com/images/2025/05/71e63b52-f589-482f-a7fe-ae612328b531.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-03-26T18:39:36.000Z","dateModified":"2025-05-26T14:51:40.000Z","keywords":"Angular, Web Development, TypeScript, Front-End Development, VS Code","articleSection":"Angular"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,47 @@
       <p class="post-full-subtitle">Transform from complete beginner to Angular 19 developer with this step-by-step guide to setting up your environment and building your first web application.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/05/71e63b52-f589-482f-a7fe-ae612328b531.jpg" alt="Angular 19 Essentials: First Steps for New Developers" loading="eager" decoding="async">
+      <img src="/images/2025/05/71e63b52-f589-482f-a7fe-ae612328b531.jpg" alt="Angular 19 Essentials: First Steps for New Developers" loading="eager" decoding="async" width="800" height="534">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Are you ready to start working with Angular? Maybe you’ve heard about this powerful framework but have no idea where to start. Don’t worry - we’ve all been there! In this guide, I’ll walk you through setting up your development environment and creating your first Angular 19 application, even if you’ve never written a line of TypeScript before. By the end of this post, you’ll have a working Angular app and understand the basic building blocks that make this framework so popular among developers worldwide. Let’s embark on this coding journey together!</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#setting-up-your-development-environment" data-toc-link>Setting Up Your Development Environment</a>
+                            <ol>
+                                                              <li><a href="#1-visual-studio-code-vs-code" data-toc-link>1. Visual Studio Code (VS Code)</a></li>
+                                                              <li><a href="#2-nodejs-and-npm" data-toc-link>2. Node.js and NPM</a></li>
+                            </ol></li>
+                                                                            <li><a href="#using-the-vs-code-integrated-terminal" data-toc-link>Using the VS Code Integrated Terminal</a>
+                            <ol>
+                                                              <li><a href="#3-enable-script-execution-in-windows" data-toc-link>3. Enable Script Execution in Windows</a></li>
+                                                              <li><a href="#3-installing-angular-cli" data-toc-link>3. Installing Angular CLI</a></li>
+                            </ol></li>
+                                                                            <li><a href="#creating-your-first-angular-19-application" data-toc-link>Creating Your First Angular 19 Application</a>
+                            </li>
+                                                                            <li><a href="#understanding-angular-19s-modern-architecture" data-toc-link>Understanding Angular 19’s Modern Architecture</a>
+                            <ol>
+                                                              <li><a href="#standalone-components" data-toc-link>Standalone Components</a></li>
+                                                              <li><a href="#bootstrapping-the-application" data-toc-link>Bootstrapping the Application</a></li>
+                                                              <li><a href="#application-configuration" data-toc-link>Application Configuration</a></li>
+                                                              <li><a href="#routing-setup" data-toc-link>Routing Setup</a></li>
+                            </ol></li>
+                                                                            <li><a href="#creating-a-custom-hello-world-component" data-toc-link>Creating a Custom “Hello World” Component</a>
+                            </li>
+                                                                            <li><a href="#services-in-standalone-angular" data-toc-link>Services in Standalone Angular</a>
+                            </li>
+                                                                            <li><a href="#templates-and-data-binding" data-toc-link>Templates and Data Binding</a>
+                            </li>
+                                                                            <li><a href="#running-your-modified-application" data-toc-link>Running Your Modified Application</a>
+                            </li>
+                                                                            <li><a href="#vs-code-terminal-tips-for-angular-development" data-toc-link>VS Code Terminal Tips for Angular Development</a>
+                            </li>
+                                                                            <li><a href="#next-steps" data-toc-link>Next Steps</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Are you ready to start working with Angular? Maybe you’ve heard about this powerful framework but have no idea where to start. Don’t worry - we’ve all been there! In this guide, I’ll walk you through setting up your development environment and creating your first Angular 19 application, even if you’ve never written a line of TypeScript before. By the end of this post, you’ll have a working Angular app and understand the basic building blocks that make this framework so popular among developers worldwide. Let’s embark on this coding journey together!</p>
 <hr>
 <h2 id="setting-up-your-development-environment">Setting Up Your Development Environment</h2>
 <p>Before getting into Angular 19, you’ll need to set up your development environment with the essential tools:</p>
@@ -365,7 +401,7 @@
 </ul>
 </li>
 </ol>
-<p><img src="/images/2025/03/image-11.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/03/image-11.png" alt="" loading="lazy" decoding="async" width="1078" height="618" data-zoom=""></p>
 <p>The integrated terminal provides all the functionality you need without switching between applications. You can:</p>
 <ul>
 <li>Run multiple terminal instances (click the + icon)</li>
@@ -388,7 +424,7 @@
 </ol>
 <div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">npm install <span class="token operator">-</span>g @angular/<span class="token function">cli</span>
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<p><img src="/images/2025/03/image-12.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/03/image-12.png" alt="" loading="lazy" decoding="async" width="999" height="569" data-zoom=""></p>
 <ol start="2">
 <li>Verify the installation:</li>
 </ol>
@@ -657,7 +693,7 @@ ng g i my-interface
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/google-places-autocomplete-directive-angular-21/">
-    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/google-places-autocomplete-directive-angular-21/">
@@ -675,7 +711,7 @@ ng g i my-interface
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
-    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async" width="938" height="652">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
@@ -692,7 +728,7 @@ ng g i my-interface
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
-    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">

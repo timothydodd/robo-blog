@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-04-09T20:57:45.000Z">  <meta property="article:tag" content="K3s">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/"},"headline":"How to Set Up Cloudflare Tunnels for k3s Without MetalLB","description":"Expose k3s services with Cloudflare Tunnels—no MetalLB, no LAN IPs, no firewall hassle. Simple, secure remote access in minutes.","image":"https://robododd.com/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-04-09T20:57:45.000Z","dateModified":"2025-04-09T20:57:45.000Z","keywords":"K3s, Kubernetes, Cloudflare, homelab, MetalLb, reverse-proxy, DevOps","articleSection":"K3s"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,34 @@
       <p class="post-full-subtitle">Expose k3s services with Cloudflare Tunnels—no MetalLB, no LAN IPs, no firewall hassle. Simple, secure remote access in minutes.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp" alt="How to Set Up Cloudflare Tunnels for k3s Without MetalLB" loading="eager" decoding="async">
+      <img src="/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp" alt="How to Set Up Cloudflare Tunnels for k3s Without MetalLB" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>If you’re running a <a href="https://k3s.io" target="_blank" rel="noopener noreferrer">k3s</a> cluster and want to expose services to the outside world, you might think you <em>have</em> to use something like MetalLB to assign local network IPs. While MetalLB is great for local access, it can feel overcomplicated if you don’t care about LAN IPs and just want remote access.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#why-cloudflare-tunnel" data-toc-link>Why Cloudflare Tunnel?</a>
+                            </li>
+                                                                            <li><a href="#step-1-create-a-kubernetes-service" data-toc-link>Step 1: Create a Kubernetes Service</a>
+                            </li>
+                                                                            <li><a href="#step-2-set-up-a-cloudflare-tunnel" data-toc-link>Step 2: Set Up a Cloudflare Tunnel</a>
+                            <ol>
+                                                              <li><a href="#1-create-a-cloudflare-account" data-toc-link>1. Create a Cloudflare Account</a></li>
+                                                              <li><a href="#2-enable-zero-trust" data-toc-link>2. Enable Zero Trust</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-3-deploy-the-cloudflare-tunnel-agent-to-k3s" data-toc-link>Step 3: Deploy the Cloudflare Tunnel Agent to k3s</a>
+                            <ol>
+                                                              <li><a href="#copy-the-token" data-toc-link>Copy the Token</a></li>
+                                                              <li><a href="#create-the-deployment-manifest" data-toc-link>Create the Deployment Manifest</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-4-add-a-public-hostname-in-cloudflare" data-toc-link>Step 4: Add a Public Hostname in Cloudflare</a>
+                            </li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>If you’re running a <a href="https://k3s.io" target="_blank" rel="noopener noreferrer">k3s</a> cluster and want to expose services to the outside world, you might think you <em>have</em> to use something like MetalLB to assign local network IPs. While MetalLB is great for local access, it can feel overcomplicated if you don’t care about LAN IPs and just want remote access.</p>
 <p>Fortunately, Cloudflare Tunnels offer a clean, secure, and LAN-agnostic way to expose services — no need to fiddle with IPs or firewall rules. You can even route traffic directly to a Kubernetes service by name. Let’s walk through how to do that.</p>
 <hr>
 <h2 id="why-cloudflare-tunnel">Why Cloudflare Tunnel?</h2>
@@ -392,7 +415,7 @@
 <li>Visit <a href="https://www.cloudflare.com" target="_blank" rel="noopener noreferrer">Cloudflare.com</a> and sign up if you don’t have an account.</li>
 <li>Click <strong>“Add a Site”</strong> and follow the prompts to add your domain (e.g., <code>mysite.com</code>).</li>
 </ul>
-<p><img src="/images/2024/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image.png" alt="" loading="lazy" decoding="async" width="562" height="315" data-zoom=""></p>
 <h3 id="2-enable-zero-trust">2. Enable Zero Trust</h3>
 <ul>
 <li>Go to the <strong>“Zero Trust”</strong> section of your dashboard.</li>
@@ -400,7 +423,7 @@
 <li>Click <strong>“Create a Tunnel”</strong>.</li>
 <li>You’ll be guided through steps until you’re prompted to install the <code>cloudflared</code> agent.</li>
 </ul>
-<p><img src="/images/2024/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image-1.png" alt="" loading="lazy" decoding="async" width="877" height="703" data-zoom=""></p>
 <hr>
 <h2 id="step-3-deploy-the-cloudflare-tunnel-agent-to-k3s">Step 3: Deploy the Cloudflare Tunnel Agent to k3s</h2>
 <p>You can run <code>cloudflared</code> as a pod in Kubernetes.</p>
@@ -456,15 +479,15 @@ spec:
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h2 id="step-4-add-a-public-hostname-in-cloudflare">Step 4: Add a Public Hostname in Cloudflare</h2>
 <p>Once your tunnel shows as <strong>“Healthy”</strong> in the dashboard:</p>
-<p><img src="/images/2025/04/image-6.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/04/image-6.png" alt="" loading="lazy" decoding="async" width="1306" height="417" data-zoom=""></p>
 <ol>
 <li>Click the three dots next to the tunnel name and select <strong>“Configure”</strong>.</li>
 <li>Under <strong>“Public Hostname”</strong>, click <strong>“Add a Public Hostname”</strong>.</li>
 <li>Choose a hostname like <code>ghost.mysite.com</code>.</li>
 <li>For the <strong>service</strong>, use the DNS name of your Kubernetes service (e.g., <code>ghost-app-lb</code>).</li>
 </ol>
-<p><img src="/images/2025/04/image-7.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
-<p><img src="/images/2024/07/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/04/image-7.png" alt="" loading="lazy" decoding="async" width="850" height="156" data-zoom=""></p>
+<p><img src="/images/2024/07/image-5.png" alt="" loading="lazy" decoding="async" width="1372" height="491" data-zoom=""></p>
 <p>Cloudflare will route traffic from the public hostname to your internal service — just like that.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Using Cloudflare Tunnels with k3s is a lightweight and secure way to expose your services — no MetalLB, no port forwarding, no headaches. This approach is especially useful for self-hosted apps like Ghost, Uptime Kuma, or even your custom tools.</p>
@@ -487,7 +510,7 @@ spec:
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">
-    <img class="post-card-image" src="/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg" alt="Make Your k3s Local Storage Persistent with Longhorn" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg" alt="Make Your k3s Local Storage Persistent with Longhorn" loading="lazy" decoding="async" width="800" height="534">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">

@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2024-07-02T11:23:54.000Z">  <meta property="article:tag" content="SSL">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/local-network-https-on-chrome/"},"headline":"Local Network  SSL / Https on Chrome without Certificate Errors","description":"If you've ever hosted a private web service on your local network , you've ran into the pain point of chrome or any other browser complaining that the connection is not secure or…","image":"https://robododd.com/images/2023/10/cert.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2023-10-26T02:54:50.000Z","dateModified":"2024-07-02T11:23:54.000Z","keywords":"SSL, Kubernetes, Cloudflare, Networking, DNS, NGINX, Chrome, Certificates","articleSection":"SSL"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,38 @@
           </header>
 
         <figure class="post-full-image">
-      <img src="/images/2023/10/cert.webp" alt="Local Network  SSL / Https on Chrome without Certificate Errors" loading="eager" decoding="async">
+      <img src="/images/2023/10/cert.webp" alt="Local Network  SSL / Https on Chrome without Certificate Errors" loading="eager" decoding="async" width="1024" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>If you’ve ever hosted a private web service on your local network , you’ve ran into the pain point of chrome or any other browser complaining that the connection is not secure or that the certificate is not valid.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#obtaining-free-wildcard-ssl-certificates-with-nginx-proxy-manager" data-toc-link>Obtaining Free Wildcard SSL Certificates with NGINX Proxy Manager</a>
+                            </li>
+                                                                            <li><a href="#setting-everything-up-in-kubernetes" data-toc-link>Setting everything up in Kubernetes</a>
+                            <ol>
+                                                              <li><a href="#setup-dns-records" data-toc-link>Setup DNS Records</a></li>
+                            </ol></li>
+                                                                            <li><a href="#create-an-dns-api-token" data-toc-link>Create an DNS API Token</a>
+                            </li>
+                                                                            <li><a href="#nginx-kubernetes-manifest" data-toc-link>NGINX Kubernetes Manifest</a>
+                            </li>
+                                                                            <li><a href="#setting-up-lan-ips-with-metallb" data-toc-link>Setting Up LAN IPs with MetalLB</a>
+                            <ol>
+                                                              <li><a href="#nginx-load-balancer" data-toc-link>NGINX load balancer</a></li>
+                                                              <li><a href="#nginx-app" data-toc-link>NGINX App</a></li>
+                            </ol></li>
+                                                                            <li><a href="#setup-nginx-proxy" data-toc-link>Setup NGINX Proxy</a>
+                            <ol>
+                                                              <li><a href="#accessing-ssl-certificates" data-toc-link>Accessing SSL Certificates</a></li>
+                                                              <li><a href="#add-proxy-hosts" data-toc-link>Add Proxy hosts</a></li>
+                            </ol></li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>If you’ve ever hosted a private web service on your local network , you’ve ran into the pain point of chrome or any other browser complaining that the connection is not secure or that the certificate is not valid.</p>
 <p>To resolve this, there are three key components you need:</p>
 <ol>
 <li>
@@ -371,7 +398,7 @@
 <p>Apply the following Kubernetes manifest files to configure NGINX. Keep in mind that you’ll need to configure the IP addresses according to your specific requirements.</p>
 <h2 id="setting-up-lan-ips-with-metallb">Setting Up LAN IPs with MetalLB</h2>
 <p>"I used MetalLB for this deployment to assign a LAN IP to the service. For a detailed setup guide, check out this short article:</p>
-<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/network-metallb/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</div><div class="kg-bookmark-description">Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/2024/07/metal.jpg" alt="" loading="lazy" decoding="async"></div></a></figure>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/network-metallb/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</div><div class="kg-bookmark-description">Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/2024/07/metal.jpg" alt="" loading="lazy" decoding="async" width="822" height="403"></div></a></figure>
 <h3 id="nginx-load-balancer">NGINX load balancer</h3>
 <div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
 <span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
@@ -405,7 +432,7 @@
 <li>In the top-right corner, click on “Add SSL Certificate,” and choose “Lets Encrypt.”</li>
 <li>In the Domain Names section, add the domain you want to use for your local setup. For instance, you can use *.mywebsite.com and <a href="http://mywebsite.com" target="_blank" rel="noopener noreferrer">mywebsite.com</a>.</li>
 </ul>
-<p><img src="/images/2023/10/image-4.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/10/image-4.png" alt="" loading="lazy" decoding="async" width="506" height="882" data-zoom=""></p>
 <ul>
 <li>Enable the DNS Provider option to automate the entire certificate issuance process.</li>
 <li>Choose your DNS Provider from the list. For example, if you’re using Cloudflare, refer to an earlier section of this guide where I explained how to create an API Token for Cloudflare. Insert this token into the designated text area.</li>
@@ -422,7 +449,7 @@
 <figure class="kg-card kg-image-card kg-card-hascaption"><img src="/images/2023/10/image-12.png" class="kg-image" alt="" loading="lazy" width="492" height="544" decoding="async" data-zoom=""><figcaption><span style="white-space: pre-wrap;">Details Section</span></figcaption></figure>
 <figure class="kg-card kg-image-card kg-card-hascaption"><img src="/images/2023/10/image-7.png" class="kg-image" alt="" loading="lazy" width="496" height="382" decoding="async" data-zoom=""><figcaption><span style="white-space: pre-wrap;">SSL Section</span></figcaption></figure>
 <p>You can now add multiple subdomains as needed.</p>
-<p><img src="/images/2023/10/image-13.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/10/image-13.png" alt="" loading="lazy" decoding="async" width="1315" height="639" data-zoom=""></p>
 <h2 id="conclusion">Conclusion</h2>
 <p>If you have successfully followed all the steps provided above, you should now have the ability to access private local network devices via your chosen domain without encountering certificate validity errors.</p>
     </section>

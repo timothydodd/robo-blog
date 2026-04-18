@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-05-27T13:27:02.000Z">  <meta property="article:tag" content="Angular">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/dynamic-environment-variables-in-angular-a-docker-ready-solution/"},"headline":"Dynamic Environment Variables in Angular: A Docker-Ready Solution","description":"Learn how to inject environment variables into Angular apps at runtime using Docker - no more rebuilds for config changes! Complete guide with code examples.","image":"https://robododd.com/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-05-24T20:00:46.000Z","dateModified":"2025-05-27T13:27:02.000Z","keywords":"Angular, Docker, DevOps, Environment-Variables, Configuration-Management, Containerization","articleSection":"Angular"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,40 @@
       <p class="post-full-subtitle">Learn how to inject environment variables into Angular apps at runtime using Docker - no more rebuilds for config changes! Complete guide with code examples.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="eager" decoding="async">
+      <img src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Ever deployed an Angular app only to realize you hardcoded the API URL? Or found yourself rebuilding your entire application just to change a single configuration value? You’re not alone! Angular’s build-time environment system works great for development, but it falls short when you need true runtime configuration flexibility.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#the-problem-build-time-vs-runtime-configuration" data-toc-link>The Problem: Build-Time vs Runtime Configuration</a>
+                            </li>
+                                                                            <li><a href="#the-solution-runtime-configuration-with-docker" data-toc-link>The Solution: Runtime Configuration with Docker</a>
+                            </li>
+                                                                            <li><a href="#step-1-create-the-runtime-configuration-file" data-toc-link>Step 1: Create the Runtime Configuration File</a>
+                            </li>
+                                                                            <li><a href="#step-2-set-up-angular-environment-files" data-toc-link>Step 2: Set Up Angular Environment Files</a>
+                            </li>
+                                                                            <li><a href="#step-3-create-the-configuration-service" data-toc-link>Step 3: Create the Configuration Service</a>
+                            </li>
+                                                                            <li><a href="#step-4-configure-angular-build" data-toc-link>Step 4: Configure Angular Build</a>
+                            </li>
+                                                                            <li><a href="#step-5-create-the-template-and-scripts" data-toc-link>Step 5: Create the Template and Scripts</a>
+                            </li>
+                                                                            <li><a href="#step-7-using-your-configuration" data-toc-link>Step 7: Using Your Configuration</a>
+                            </li>
+                                                                            <li><a href="#running-your-application" data-toc-link>Running Your Application</a>
+                            </li>
+                                                                            <li><a href="#the-benefits" data-toc-link>The Benefits</a>
+                            </li>
+                                                                            <li><a href="#pro-tips" data-toc-link>Pro Tips</a>
+                            </li>
+                                                                            <li><a href="#wrapping-up" data-toc-link>Wrapping Up</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Ever deployed an Angular app only to realize you hardcoded the API URL? Or found yourself rebuilding your entire application just to change a single configuration value? You’re not alone! Angular’s build-time environment system works great for development, but it falls short when you need true runtime configuration flexibility.</p>
 <p>In this guide, we’ll build a robust solution that lets you inject environment variables at container startup, making your Angular apps truly portable across different environments without rebuilding.</p>
 <h2 id="the-problem-build-time-vs-runtime-configuration">The Problem: Build-Time vs Runtime Configuration</h2>
 <p>Angular’s default environment system bakes configuration values into your JavaScript bundles during the build process. This means:</p>
@@ -708,7 +737,7 @@ docker run -p 8080:80 \
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/google-places-autocomplete-directive-angular-21/">
-    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/google-places-autocomplete-directive-angular-21/">
@@ -726,7 +755,7 @@ docker run -p 8080:80 \
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
-    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async" width="938" height="652">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
@@ -743,7 +772,7 @@ docker run -p 8080:80 \
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
-    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">

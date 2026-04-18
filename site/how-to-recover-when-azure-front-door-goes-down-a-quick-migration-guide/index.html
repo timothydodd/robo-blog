@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-10-29T21:50:18.000Z">  <meta property="article:tag" content="Azure Front Door">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-recover-when-azure-front-door-goes-down-a-quick-migration-guide/"},"headline":"Recover from Azure Front Door Outages: A Quick Guide","description":"Azure Front Door down? Learn how to quickly set up Azure Application Gateway and Traffic Manager to restore your site and prevent future outages.","image":"https://robododd.com/images/2025/10/itsfine.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-10-29T21:45:01.000Z","dateModified":"2025-10-29T21:50:18.000Z","keywords":"Azure Front Door, Azure CDN, DNS Failover, High Availability, Azure Application Gateway, Disaster Recovery, DevOps, Microsoft Azure","articleSection":"Azure Front Door"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,41 @@
       <p class="post-full-subtitle">Azure Front Door down? Learn how to quickly set up Azure Application Gateway and Traffic Manager to restore your site and prevent future outages.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/10/itsfine.jpg" alt="Recover from Azure Front Door Outages: A Quick Guide" loading="eager" decoding="async">
+      <img src="/images/2025/10/itsfine.jpg" alt="Recover from Azure Front Door Outages: A Quick Guide" loading="eager" decoding="async" width="672" height="596">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p><strong>The Problem:</strong> If you’re experiencing an Azure Front Door outage today and you’re routing traffic from Azure Front Door CDN to a storage account, you need a fast recovery solution to keep your site or application accessible.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-by-step-recovery-process" data-toc-link>Step-by-Step Recovery Process</a>
+                            <ol>
+                                                              <li><a href="#step-1-prepare-your-azure-storage-account" data-toc-link>Step 1: Prepare Your Azure Storage Account</a></li>
+                                                              <li><a href="#step-2-create-an-azure-application-gateway" data-toc-link>Step 2: Create an Azure Application Gateway</a></li>
+                                                              <li><a href="#step-3-configure-frontend-ip-and-listener" data-toc-link>Step 3: Configure Frontend IP and Listener</a></li>
+                                                              <li><a href="#step-4-configure-backend-pool" data-toc-link>Step 4: Configure Backend Pool</a></li>
+                                                              <li><a href="#step-5-configure-http-settings" data-toc-link>Step 5: Configure HTTP Settings</a></li>
+                                                              <li><a href="#step-6-create-routing-rule" data-toc-link>Step 6: Create Routing Rule</a></li>
+                                                              <li><a href="#step-7-update-dns-records" data-toc-link>Step 7: Update DNS Records</a></li>
+                            </ol></li>
+                                                                            <li><a href="#testing-your-setup" data-toc-link>Testing Your Setup</a>
+                            </li>
+                                                                            <li><a href="#additional-considerations" data-toc-link>Additional Considerations</a>
+                            </li>
+                                                                            <li><a href="#long-term-solution-implement-azure-traffic-manager-for-high-availability" data-toc-link>Long-Term Solution: Implement Azure Traffic Manager for High Availability</a>
+                            <ol>
+                                                              <li><a href="#why-azure-traffic-manager" data-toc-link>Why Azure Traffic Manager?</a></li>
+                                                              <li><a href="#setting-up-traffic-manager-for-failover" data-toc-link>Setting Up Traffic Manager for Failover</a></li>
+                                                              <li><a href="#benefits-of-this-architecture" data-toc-link>Benefits of This Architecture</a></li>
+                                                              <li><a href="#recommended-architecture" data-toc-link>Recommended Architecture</a></li>
+                            </ol></li>
+                                                                            <li><a href="#prevention-build-resilience-for-next-time" data-toc-link>Prevention: Build Resilience for Next Time</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p><strong>The Problem:</strong> If you’re experiencing an Azure Front Door outage today and you’re routing traffic from Azure Front Door CDN to a storage account, you need a fast recovery solution to keep your site or application accessible.</p>
 <p><strong>The Solution:</strong> Set up an Azure Application Gateway with SSL/TLS certificate and configure it to point directly to your Azure Storage account as a temporary (or permanent) failover solution.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>

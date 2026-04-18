@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-04-09T20:11:08.000Z">  <meta property="article:tag" content="Cloudflare">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/host-loc/"},"headline":"Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free","description":"Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.","image":"https://robododd.com/images/2024/07/cloudflare3.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-07-01T09:47:34.000Z","dateModified":"2025-04-09T20:11:08.000Z","keywords":"Cloudflare, Kubernetes, DNS, DevOps, Home Lab","articleSection":"Cloudflare"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,33 +330,33 @@
       <p class="post-full-subtitle">Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/07/cloudflare3.webp" alt="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free" loading="eager" decoding="async">
+      <img src="/images/2024/07/cloudflare3.webp" alt="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free" loading="eager" decoding="async" width="1288" height="702">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>In this post, I’ll guide you through setting up Cloudflare to route traffic from your public domain to a local Kubernetes service—without exposing your IP address. Best of all, we’ll achieve this for free!</p>
+            <p>In this post, I’ll guide you through setting up Cloudflare to route traffic from your public domain to a local Kubernetes service—without exposing your IP address. Best of all, we’ll achieve this for free!</p>
 <h3 id="step-1-create-a-cloudflare-account">Step 1: Create a Cloudflare Account</h3>
 <ol>
 <li><strong>Sign Up</strong>: If you don’t already have a Cloudflare account, head over to <a href="https://www.cloudflare.com" target="_blank" rel="noopener noreferrer">Cloudflare’s website</a> and sign up.</li>
 <li><strong>Add Your Site</strong>: Click on “Add a Site” at the top and follow the instructions to add your domain (e.g., <code>mysite.com</code>) to Cloudflare.</li>
 </ol>
-<p><img src="/images/2024/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image.png" alt="" loading="lazy" decoding="async" width="562" height="315" data-zoom=""></p>
 <h3 id="step-2-set-up-zero-trust">Step 2: Set Up Zero Trust</h3>
 <ol>
 <li><strong>Access Zero Trust</strong>: Navigate to the “Zero Trust” section in the Cloudflare dashboard.</li>
 </ol>
-<p><img src="/images/2024/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image-1.png" alt="" loading="lazy" decoding="async" width="877" height="703" data-zoom=""></p>
 <ol>
 <li><strong>Go to Networks and Tunnels</strong>: Select “Networks” and then “Tunnels.”</li>
 <li><strong>Create a Tunnel</strong>: Click on “Create a Tunnel” and follow the steps until you reach the part where you’re prompted to install an agent.</li>
 </ol>
-<p><img src="/images/2024/07/image-2.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image-2.png" alt="" loading="lazy" decoding="async" width="556" height="578" data-zoom=""></p>
 <h3 id="step-3-install-the-cloudflare-agent">Step 3: Install the Cloudflare Agent</h3>
 <p>You have two options here: you can either download the agent and host it as you like, or you can host it in Kubernetes. Below, I’ll show you how to set it up in Kubernetes.</p>
 <ol>
 <li><strong>Copy the Token</strong>: During the setup, you’ll see a command line with a token argument. Copy this token as you’ll need it later.</li>
 </ol>
-<p><img src="/images/2024/07/image-3.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image-3.png" alt="" loading="lazy" decoding="async" width="1234" height="455" data-zoom=""></p>
 <ol start="2">
 <li><strong>Create a Manifest File</strong>: Create a file named <code>cloud-flare-tunnel.yaml</code> with the following content:</li>
 </ol>
@@ -413,17 +413,17 @@
 <ul>
 <li>If everything was set up correctly, your tunnel status should show as <strong>“Healthy.”</strong></li>
 </ul>
-<p><img src="/images/2025/04/image-6.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/04/image-6.png" alt="" loading="lazy" decoding="async" width="1306" height="417" data-zoom=""></p>
 <ul>
 <li>Click the three dots next to your tunnel and select <strong>“Configure.”</strong></li>
 <li>Under <strong>“Public Hostname,”</strong> click <strong>“Add a Public Hostname.”</strong></li>
 <li>Fill in the hostname you want to use (e.g., <code>service.mysite.com</code>).</li>
 </ul>
-<p><img src="/images/2025/04/image-7.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/04/image-7.png" alt="" loading="lazy" decoding="async" width="850" height="156" data-zoom=""></p>
 <ul>
 <li>For the <strong>URL</strong>, enter the <strong>internal IP address</strong> or DNS name of the Kubernetes service you want to expose on your LAN.</li>
 </ul>
-<p><img src="/images/2024/07/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/07/image-5.png" alt="" loading="lazy" decoding="async" width="1372" height="491" data-zoom=""></p>
 <h3 id="conclusion">Conclusion</h3>
 <p>With Cloudflare Tunnel and Zero Trust, you can securely expose services running on your local Kubernetes cluster to the internet—without ever revealing your public IP address. It’s a powerful way to enable external access for testing, demos, or even lightweight production use, all while keeping your infrastructure locked down.</p>
 <p>And the best part? You did it without opening any ports on your router, configuring complex firewall rules, or spending a dime.</p>
@@ -445,7 +445,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/">
-    <img class="post-card-image" src="/images/2025/11/cloud-azure.webp" alt="Migrating Azure Front Door to Cloudflare Storage Connectors" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/11/cloud-azure.webp" alt="Migrating Azure Front Door to Cloudflare Storage Connectors" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/">

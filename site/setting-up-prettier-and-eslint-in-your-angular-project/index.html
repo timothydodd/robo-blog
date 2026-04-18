@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-05-08T15:22:49.000Z">  <meta property="article:tag" content="Angular">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setting-up-prettier-and-eslint-in-your-angular-project/"},"headline":"Setting Up Prettier and ESLint 9 in Your Angular 19+ Project","description":"Learn how to set up Prettier and ESLint 9 in your Angular 19+ project for clean, consistent code with auto-save for a seamless dev experience.","image":"https://robododd.com/images/2025/01/blog2-1.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-09T17:26:35.000Z","dateModified":"2025-05-08T15:22:49.000Z","keywords":"Angular, Prettier, ESLint, TypeScript, Clean Code, Front-End Development, Linting, Visual Studio Code","articleSection":"Angular"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,44 @@
       <p class="post-full-subtitle">Learn how to set up Prettier and ESLint 9 in your Angular 19+ project for clean, consistent code with auto-save for a seamless dev experience.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/01/blog2-1.webp" alt="Setting Up Prettier and ESLint 9 in Your Angular 19+ Project" loading="eager" decoding="async">
+      <img src="/images/2025/01/blog2-1.webp" alt="Setting Up Prettier and ESLint 9 in Your Angular 19+ Project" loading="eager" decoding="async" width="808" height="500">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Maintaining clean and consistent code is essential for any project, especially in a collaborative environment. Prettier and ESLint are popular tools that help enforce code quality and formatting standards. This guide walks you through setting up Prettier and ESLint in your Angular project and configuring auto-save for a seamless developer experience. This method should work in older Angular versions as well.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#why-use-prettier-and-eslint" data-toc-link>Why Use Prettier and ESLint?</a>
+                            <ol>
+                                                              <li><a href="#prettier" data-toc-link>Prettier</a></li>
+                                                              <li><a href="#eslint" data-toc-link>ESLint</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-1-install-dependencies" data-toc-link>Step 1: Install Dependencies</a>
+                            <ol>
+                                                              <li><a href="#installed-packages" data-toc-link>Installed Packages:</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-2-configure-eslint" data-toc-link>Step 2: Configure ESLint</a>
+                            <ol>
+                                                              <li><a href="#key-point" data-toc-link>Key Point:</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-3-configure-prettier" data-toc-link>Step 3: Configure Prettier</a>
+                            <ol>
+                                                              <li><a href="#optional-prettierignore" data-toc-link>Optional: .prettierignore</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-4-install-vs-code-extensions" data-toc-link>Step 4: Install VS Code Extensions</a>
+                            </li>
+                                                                            <li><a href="#step-5-configure-auto-format-when-save-in-vs-code" data-toc-link>Step 5: Configure Auto-Format when save in VS Code</a>
+                            <ol>
+                                                              <li><a href="#packages" data-toc-link>Packages</a></li>
+                                                              <li><a href="#how-it-works" data-toc-link>How It Works:</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-6-test-it" data-toc-link>Step 6: Test it</a>
+                            </li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Maintaining clean and consistent code is essential for any project, especially in a collaborative environment. Prettier and ESLint are popular tools that help enforce code quality and formatting standards. This guide walks you through setting up Prettier and ESLint in your Angular project and configuring auto-save for a seamless developer experience. This method should work in older Angular versions as well.</p>
 <p>I put together a test project that does all these steps, you can check it out here:</p>
 <figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://github.com/timothydodd/prettier-eslint-angular-example/tree/master" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">GitHub - timothydodd/prettier-eslint-angular-example</div><div class="kg-bookmark-description">Contribute to timothydodd/prettier-eslint-angular-example development by creating an account on GitHub.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">GitHub</span><span class="kg-bookmark-publisher">timothydodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="https://opengraph.githubassets.com/5222352c6b04c1746f236e043447c3b2388eb2de67f07f780325b24c8158d964/timothydodd/prettier-eslint-angular-example" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
 <h2 id="why-use-prettier-and-eslint"><strong>Why Use Prettier and ESLint?</strong></h2>
@@ -563,10 +596,10 @@ node_modules
 </ul>
 <h2 id="step-6-test-it"><strong>Step 6: Test it</strong></h2>
 <p>Your project file layout should look this:</p>
-<p><img src="/images/2025/01/image-2.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-2.png" alt="" loading="lazy" decoding="async" width="517" height="665" data-zoom=""></p>
 <p>Restart your vscode and make sure your opening the project in the root folder , not a parent folder.</p>
 <p>Once the project is open, any file issues should show up in vscode like this:</p>
-<p><img src="/images/2025/01/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-1.png" alt="" loading="lazy" decoding="async" width="701" height="493" data-zoom=""></p>
 <p>Saving the file should automatically fix the file.</p>
 <h2 id="conclusion"><strong>Conclusion</strong></h2>
 <p>By integrating Prettier and ESLint into your Angular project, you ensure clean and consistent code while minimizing manual formatting efforts. With auto-save configured in VS Code, your development process becomes even smoother. Happy coding!</p>
@@ -590,7 +623,7 @@ node_modules
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/google-places-autocomplete-directive-angular-21/">
-    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/google-places-autocomplete-directive-angular-21/">
@@ -608,7 +641,7 @@ node_modules
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
-    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async" width="938" height="652">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
@@ -625,7 +658,7 @@ node_modules
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
-    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">

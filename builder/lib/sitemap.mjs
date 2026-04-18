@@ -1,11 +1,19 @@
 import { escapeXml } from "./util.mjs";
 
 export function buildSitemap({ posts, pages, tags, baseUrl }) {
+  const postDate = (p) => p.updated_at || p.published_at || "";
+  const maxDate = (items, pick) => items.reduce((m, x) => {
+    const d = pick(x) || "";
+    return d > m ? d : m;
+  }, "").slice(0, 10);
+
+  const homeLastmod = maxDate(posts, postDate);
+
   const urls = [
-    { loc: `${baseUrl}/`, changefreq: "weekly", priority: "1.0" },
+    { loc: `${baseUrl}/`, lastmod: homeLastmod, changefreq: "weekly", priority: "1.0" },
     ...posts.map(p => ({
       loc: `${baseUrl}/${p.slug}/`,
-      lastmod: (p.updated_at || p.published_at || "").slice(0, 10),
+      lastmod: postDate(p).slice(0, 10),
       changefreq: "monthly",
       priority: "0.8",
     })),
@@ -15,11 +23,15 @@ export function buildSitemap({ posts, pages, tags, baseUrl }) {
       changefreq: "yearly",
       priority: "0.5",
     })),
-    ...tags.map(t => ({
-      loc: `${baseUrl}/tag/${t.slug}/`,
-      changefreq: "monthly",
-      priority: "0.3",
-    })),
+    ...tags.map(t => {
+      const tagged = posts.filter(p => p.tags?.some(x => x.slug === t.slug));
+      return {
+        loc: `${baseUrl}/tag/${t.slug}/`,
+        lastmod: maxDate(tagged, postDate),
+        changefreq: "monthly",
+        priority: "0.3",
+      };
+    }),
   ];
 
   const body = urls.map(u => `

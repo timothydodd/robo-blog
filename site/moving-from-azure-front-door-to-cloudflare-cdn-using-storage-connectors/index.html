@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-11-12T18:13:37.000Z">  <meta property="article:tag" content="Cloudflare">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/"},"headline":"Migrating Azure Front Door to Cloudflare Storage Connectors","description":"Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.","image":"https://robododd.com/images/2025/11/cloud-azure.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-11-12T18:00:21.000Z","dateModified":"2025-11-12T18:13:37.000Z","keywords":"Cloudflare, Azure CDN, DevOps, Azure Front Door, Cloudflare Storage Connector","articleSection":"Cloudflare"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,30 @@
       <p class="post-full-subtitle">Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/11/cloud-azure.webp" alt="Migrating Azure Front Door to Cloudflare Storage Connectors" loading="eager" decoding="async">
+      <img src="/images/2025/11/cloud-azure.webp" alt="Migrating Azure Front Door to Cloudflare Storage Connectors" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <h2 id="introduction">Introduction</h2>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#introduction" data-toc-link>Introduction</a>
+                            </li>
+                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-1-configure-dns-records" data-toc-link>Step 1: Configure DNS Records</a>
+                            </li>
+                                                                            <li><a href="#step-2-setup-cloud-connectors" data-toc-link>Step 2: Setup Cloud Connectors</a>
+                            </li>
+                                                                            <li><a href="#step-3-setup-spa-rewrites-for-single-page-applications" data-toc-link>Step 3: Setup SPA Rewrites (for Single Page Applications)</a>
+                            </li>
+                                                                            <li><a href="#step-4-setup-cache-rules" data-toc-link>Step 4: Setup Cache Rules</a>
+                            </li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <h2 id="introduction">Introduction</h2>
 <p>If you have a static web app stored in Azure Storage, you can leverage Cloudflare Storage Connectors to simplify your infrastructure and reduce costs. The storage connector provides hostname rewrite capabilities without requiring a Cloudflare Enterprise plan, allowing you to have multiple hostnames point to the same storage account.</p>
 <p>Out of the box, Azure Storage accounts only allow you to set a single custom domain, which prevents you from having multiple hosts point to it. Cloudflare Storage Connectors solves this limitation elegantly.</p>
 <h2 id="prerequisites">Prerequisites</h2>
@@ -422,7 +441,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/host-loc/">
-    <img class="post-card-image" src="/images/2024/07/cloudflare3.webp" alt="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/07/cloudflare3.webp" alt="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free" loading="lazy" decoding="async" width="1288" height="702">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/host-loc/">

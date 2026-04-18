@@ -2,7 +2,7 @@
 <article class="post-card<%= size === 'large' ? ' post-card-large' : '' %>">
   <% if (p.feature_image) { %>
   <a class="post-card-image-link" href="/<%= p.slug %>/">
-    <img class="post-card-image" src="<%= p.feature_image %>" alt="<%= p.feature_image_alt || p.title %>" loading="lazy" decoding="async">
+    <img class="post-card-image" src="<%= p.feature_image %>" alt="<%= p.feature_image_alt || p.title %>" loading="lazy" decoding="async"<% if (p.feature_image_width && p.feature_image_height) { %> width="<%= p.feature_image_width %>" height="<%= p.feature_image_height %>"<% } %>>
   </a>
   <% } %>
   <div class="post-card-content">

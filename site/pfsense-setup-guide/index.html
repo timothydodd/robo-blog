@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-03-11T20:57:15.000Z">  <meta property="article:tag" content="pfsesnse">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/pfsense-setup-guide/"},"headline":"Pfsense Hardware Setup Guide","description":"Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.","image":"https://robododd.com/images/2023/08/pic2.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2023-08-02T11:30:57.000Z","dateModified":"2025-03-11T20:57:15.000Z","keywords":"pfsesnse","articleSection":"pfsesnse"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,11 @@
       <p class="post-full-subtitle">Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2023/08/pic2.jpg" alt="Pfsense Hardware Setup Guide" loading="eager" decoding="async">
+      <img src="/images/2023/08/pic2.jpg" alt="Pfsense Hardware Setup Guide" loading="eager" decoding="async" width="696" height="365">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>In this guide, we’ll delve into the world of pfSense and walk through the process of setting up some custom pfSense hardware.</p>
+            <p>In this guide, we’ll delve into the world of pfSense and walk through the process of setting up some custom pfSense hardware.</p>
 <p>Before we dive into the technical details, let’s take a moment to understand what pfSense is and why it’s become a popular choice for network enthusiasts and professionals alike.</p>
 <h3 id="what-is-pfsense">What is Pfsense?</h3>
 <p>PfSense is a versatile open-source platform built for efficient network management and security. Operating as a firewall, router, and VPN gateway, pfSense empowers users with a user-friendly web interface that sidesteps complex command-line interfaces. Its arsenal of features includes robust firewall capabilities, streamlined VPN setup (OpenVPN, IPSec, L2TP), and dynamic routing for optimal data flow.</p>
@@ -343,7 +343,7 @@
 <p>When it comes to hardware options, there are a few routes you can take. While many experts suggest opting for Netgate’s native hardware for robust production setups, if you’re looking for a more personalized solution, consider alternatives like the AppNeta M70. This choice boasts impressive capabilities, effortlessly reaching speeds of 1 gigabit up and down. So whether you’re leaning towards tried-and-true or seeking a tailored approach, pfSense has you covered</p>
 <h4 id="netgate-1100"><strong>Netgate 1100</strong></h4>
 <p><a href="https://amzn.to/3CeARxF" target="_blank" rel="noopener noreferrer">Netgate 1100 on Amazon</a></p>
-<p><img src="/images/2023/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/07/image.png" alt="" loading="lazy" decoding="async" width="290" height="290" data-zoom=""></p>
 <p>If you’re looking for a reliable option, you can’t go wrong with Netgate. However, it’s a bit on the pricey side for the specs that you get. For $189, you can get their entry-level <strong>Netgate 1100</strong>, which is well-suited for a home lab setup.</p>
 <p><strong>Specs</strong>:</p>
 <ul>
@@ -353,7 +353,7 @@
 <li>1 GB DDR4 RAM</li>
 </ul>
 <h4 id="appneta-m70"><strong>AppNeta M70</strong></h4>
-<p><img src="/images/2023/07/cq5dam.web.1280.1280.jpeg" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/07/cq5dam.web.1280.1280.jpeg" alt="" loading="lazy" decoding="async" width="662" height="414" data-zoom=""></p>
 <p>I personally went with the <strong>AppNeta M70</strong>. It’s Intel-based with impressive specs, making it a great choice if you need more power. You can usually find one on eBay for around $280.</p>
 <p><strong>Specs</strong>:</p>
 <ul>
@@ -366,7 +366,7 @@
 </ul>
 <p><a href="https://www.ebay.com/sch/i.html?_nkw=appneta+m70" target="_blank" rel="noopener noreferrer">Ebay Search Link</a></p>
 <h2 id="protectli-vault-fw4b">Protectli Vault FW4B</h2>
-<p><img src="/images/2025/01/image-7.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-7.webp" alt="" loading="lazy" decoding="async" width="620" height="320" data-zoom=""></p>
 <p>Protectli offers excellent fanless options like the <strong>FW4B</strong>, which is perfect for those looking for silent performance. At $299, it comes with US-based support and a 30-day money-back guarantee.</p>
 <p><strong>Specs</strong>:</p>
 <ul>
@@ -383,7 +383,7 @@
 <p>Download pfsense community edition (link below)</p>
 <figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://www.pfsense.org/download/" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Download pfSense Community Edition</div><div class="kg-bookmark-description">pfSense is a free and open source firewall and router that also features unified threat management, load balancing, multi WAN, and more</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://www.pfsense.org/img/apple-touch-icon.png" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">pfSense Logo</span></div></div><div class="kg-bookmark-thumbnail"><img src="https://www.pfsense.org/images/sponsored-by-netgate-logo-225.png" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
 <p>I used the following options when downloading the Image , note the Architecture , mirror and console options.</p>
-<p><img src="/images/2023/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/07/image-1.png" alt="" loading="lazy" decoding="async" width="526" height="397" data-zoom=""></p>
 <p>Extract the downloaded gz file.</p>
 <h3 id="create-a-bootable-usb-windows">Create a bootable USB (windows)</h3>
 <p>I recommend using <a href="https://rufus.ie/en/" target="_blank" rel="noopener noreferrer">https://rufus.ie/en/</a> on windows.</p>
@@ -393,7 +393,7 @@
 <li>In the “Boot selection” section, click the “Select” button and choose the pfsense img file you downloaded.</li>
 <li>Click the “Start” button to begin the process of creating the bootable flash drive.</li>
 </ul>
-<p><img src="/images/2023/01/fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580.png" alt="fd04f13dd3e608cb1328684aeafae066111c9c132517x580" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/01/fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580.png" alt="fd04f13dd3e608cb1328684aeafae066111c9c132517x580" loading="lazy" decoding="async" width="517" height="580" data-zoom=""></p>
 <h2 id="use-putty-and-install-pfsense">Use PuTTy And install Pfsense</h2>
 <p>PuTTY is a popular terminal emulator that you can use to access the console port of your router and install pfSense. Here’s a step-by-step guide on how to use PuTTY to install pfSense via the console port:</p>
 <p><strong>1. Download and Install PuTTY:</strong></p>

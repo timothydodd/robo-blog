@@ -23,7 +23,7 @@
   <meta property="article:modified_time" content="2026-02-13T22:49:45.000Z">  <meta property="article:tag" content="Angular">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/google-places-autocomplete-directive-angular-21/"},"headline":"Google Places Autocomplete Directive – Angular 21","description":"Learn how to build a custom Google Places Autocomplete directive in Angular 21 with a fully styled dropdown, keyboard\n  navigation, and parsed address output.","image":"https://robododd.com/images/2026/02/google-places.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-02-13T22:49:45.000Z","dateModified":"2026-02-13T22:49:45.000Z","keywords":"Angular, Google Places API, TypeScript, Directives","articleSection":"Angular"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -333,11 +333,49 @@
   navigation, and parsed address output.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="eager" decoding="async">
+      <img src="/images/2026/02/google-places.webp" alt="Google Places Autocomplete Directive – Angular 21" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Google Places Autocomplete is a common requirement for address forms. While Google provides a ready-made widget, it’s difficult to style and doesn’t play well with Angular’s reactive forms. In this guide, we’ll build a <strong>custom autocomplete directive</strong> from scratch using Google’s newer <code>AutocompleteSuggestion</code> API — giving us full control over the UI while leveraging Google’s powerful address matching.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#what-were-building" data-toc-link>What We’re Building</a>
+                            </li>
+                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-1-install-google-maps-types" data-toc-link>Step 1: Install Google Maps Types</a>
+                            </li>
+                                                                            <li><a href="#step-2-create-the-address-model" data-toc-link>Step 2: Create the Address Model</a>
+                            </li>
+                                                                            <li><a href="#step-3-create-an-injection-token-for-the-api-key" data-toc-link>Step 3: Create an Injection Token for the API Key</a>
+                            </li>
+                                                                            <li><a href="#step-4-create-the-google-places-loader-service" data-toc-link>Step 4: Create the Google Places Loader Service</a>
+                            </li>
+                                                                            <li><a href="#step-5-build-the-directive" data-toc-link>Step 5: Build the Directive</a>
+                            <ol>
+                                                              <li><a href="#why-not-use-googlemapsplacesautocomplete" data-toc-link>Why Not Use google.maps.places.Autocomplete?</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-6-add-global-styles" data-toc-link>Step 6: Add Global Styles</a>
+                            </li>
+                                                                            <li><a href="#step-7-use-it-in-a-component" data-toc-link>Step 7: Use It in a Component</a>
+                            </li>
+                                                                            <li><a href="#step-8-restrict-by-region-optional" data-toc-link>Step 8: Restrict by Region (Optional)</a>
+                            </li>
+                                                                            <li><a href="#how-it-works-under-the-hood" data-toc-link>How It Works Under the Hood</a>
+                            </li>
+                                                                            <li><a href="#common-gotchas" data-toc-link>Common Gotchas</a>
+                            <ol>
+                                                              <li><a href="#1-no-more-ngzone" data-toc-link>1. No More NgZone</a></li>
+                                                              <li><a href="#2-browser-autocomplete" data-toc-link>2. Browser Autocomplete</a></li>
+                                                              <li><a href="#3-dropdown-z-index" data-toc-link>3. Dropdown z-index</a></li>
+                                                              <li><a href="#4-click-outside" data-toc-link>4. Click Outside</a></li>
+                            </ol></li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Google Places Autocomplete is a common requirement for address forms. While Google provides a ready-made widget, it’s difficult to style and doesn’t play well with Angular’s reactive forms. In this guide, we’ll build a <strong>custom autocomplete directive</strong> from scratch using Google’s newer <code>AutocompleteSuggestion</code> API — giving us full control over the UI while leveraging Google’s powerful address matching.</p>
 <h2 id="what-were-building">What We’re Building</h2>
 <ul>
 <li>A reusable Angular <strong>directive</strong> that attaches to any <code>&lt;input&gt;</code> element</li>
@@ -883,7 +921,7 @@ includedRegionCodes<span class="token operator">:</span> <span class="token keyw
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h2 id="how-it-works-under-the-hood">How It Works Under the Hood</h2>
 <p>Here’s the flow when a user interacts with the autocomplete:</p>
-<p><img src="/images/2026/02/image-3.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2026/02/image-3.webp" alt="" loading="lazy" decoding="async" width="1024" height="1536" data-zoom=""></p>
 <p>Two API calls are made per selection:</p>
 <ol>
 <li><code>fetchAutocompleteSuggestions</code> — returns suggestions as the user types (called on each debounced keystroke)</li>
@@ -901,7 +939,7 @@ includedRegionCodes<span class="token operator">:</span> <span class="token keyw
 <h2 id="conclusion">Conclusion</h2>
 <p>Building a custom autocomplete gives you full control over the UX while still leveraging Google’s powerful address matching. The directive pattern keeps it reusable — drop `libGooglePlaces` on any input and handle the `(placeChanged)` event. No wrapper components, no configuration objects, just a directive and an event.<br>
 The complete example project is available on</p>
-<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://github.com/timothydodd/blog-samples/tree/main/google-places" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">blog-samples/google-places at main · timothydodd/blog-samples</div><div class="kg-bookmark-description">Contribute to timothydodd/blog-samples development by creating an account on GitHub.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/images/icon/pinned-octocat-093da3e6fa40-2.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">GitHub</span><span class="kg-bookmark-publisher">timothydodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/blog-samples" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>    </section>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://github.com/timothydodd/blog-samples/tree/main/google-places" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">blog-samples/google-places at main · timothydodd/blog-samples</div><div class="kg-bookmark-description">Contribute to timothydodd/blog-samples development by creating an account on GitHub.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/images/icon/pinned-octocat-093da3e6fa40-2.svg" alt="" loading="lazy" decoding="async" width="36" height="36"><span class="kg-bookmark-author">GitHub</span><span class="kg-bookmark-publisher">timothydodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/blog-samples" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async" width="1200" height="600"></div></a></figure>    </section>
 
         <aside class="post-full-tag-list gh-canvas">
       <strong>More on</strong>
@@ -917,7 +955,7 @@ The complete example project is available on</p>
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
-    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/10/computer-a.jpg" alt="Teaching Claude Modern Angular Best Practices with Custom Instructions" loading="lazy" decoding="async" width="938" height="652">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
@@ -934,7 +972,7 @@ The complete example project is available on</p>
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
-    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/05/affd9f9f-dcd6-4be6-bf72-198295ac57d0.jpg" alt="Dynamic Environment Variables in Angular: A Docker-Ready Solution" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
@@ -951,7 +989,7 @@ The complete example project is available on</p>
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
-    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">

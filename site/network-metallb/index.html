@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2024-07-02T13:00:38.000Z">  <meta property="article:tag" content="Kubernetes">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/network-metallb/"},"headline":"Simplifying Local Network IP Assignment for Kubernetes with MetalLB","description":"Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.","image":"https://robododd.com/images/2024/07/metal.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-07-02T11:13:22.000Z","dateModified":"2024-07-02T13:00:38.000Z","keywords":"Kubernetes, Networking, Home Lab","articleSection":"Kubernetes"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,11 @@
       <p class="post-full-subtitle">Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/07/metal.jpg" alt="Simplifying Local Network IP Assignment for Kubernetes with MetalLB" loading="eager" decoding="async">
+      <img src="/images/2024/07/metal.jpg" alt="Simplifying Local Network IP Assignment for Kubernetes with MetalLB" loading="eager" decoding="async" width="822" height="403">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>In this article, I’ll guide you through setting up MetalLB, a network load-balancer that allows you to assign local area network (LAN) IP addresses to your Kubernetes deployments. This setup is particularly useful for environments where a cloud provider’s load balancer is unavailable or unnecessary.</p>
+            <p>In this article, I’ll guide you through setting up MetalLB, a network load-balancer that allows you to assign local area network (LAN) IP addresses to your Kubernetes deployments. This setup is particularly useful for environments where a cloud provider’s load balancer is unavailable or unnecessary.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Please be aware that you must Disable servicelib and traefik when installing your master node.</p>
 <div class="pre-wrapper"><pre class="language-text"><code class="language-text">export INSTALL_K3S_EXEC="--disable servicelb --disable traefik"
@@ -403,7 +403,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
-    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" alt="LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" alt="LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring" loading="lazy" decoding="async" width="919" height="648">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
@@ -420,7 +420,7 @@
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/setup-uptime-kuma-on-kubernetes/">
-    <img class="post-card-image" src="/images/2024/07/uptime.webp" alt="How to Set Up Uptime Kuma on a k3s Kubernetes Cluster" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/07/uptime.webp" alt="How to Set Up Uptime Kuma on a k3s Kubernetes Cluster" loading="lazy" decoding="async" width="1110" height="799">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/setup-uptime-kuma-on-kubernetes/">
@@ -437,7 +437,7 @@
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/grafana-loki-log-everything-locally/">
-    <img class="post-card-image" src="/images/2024/04/logs.webp" alt="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/04/logs.webp" alt="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s" loading="lazy" decoding="async" width="999" height="991">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/grafana-loki-log-everything-locally/">

@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-05-26T14:52:57.000Z">  <meta property="article:tag" content="K3s">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/make-your-k3s-local-storage-persistent-with-longhorn/"},"headline":"Make Your k3s Local Storage Persistent with Longhorn","description":"Learn how to install Longhorn in k3s and migrate from local-path PVCs to resilient, node-independent Longhorn volumes.","image":"https://robododd.com/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-05-10T18:49:21.000Z","dateModified":"2025-05-26T14:52:57.000Z","keywords":"K3s, Kubernetes, longhorn, persistent-volume, pvc, storage, Home Lab, data-migration, DevOps, self-hosted","articleSection":"K3s"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,36 @@
       <p class="post-full-subtitle">Learn how to install Longhorn in k3s and migrate from local-path PVCs to resilient, node-independent Longhorn volumes.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg" alt="Make Your k3s Local Storage Persistent with Longhorn" loading="eager" decoding="async">
+      <img src="/images/2025/05/55f74b4a-8e10-4d2f-b4b6-98e1c83ec220.jpg" alt="Make Your k3s Local Storage Persistent with Longhorn" loading="eager" decoding="async" width="800" height="534">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>If you’re using <code>k3s</code> in a home lab or production setup, chances are you’ve started with the default <code>local-path</code> storage class. While it’s quick and easy, it has a major downside: <strong>volumes are tied to a specific node</strong>. If that node fails, your data doesn’t follow your pod.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#step-1-install-longhorn-on-your-k3s-cluster" data-toc-link>Step 1: Install Longhorn on Your k3s Cluster</a>
+                            </li>
+                                                                            <li><a href="#step-2-create-a-longhorn-backed-pvc" data-toc-link>Step 2: Create a Longhorn-backed PVC</a>
+                            </li>
+                                                                            <li><a href="#step-3-scale-down-the-deployment" data-toc-link>Step 3: Scale Down the Deployment</a>
+                            </li>
+                                                                            <li><a href="#step-4-create-a-data-migration-pod" data-toc-link>Step 4: Create a Data Migration Pod</a>
+                            </li>
+                                                                            <li><a href="#step-5-copy-the-data" data-toc-link>Step 5: Copy the Data</a>
+                            </li>
+                                                                            <li><a href="#step-6-update-your-deployment-to-use-the-new-pvc" data-toc-link>Step 6: Update Your Deployment to Use the New PVC</a>
+                            </li>
+                                                                            <li><a href="#step-7-clean-up" data-toc-link>Step 7: Clean Up</a>
+                            </li>
+                                                                            <li><a href="#accessing-the-longhorn-dashboard" data-toc-link>Accessing the Longhorn Dashboard</a>
+                            </li>
+                                                                            <li><a href="#tips-notes" data-toc-link>Tips & Notes</a>
+                            </li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>If you’re using <code>k3s</code> in a home lab or production setup, chances are you’ve started with the default <code>local-path</code> storage class. While it’s quick and easy, it has a major downside: <strong>volumes are tied to a specific node</strong>. If that node fails, your data doesn’t follow your pod.</p>
 <p><strong>Longhorn</strong> solves this by providing <strong>replicated, distributed block storage</strong> that works seamlessly with Kubernetes.</p>
 <p>In this post, you’ll learn:</p>
 <ul>
@@ -460,7 +485,7 @@ kubectl delete pvc my-pvc
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <p>Now visit:<br>
 ? <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">http://localhost:8080</a></p>
-<p><img src="/images/2025/05/db05809d-02eb-4324-9803-3f9feacf16c3.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/05/db05809d-02eb-4324-9803-3f9feacf16c3.png" alt="" loading="lazy" decoding="async" width="997" height="875" data-zoom=""></p>
 <hr>
 <h2 id="tips-notes">Tips &amp; Notes</h2>
 <ul>
@@ -497,7 +522,7 @@ Let me know in the comments</p>
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">
-    <img class="post-card-image" src="/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp" alt="How to Set Up Cloudflare Tunnels for k3s Without MetalLB" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/04/fd04f6df-0fee-4e8f-8ee4-4a47832b5af2.webp" alt="How to Set Up Cloudflare Tunnels for k3s Without MetalLB" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">

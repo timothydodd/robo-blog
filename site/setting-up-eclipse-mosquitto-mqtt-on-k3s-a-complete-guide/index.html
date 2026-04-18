@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-03-20T22:18:14.000Z">  <meta property="article:tag" content="MQTT">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setting-up-eclipse-mosquitto-mqtt-on-k3s-a-complete-guide/"},"headline":"Setting Up Eclipse Mosquitto (MQTT) on K3s: A Complete Guide","description":"Deploy Eclipse Mosquitto on K3s with persistent storage for a lightweight, reliable MQTT broker perfect for your IoT projects and smart home automation.","image":"https://robododd.com/images/2025/03/Screenshot-2025-03-20-181537.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-03-20T22:18:14.000Z","dateModified":"2025-03-20T22:18:14.000Z","keywords":"MQTT, K3s, Kubernetes, IOT, DevOps, Home Automation, MetalLb, NFS Server, Home Lab","articleSection":"MQTT"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,40 @@
       <p class="post-full-subtitle">Deploy Eclipse Mosquitto on K3s with persistent storage for a lightweight, reliable MQTT broker perfect for your IoT projects and smart home automation.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/03/Screenshot-2025-03-20-181537.webp" alt="Setting Up Eclipse Mosquitto (MQTT) on K3s: A Complete Guide" loading="eager" decoding="async">
+      <img src="/images/2025/03/Screenshot-2025-03-20-181537.webp" alt="Setting Up Eclipse Mosquitto (MQTT) on K3s: A Complete Guide" loading="eager" decoding="async" width="1132" height="803">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>In today’s interconnected world, MQTT (Message Queuing Telemetry Transport) has become an essential protocol for IoT devices and applications requiring lightweight messaging. Eclipse Mosquitto, a popular open-source MQTT broker, provides a reliable and efficient implementation of this protocol. In this guide, I’ll walk you through setting up Mosquitto on a K3s Kubernetes cluster, making it accessible from your network, and ensuring your data persists beyond container restarts.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#understanding-the-manifests" data-toc-link>Understanding the Manifests</a>
+                            <ol>
+                                                              <li><a href="#service-manifest" data-toc-link>Service Manifest</a></li>
+                            </ol></li>
+                                                                            <li><a href="#deployment-steps" data-toc-link>Deployment Steps</a>
+                            <ol>
+                                                              <li><a href="#1-prepare-the-configuration-file" data-toc-link>1. Prepare the Configuration File</a></li>
+                                                              <li><a href="#2-apply-the-manifests" data-toc-link>2. Apply the Manifests</a></li>
+                                                              <li><a href="#3-verify-the-deployment" data-toc-link>3. Verify the Deployment</a></li>
+                            </ol></li>
+                                                                            <li><a href="#alternative-using-a-persistentvolume-instead-of-nfs" data-toc-link>Alternative: Using a PersistentVolume Instead of NFS</a>
+                            <ol>
+                                                              <li><a href="#1-create-a-persistentvolumeclaim" data-toc-link>1. Create a PersistentVolumeClaim</a></li>
+                                                              <li><a href="#2-modified-deployment-manifest" data-toc-link>2. Modified Deployment Manifest</a></li>
+                            </ol></li>
+                                                                            <li><a href="#testing-the-mqtt-broker" data-toc-link>Testing the MQTT Broker</a>
+                            <ol>
+                                                              <li><a href="#setting-up-mqtt-explorer" data-toc-link>Setting Up MQTT Explorer</a></li>
+                                                              <li><a href="#publishing-subscribing-to-messages" data-toc-link>Publishing & Subscribing to Messages</a></li>
+                            </ol></li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>In today’s interconnected world, MQTT (Message Queuing Telemetry Transport) has become an essential protocol for IoT devices and applications requiring lightweight messaging. Eclipse Mosquitto, a popular open-source MQTT broker, provides a reliable and efficient implementation of this protocol. In this guide, I’ll walk you through setting up Mosquitto on a K3s Kubernetes cluster, making it accessible from your network, and ensuring your data persists beyond container restarts.</p>
 <hr>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before we begin, make sure you have:</p>
@@ -548,7 +577,7 @@ kubectl apply <span class="token parameter variable">-f</span> mosq-lb.yaml  <sp
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h2 id="testing-the-mqtt-broker">Testing the MQTT Broker</h2>
 <p>Once your Mosquitto broker is up and running, you can test it using MQTT Explorer, a powerful graphical client that makes it easy to interact with your broker.</p>
-<p><img src="/images/2025/03/image-10.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/03/image-10.webp" alt="" loading="lazy" decoding="async" width="1280" height="873" data-zoom=""></p>
 <h3 id="setting-up-mqtt-explorer">Setting Up MQTT Explorer</h3>
 <ol>
 <li>Download and install MQTT Explorer from <a href="https://mqtt-explorer.com/" target="_blank" rel="noopener noreferrer">mqtt-explorer.com</a> or GitHub (<a href="https://github.com/thomasnordquist/MQTT-Explorer/releases" target="_blank" rel="noopener noreferrer">MQTT-Explorer releases</a>)</li>

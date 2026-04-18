@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-02-27T16:20:40.000Z">  <meta property="article:tag" content="Linux">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/"},"headline":"How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month","description":"Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! ","image":"https://robododd.com/images/2025/02/Screenshot-2025-02-18-155559.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-02-18T20:58:20.000Z","dateModified":"2025-02-27T16:20:40.000Z","keywords":"Linux, Linode, VirtualMachine, ubuntu, Cyber Security, DevOps, SSH","articleSection":"Linux"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,26 +330,45 @@
       <p class="post-full-subtitle">Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! </p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/02/Screenshot-2025-02-18-155559.webp" alt="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month" loading="eager" decoding="async">
+      <img src="/images/2025/02/Screenshot-2025-02-18-155559.webp" alt="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month" loading="eager" decoding="async" width="1362" height="779">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Need to setup a <strong>super cheap</strong> virtual machine? I got you. Linode offers <strong>$5/month</strong> VMs (<a href="https://www.linode.com/lp/free-credit-100/" target="_blank" rel="noopener noreferrer">or <strong>free with a $100 credit</strong>—don’t miss that</a>). Let’s get one up and running <strong>fast</strong> while making it <strong>secure</strong> so hackers don’t have a field day.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#step-1-create-your-linode" data-toc-link>Step 1: Create Your Linode</a>
+                            </li>
+                                                                            <li><a href="#step-2-first-login" data-toc-link>Step 2: First Login</a>
+                            </li>
+                                                                            <li><a href="#%F0%9F%8F%B0-step-3-secure-your-vm-no-more-root-no-passwords" data-toc-link>? Step 3: Secure Your VM (No More Root, No Passwords!)</a>
+                            </li>
+                                                                            <li><a href="#step-4-set-up-ssh-key-authentication-no-more-passwords" data-toc-link>Step 4: Set Up SSH Key Authentication (No More Passwords!)</a>
+                            </li>
+                                                                            <li><a href="#step-5-lock-down-ssh-no-root-no-password-logins" data-toc-link>Step 5: Lock Down SSH (No Root, No Password Logins)</a>
+                            </li>
+                                                                            <li><a href="#step-6-reboot-confirm" data-toc-link>Step 6: Reboot & Confirm</a>
+                            </li>
+                                                                            <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Need to setup a <strong>super cheap</strong> virtual machine? I got you. Linode offers <strong>$5/month</strong> VMs (<a href="https://www.linode.com/lp/free-credit-100/" target="_blank" rel="noopener noreferrer">or <strong>free with a $100 credit</strong>—don’t miss that</a>). Let’s get one up and running <strong>fast</strong> while making it <strong>secure</strong> so hackers don’t have a field day.</p>
 <hr>
 <h2 id="step-1-create-your-linode">Step 1: Create Your Linode</h2>
 <p>Go to <a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode</a> and sign up.</p>
 <p>Click <strong>Linodes → Create Linode</strong>.</p>
-<p><img src="/images/2025/02/image-18.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-18.png" alt="" loading="lazy" decoding="async" width="1223" height="542" data-zoom=""></p>
 <p>Pick a <strong>region</strong> close to you (lower latency = good).</p>
 <p>Select <strong>Ubuntu</strong> as the OS.</p>
 <p>Choose <strong>Shared CPU → Nanode 1GB ($5/month)</strong>.</p>
-<p><img src="/images/2025/02/image-19.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-19.png" alt="" loading="lazy" decoding="async" width="1224" height="777" data-zoom=""></p>
 <p>Set a <strong>strong password</strong> (seriously, this is public!).</p>
-<p><img src="/images/2025/02/image-20.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-20.png" alt="" loading="lazy" decoding="async" width="1158" height="580" data-zoom=""></p>
 <p>Click <strong>Create Node</strong>.</p>
-<p><img src="/images/2025/02/image-21.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-21.png" alt="" loading="lazy" decoding="async" width="1241" height="185" data-zoom=""></p>
 <p>Once it’s running, copy the <strong>SSH access</strong> from the dashboard.</p>
-<p><img src="/images/2025/02/image-22.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-22.png" alt="" loading="lazy" decoding="async" width="1245" height="424" data-zoom=""></p>
 <hr>
 <h2 id="step-2-first-login">Step 2: First Login</h2>
 <p>Fire up <strong>PowerShell (Windows)</strong> or <strong>Terminal (Mac/Linux)</strong> and run:</p>
@@ -357,7 +376,7 @@
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <p>✅ Accept the <strong>SHA fingerprint</strong>.<br>
 ✅ Enter the <strong>password</strong> you just created.</p>
-<p><img src="/images/2025/02/image-23.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-23.png" alt="" loading="lazy" decoding="async" width="780" height="181" data-zoom=""></p>
 <p>Congrats, you’re in. Now, let’s <strong>lock this thing down</strong>.</p>
 <hr>
 <h2 id="%F0%9F%8F%B0-step-3-secure-your-vm-no-more-root-no-passwords">? Step 3: Secure Your VM (No More Root, No Passwords!)</h2>
@@ -365,7 +384,7 @@
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">adduser robo
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <p>✔️ Set a password (skip the extra profile questions by pressing Enter).</p>
-<p><img src="/images/2025/02/image-24.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-24.png" alt="" loading="lazy" decoding="async" width="785" height="397" data-zoom=""></p>
 <p><strong>Give them admin power</strong>:</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">sudo</span> robo
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
@@ -399,9 +418,9 @@
 PermitRootLogin no
 PasswordAuthentication no
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<p><img src="/images/2025/02/image-26.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
-<p><img src="/images/2025/02/image-27.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
-<p><img src="/images/2025/02/image-28.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/02/image-26.png" alt="" loading="lazy" decoding="async" width="911" height="583" data-zoom=""></p>
+<p><img src="/images/2025/02/image-27.png" alt="" loading="lazy" decoding="async" width="615" height="552" data-zoom=""></p>
+<p><img src="/images/2025/02/image-28.png" alt="" loading="lazy" decoding="async" width="870" height="360" data-zoom=""></p>
 <p>? Save (<code>CTRL + S</code>), exit (<code>CTRL + X</code>)</p>
 <hr>
 <h2 id="step-6-reboot-confirm">Step 6: Reboot &amp; Confirm</h2>

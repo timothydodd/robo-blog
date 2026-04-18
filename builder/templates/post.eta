@@ -16,12 +16,39 @@
 
     <% if (it.post.feature_image) { %>
     <figure class="post-full-image">
-      <img src="<%= it.post.feature_image %>" alt="<%= it.post.feature_image_alt || it.post.title %>" loading="eager" decoding="async">
+      <img src="<%= it.post.feature_image %>" alt="<%= it.post.feature_image_alt || it.post.title %>" loading="eager" decoding="async"<% if (it.post.feature_image_width && it.post.feature_image_height) { %> width="<%= it.post.feature_image_width %>" height="<%= it.post.feature_image_height %>"<% } %>>
       <% if (it.post.feature_image_caption) { %><figcaption><%= it.post.feature_image_caption %></figcaption><% } %>
     </figure>
     <% } %>
 
     <section class="post-full-content gh-content gh-canvas">
+      <% if (it.post.toc && it.post.toc.length) { %>
+      <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+          <% let openH3 = false; %>
+          <% it.post.toc.forEach(function(item, i){ %>
+            <% if (item.level === 2) { %>
+              <% if (openH3) { %></ol></li><% openH3 = false; } %>
+              <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a>
+              <%
+                const next = it.post.toc[i + 1];
+                if (next && next.level === 3) { openH3 = true;
+              %>
+              <ol>
+              <% } else { %>
+              </li>
+              <% } %>
+            <% } else if (item.level === 3 && openH3) { %>
+              <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a></li>
+              <% const next = it.post.toc[i + 1]; if (!next || next.level !== 3) { %>
+              </ol></li>
+              <% openH3 = false; } %>
+            <% } %>
+          <% }) %>
+        </ol>
+      </nav>
+      <% } %>
       <%~ it.post.content_html %>
     </section>
 

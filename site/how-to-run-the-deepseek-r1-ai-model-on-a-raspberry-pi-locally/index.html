@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-01-28T16:33:40.000Z">  <meta property="article:tag" content="Raspberry Pi">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/"},"headline":"How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally","description":"Run the DeepSeek-R1 AI model locally on your Raspberry Pi! Learn how to set up Ollama, install the model, and explore AI on affordable hardware. Fun and educational for enthusiasts!","image":"https://robododd.com/images/2025/01/Screenshot-2025-01-27-234349.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-28T05:04:48.000Z","dateModified":"2025-01-28T16:33:40.000Z","keywords":"Raspberry Pi, Ollama AI, DeepSeek, Promtail","articleSection":"Raspberry Pi"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,46 @@
       <p class="post-full-subtitle">Run the DeepSeek-R1 AI model locally on your Raspberry Pi! Learn how to set up Ollama, install the model, and explore AI on affordable hardware. Fun and educational for enthusiasts!</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/01/Screenshot-2025-01-27-234349.webp" alt="How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally" loading="eager" decoding="async">
+      <img src="/images/2025/01/Screenshot-2025-01-27-234349.webp" alt="How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally" loading="eager" decoding="async" width="894" height="603">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Artificial intelligence isn’t just for supercomputers anymore! With tools like Ollama and the new DeepSeek-R1 AI model, you can harness the power of advanced language models directly on your Raspberry Pi. In this guide, we’ll walk you through the steps to set up DeepSeek-R1 on your Raspberry Pi hardware. Whether you’re a seasoned Pi enthusiast or just starting out, this tutorial will help you get up and running quickly.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-1-prepare-your-raspberry-pi" data-toc-link>Step 1: Prepare Your Raspberry Pi</a>
+                            <ol>
+                                                              <li><a href="#install-a-fresh-operating-system" data-toc-link>Install a Fresh Operating System</a></li>
+                                                              <li><a href="#update-your-system" data-toc-link>Update Your System</a></li>
+                                                              <li><a href="#verify-a-64-bit-os" data-toc-link>Verify a 64-bit OS</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-2-install-ollama-on-your-raspberry-pi" data-toc-link>Step 2: Install Ollama on Your Raspberry Pi</a>
+                            <ol>
+                                                              <li><a href="#install-curl" data-toc-link>Install Curl</a></li>
+                                                              <li><a href="#download-and-run-the-ollama-installer" data-toc-link>Download and Run the Ollama Installer</a></li>
+                                                              <li><a href="#verify-installation" data-toc-link>Verify Installation</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-3-run-the-deepseek-r1-model" data-toc-link>Step 3: Run the DeepSeek-R1 Model</a>
+                            <ol>
+                                                              <li><a href="#download-and-run-deepseek-r1" data-toc-link>Download and Run DeepSeek-R1</a></li>
+                                                              <li><a href="#interact-with-the-model" data-toc-link>Interact with the Model</a></li>
+                            </ol></li>
+                                                                            <li><a href="#a-note-about-raspberry-pi-hardware" data-toc-link>A Note About Raspberry Pi Hardware</a>
+                            </li>
+                                                                            <li><a href="#inexpensive-hardware-alternatives" data-toc-link>Inexpensive Hardware Alternatives</a>
+                            <ol>
+                                                              <li><a href="#nvidia-jetson-orin-nano" data-toc-link>NVIDIA Jetson Orin Nano</a></li>
+                                                              <li><a href="#apple-mac-mini-m4" data-toc-link>Apple Mac Mini (M4)</a></li>
+                            </ol></li>
+                                                                            <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
+                            </li>
+                                                                            <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Artificial intelligence isn’t just for supercomputers anymore! With tools like Ollama and the new DeepSeek-R1 AI model, you can harness the power of advanced language models directly on your Raspberry Pi. In this guide, we’ll walk you through the steps to set up DeepSeek-R1 on your Raspberry Pi hardware. Whether you’re a seasoned Pi enthusiast or just starting out, this tutorial will help you get up and running quickly.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before diving in, ensure you have the following:</p>
 <ol>
@@ -391,7 +426,7 @@ sudo apt upgrade -y
 <h2 id="inexpensive-hardware-alternatives">Inexpensive Hardware Alternatives</h2>
 <p>High-end GPUs can be quite expensive, but there are cost-effective hardware options that can deliver better performance for AI tasks without breaking the bank. Here are a few alternatives:</p>
 <h3 id="nvidia-jetson-orin-nano">NVIDIA Jetson Orin Nano</h3>
-<p><img src="/images/2025/01/image-6.webp" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-6.webp" alt="" loading="lazy" decoding="async" width="600" height="600" data-zoom=""></p>
 <ul>
 <li><strong>Price Range</strong>: $240 to $340</li>
 <li><strong>Overview</strong>: The NVIDIA Jetson Orin Nano is a compact and powerful option for running AI models. Make sure to get the latest version, as supplies can be limited. You may need to shop around.</li>
@@ -399,7 +434,7 @@ sudo apt upgrade -y
 <li><strong>Learn More</strong>: <a href="https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/" target="_blank" rel="noopener noreferrer">Jetson Orin Nano Super Developer Kit</a></li>
 </ul>
 <h3 id="apple-mac-mini-m4">Apple Mac Mini (M4)</h3>
-<p><img src="/images/2025/01/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-5.png" alt="" loading="lazy" decoding="async" width="443" height="243" data-zoom=""></p>
 <ul>
 <li><strong>Price Range</strong>: Varies, but often considered a good value for the performance.</li>
 <li><strong>Overview</strong>: The Apple Mac Mini is an excellent choice for running LLMs thanks to its powerful M-series chips and efficient performance.</li>
@@ -434,7 +469,7 @@ sudo apt upgrade -y
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/setting-up-an-nfs-server-on-a-raspberry-pi/">
-    <img class="post-card-image" src="/images/2025/01/Screenshot-2025-01-13-153551.webp" alt="Setting Up an NFS Server on a Raspberry Pi" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/01/Screenshot-2025-01-13-153551.webp" alt="Setting Up an NFS Server on a Raspberry Pi" loading="lazy" decoding="async" width="900" height="544">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/setting-up-an-nfs-server-on-a-raspberry-pi/">

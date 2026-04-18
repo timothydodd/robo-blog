@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2024-01-09T19:55:17.000Z">  <meta property="article:tag" content="Pulumi">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/moving-pulumi-resources-from-one-project-to-another/"},"headline":"Moving Pulumi Resources from one project to another","description":"Learn how to painlessly transfer Pulumi resources between projects.","image":"https://robododd.com/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-01-09T19:49:28.000Z","dateModified":"2024-01-09T19:55:17.000Z","keywords":"Pulumi, PowerShell, Migration, Cloud Computing, DevOps","articleSection":"Pulumi"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,11 @@
       <p class="post-full-subtitle">Learn how to painlessly transfer Pulumi resources between projects.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp" alt="Moving Pulumi Resources from one project to another" loading="eager" decoding="async">
+      <img src="/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp" alt="Moving Pulumi Resources from one project to another" loading="eager" decoding="async" width="1024" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Moving Pulumi resources from one project to another can be a complex process. If you’ve ever found yourself navigating this challenge, worry not; I’ve compiled a step-by-step guide that can serve as a lifeline for anyone in a similar situation.</p>
+            <p>Moving Pulumi resources from one project to another can be a complex process. If you’ve ever found yourself navigating this challenge, worry not; I’ve compiled a step-by-step guide that can serve as a lifeline for anyone in a similar situation.</p>
 <h3 id="target-the-pulumi-project">Target the Pulumi Project:</h3>
 <p>Begin by selecting the Pulumi project that you wish to export resources from. To do this, use the following command:</p>
 <div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">pulumi stack <span class="token function">select</span>

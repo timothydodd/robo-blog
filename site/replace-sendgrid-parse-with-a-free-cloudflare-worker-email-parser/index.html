@@ -23,7 +23,7 @@
   <meta property="article:modified_time" content="2025-07-05T18:39:57.000Z">  <meta property="article:tag" content="sendgrid">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser/"},"headline":"Replace SendGrid Parse with a Free Cloudflare Worker Email Parser","description":" Build a free SendGrid Parse replacement using Cloudflare Workers. Parse and forward emails to your API with        \n  zero monthly costs and easy setup.","image":"https://robododd.com/images/2025/07/sendgrid1.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-07-05T18:39:57.000Z","dateModified":"2025-07-05T18:39:57.000Z","keywords":"sendgrid, Cloudflare, email, GitHub","articleSection":"sendgrid"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -333,11 +333,64 @@
   zero monthly costs and easy setup.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/07/sendgrid1.webp" alt="Replace SendGrid Parse with a Free Cloudflare Worker Email Parser" loading="eager" decoding="async">
+      <img src="/images/2025/07/sendgrid1.webp" alt="Replace SendGrid Parse with a Free Cloudflare Worker Email Parser" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>SendGrid recently announced they’re discontinuing their free Email Plan, forcing developers to migrate to paid plans. I wanted to move off of the Email Parser because I’m not sure if that will be paid only as well. If you’re looking for a cost-effective alternative, Cloudflare Workers provide an excellent solution for parsing and forwarding emails to your API.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#why-choose-cloudflare-workers" data-toc-link>Why Choose Cloudflare Workers?</a>
+                            </li>
+                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-1-clone-and-customize-the-project" data-toc-link>Step 1: Clone and Customize the Project</a>
+                            <ol>
+                                                              <li><a href="#rename-for-your-project" data-toc-link>Rename for Your Project</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-2-customize-the-worker-code" data-toc-link>Step 2: Customize the Worker Code</a>
+                            <ol>
+                                                              <li><a href="#email-processing-flow" data-toc-link>Email Processing Flow:</a></li>
+                                                              <li><a href="#key-features" data-toc-link>Key Features:</a></li>
+                                                              <li><a href="#required-code-changes" data-toc-link>Required Code Changes:</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-3-upload-your-customized-project-to-github" data-toc-link>Step 3: Upload Your Customized Project to GitHub</a>
+                            </li>
+                                                                            <li><a href="#step-4-setup-worker-on-cloudflare" data-toc-link>Step 4: Setup Worker on Cloudflare</a>
+                            <ol>
+                                                              <li><a href="#deploy-via-cloudflare-dashboard" data-toc-link>Deploy via Cloudflare Dashboard</a></li>
+                                                              <li><a href="#configure-environment-variables" data-toc-link>Configure Environment Variables</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-5-configure-email-routing" data-toc-link>Step 5: Configure Email Routing</a>
+                            <ol>
+                                                              <li><a href="#setup-email-routing-in-cloudflare-dashboard" data-toc-link>Setup Email Routing in Cloudflare Dashboard</a></li>
+                            </ol></li>
+                                                                            <li><a href="#step-6-test-your-setup" data-toc-link>Step 6: Test Your Setup</a>
+                            <ol>
+                                                              <li><a href="#local-testing" data-toc-link>Local Testing</a></li>
+                                                              <li><a href="#live-testing" data-toc-link>Live Testing</a></li>
+                                                              <li><a href="#monitor-logs" data-toc-link>Monitor Logs</a></li>
+                            </ol></li>
+                                                                            <li><a href="#expected-email-data-format" data-toc-link>Expected Email Data Format</a>
+                            </li>
+                                                                            <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
+                            <ol>
+                                                              <li><a href="#common-issues" data-toc-link>Common Issues:</a></li>
+                                                              <li><a href="#debug-mode" data-toc-link>Debug Mode</a></li>
+                            </ol></li>
+                                                                            <li><a href="#advanced-customizations" data-toc-link>Advanced Customizations</a>
+                            <ol>
+                                                              <li><a href="#add-email-parsing" data-toc-link>Add Email Parsing</a></li>
+                                                              <li><a href="#add-attachment-detection" data-toc-link>Add Attachment Detection</a></li>
+                                                              <li><a href="#add-spam-filtering" data-toc-link>Add Spam Filtering</a></li>
+                            </ol></li>
+                                                                            <li><a href="#production-considerations" data-toc-link>Production Considerations</a>
+                            </li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>SendGrid recently announced they’re discontinuing their free Email Plan, forcing developers to migrate to paid plans. I wanted to move off of the Email Parser because I’m not sure if that will be paid only as well. If you’re looking for a cost-effective alternative, Cloudflare Workers provide an excellent solution for parsing and forwarding emails to your API.</p>
 <h2 id="why-choose-cloudflare-workers">Why Choose Cloudflare Workers?</h2>
 <ul>
 <li><strong>Free Tier</strong>: 100,000 requests per day at no cost</li>
@@ -472,7 +525,7 @@ In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
 </li>
 <li>Click&nbsp;<strong>Save and Deploy</strong></li>
 </ol>
-<p><img src="/images/2025/07/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/07/image.png" alt="" loading="lazy" decoding="async" width="900" height="768" data-zoom=""></p>
 <h3 id="configure-environment-variables">Configure Environment Variables</h3>
 <ol>
 <li>Go to your&nbsp;<strong>project settings</strong>&nbsp;in Cloudflare Dashboard</li>
@@ -485,7 +538,7 @@ In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
 </li>
 <li>Click&nbsp;<strong>Save</strong></li>
 </ol>
-<p><img src="/images/2025/07/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/07/image-1.png" alt="" loading="lazy" decoding="async" width="1081" height="732" data-zoom=""></p>
 <h2 id="step-5-configure-email-routing">Step 5: Configure Email Routing</h2>
 <p><strong>Note</strong>: Since we’re using Cloudflare’s GitHub integration, the deployment and configuration is handled automatically. You don’t need to manually run deployment commands.</p>
 <h3 id="setup-email-routing-in-cloudflare-dashboard">Setup Email Routing in Cloudflare Dashboard</h3>
@@ -494,7 +547,7 @@ In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
 <li>Go to&nbsp;<strong>Email Routing</strong>&nbsp;in your Cloudflare Dashboard</li>
 <li>Click&nbsp;<strong>Get Started</strong>&nbsp;and verify your domain</li>
 </ol>
-<p><img src="/images/2025/07/image-4.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/07/image-4.png" alt="" loading="lazy" decoding="async" width="1452" height="595" data-zoom=""></p>
 <ol start="3">
 <li>Navigate to&nbsp;<strong>Routing Rules</strong></li>
 <li><strong>Enable Catch-all Address</strong>:
@@ -511,7 +564,7 @@ In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
 </li>
 <li><strong>Save</strong>&nbsp;your routing configuration</li>
 </ol>
-<p><img src="/images/2025/07/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/07/image-5.png" alt="" loading="lazy" decoding="async" width="1052" height="502" data-zoom=""></p>
 <h2 id="step-6-test-your-setup">Step 6: Test Your Setup</h2>
 <h3 id="local-testing">Local Testing</h3>
 <p>Test the worker logic locally:</p>

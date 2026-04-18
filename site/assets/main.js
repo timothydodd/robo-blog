@@ -66,6 +66,54 @@
   })();
 
   // ---------------------------------------------------------------------------
+  // TOC scroll-spy — highlights the TOC entry for the section currently in view.
+  // Uses IntersectionObserver to track h2/h3 targets. No-op if no .post-toc.
+  // ---------------------------------------------------------------------------
+  (function () {
+    const toc = document.querySelector(".post-toc");
+    if (!toc || !("IntersectionObserver" in window)) return;
+
+    const links = new Map(); // id -> <a>
+    toc.querySelectorAll("a[data-toc-link]").forEach((a) => {
+      const id = decodeURIComponent((a.getAttribute("href") || "").replace(/^#/, ""));
+      if (id) links.set(id, a);
+    });
+    if (!links.size) return;
+
+    const targets = [];
+    links.forEach((_, id) => {
+      const el = document.getElementById(id);
+      if (el) targets.push(el);
+    });
+
+    const visible = new Set();
+    function updateActive() {
+      // Pick the visible target closest to the top of the viewport.
+      let best = null;
+      let bestTop = Infinity;
+      visible.forEach((el) => {
+        const t = el.getBoundingClientRect().top;
+        if (t < bestTop) { bestTop = t; best = el; }
+      });
+      links.forEach((a) => a.classList.remove("is-active"));
+      if (best) {
+        const a = links.get(best.id);
+        if (a) a.classList.add("is-active");
+      }
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      }
+      updateActive();
+    }, { rootMargin: "-72px 0px -70% 0px", threshold: 0 });
+
+    targets.forEach((t) => io.observe(t));
+  })();
+
+  // ---------------------------------------------------------------------------
   // Smooth-scroll in-page anchor links
   // ---------------------------------------------------------------------------
   document.addEventListener("click", function (e) {

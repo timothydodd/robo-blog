@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { FileText, Files, Tag, Image, Settings, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BuildPanel } from "./BuildPanel";
+import { confirmDiscard } from "@/lib/dirty";
 
 const nav = [
   { to: "/posts", label: "Posts", icon: FileText },
@@ -24,6 +25,7 @@ export function Layout() {
             <NavLink
               key={to}
               to={to}
+              onClick={(e) => { if (!confirmDiscard()) e.preventDefault(); }}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition",

@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2026-04-18T02:18:46.522Z">  <meta property="article:tag" content="Web Development">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/building-a-static-blog-to-replace-ghost/"},"headline":"Building a Static Blog to Replace Ghost","description":"I replaced my self-hosted Ghost blog with a static site — cheaper, faster, and with almost no attack surface. Here's the stack and how you can do the same.","image":"https://robododd.com/images/2026/04/new-blog-4e07363f.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-17T23:30:00.000Z","dateModified":"2026-04-18T02:18:46.522Z","keywords":"Web Development, Open Source, JavaScript, Migration","articleSection":"Web Development"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,32 @@
       <p class="post-full-subtitle">I replaced my self-hosted Ghost blog with a static site — cheaper, faster, and with almost no attack surface. Here's the stack and how you can do the same.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2026/04/new-blog-4e07363f.jpg" alt="RoboDodd orb logo dispersing into a stream of glowing code particles" loading="eager" decoding="async">
+      <img src="/images/2026/04/new-blog-4e07363f.jpg" alt="RoboDodd orb logo dispersing into a stream of glowing code particles" loading="eager" decoding="async" width="1298" height="745">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <h2 id="why-i-replaced-ghost-with-a-static-site">Why I replaced Ghost with a static site</h2>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#why-i-replaced-ghost-with-a-static-site" data-toc-link>Why I replaced Ghost with a static site</a>
+                            </li>
+                                                                            <li><a href="#how-the-system-works" data-toc-link>How the system works</a>
+                            </li>
+                                                                            <li><a href="#importing-posts-from-ghost" data-toc-link>Importing posts from Ghost</a>
+                            </li>
+                                                                            <li><a href="#a-local-editor-for-writing-posts" data-toc-link>A local editor for writing posts</a>
+                            <ol>
+                                                              <li><a href="#one-click-build-from-the-editor" data-toc-link>One-click build from the editor</a></li>
+                            </ol></li>
+                                                                            <li><a href="#small-touches-that-matter" data-toc-link>Small touches that matter</a>
+                            </li>
+                                                                            <li><a href="#migrating-from-ghost-or-anywhere-else" data-toc-link>Migrating from Ghost (or anywhere else)</a>
+                            </li>
+                                                                            <li><a href="#what-this-looks-like-in-numbers" data-toc-link>What this looks like in numbers</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <h2 id="why-i-replaced-ghost-with-a-static-site">Why I replaced Ghost with a static site</h2>
 <p>RoboDodd has run on <a href="https://ghost.org/" target="_blank" rel="noopener noreferrer">Ghost</a> since 2022. Ghost is a great CMS, but the more I thought about what I actually needed — a place where people can read articles — the clearer it got that most of what was running existed for reasons I wasn’t using.</p>
 <p><strong>Security was the biggest reason.</strong> Every dynamic service is an attack surface. Login endpoints, admin panels, content APIs, database connections — all things automated scanners probe constantly, looking for the week’s fresh CVE. A running CMS is a running target: keeping it safe means keeping up with patches, tracking advisories, and trusting that every transitive dependency in the stack gets security updates faster than anyone can exploit them. Miss one, and someone else is running your site.</p>
 <p>A folder of static HTML files has none of that. There’s no login to brute-force, no database to query, no server-side code to exploit. There’s no admin panel to break into because there is no admin panel. The only thing a visitor’s browser can do is download pre-rendered pages — which is all I wanted it to do in the first place.</p>
@@ -342,7 +363,7 @@
 <p><strong>Cost</strong> reminded me of the first two every month.</p>
 <p>So I built a replacement. The goal was simple: write posts in a nice local editor, save them as JSON and Markdown, build static HTML, ship it to cheap storage. Total control, minimal moving parts, nothing to break into.</p>
 <h2 id="how-the-system-works">How the system works</h2>
-<p><img src="/images/2026/04/architecture-diagram.jpg" alt="High-level flow: editor writes JSON, builder renders HTML, GitHub Action deploys to Azure" loading="lazy" decoding="async" data-zoom="">Four small pieces, each doing one thing:</p>
+<p><img src="/images/2026/04/architecture-diagram.jpg" alt="High-level flow: editor writes JSON, builder renders HTML, GitHub Action deploys to Azure" loading="lazy" decoding="async" width="1191" height="785" data-zoom="">Four small pieces, each doing one thing:</p>
 <ul>
 <li><code>content/</code> — the source of truth. One JSON file per post, one per page, plus a tags list and site settings. Images live in a dated folder structure.</li>
 <li><code>editor/</code> — a React app I run locally. Never deployed. It reads and writes the JSON files through a tiny local backend.</li>
@@ -352,15 +373,15 @@
 <p>That’s it. <code>npm run import</code> seeded everything from the Ghost export once. After that it’s <code>npm run build</code> and <code>git push</code>.</p>
 <h2 id="importing-posts-from-ghost">Importing posts from Ghost</h2>
 <p>Ghost has an <em>Export your content</em> button that hands you one big JSON file. I wrote a script that reads it, converts each post’s HTML body to Markdown, preserves the special Ghost blocks that don’t round-trip cleanly (bookmark previews, galleries, callouts), and downloads every referenced image into the repo.</p>
-<p><img src="/images/2026/04/post-json-sample.jpg" alt="A single imported post as a JSON file: metadata at the top, Markdown body below" loading="lazy" decoding="async" data-zoom="">Every post ends up as a plain, readable JSON file. Easy to diff, easy to edit by hand, and future-me will never be locked out by a proprietary format.</p>
+<p><img src="/images/2026/04/post-json-sample.jpg" alt="A single imported post as a JSON file: metadata at the top, Markdown body below" loading="lazy" decoding="async" width="915" height="506" data-zoom="">Every post ends up as a plain, readable JSON file. Easy to diff, easy to edit by hand, and future-me will never be locked out by a proprietary format.</p>
 <p>One moment I enjoyed: Cloudflare sits in front of <a href="http://robododd.com">robododd.com</a> and — naturally — blocked my importer from downloading my own images. <code>403 cf-mitigated: challenge</code> on every single file. I paused the rule for five minutes, re-ran the importer, grabbed all 328 images in under a minute, and turned it back on. Funny getting rate-limited by your own site.</p>
 <h2 id="a-local-editor-for-writing-posts">A local editor for writing posts</h2>
-<p><img src="/images/2026/04/editor-full.jpg" alt="Editing this very post: Markdown editor on the left, metadata sidebar on the right" loading="lazy" decoding="async" data-zoom="">I spent the most time on the edito. It runs locally, feels like a polished CMS, and writes straight to the JSON files.</p>
+<p><img src="/images/2026/04/editor-full.jpg" alt="Editing this very post: Markdown editor on the left, metadata sidebar on the right" loading="lazy" decoding="async" width="1311" height="983" data-zoom="">I spent the most time on the edito. It runs locally, feels like a polished CMS, and writes straight to the JSON files.</p>
 <p>It handles posts, pages, tags, images, and site-wide settings. Each post has a rich Markdown editor on the left and a sidebar for metadata on the right — title, status, publish date, tags, feature image, excerpt. There’s a drag-and-drop image library, and drafts live in a gitignored folder so half-finished posts never accidentally ship.</p>
-<p><img src="/images/2026/04/editor-settings.jpg" alt="Site settings — title, description, accent color picker, locale, timezone" loading="lazy" decoding="async" data-zoom="">The <strong>Site settings</strong> screen also has a code-injection section for pasting Google Analytics tags, custom CSS, or any raw HTML that needs to land in <code>&lt;head&gt;</code> or before <code>&lt;/body&gt;</code> on every page. Pragmatic escape hatch.</p>
+<p><img src="/images/2026/04/editor-settings.jpg" alt="Site settings — title, description, accent color picker, locale, timezone" loading="lazy" decoding="async" width="1178" height="618" data-zoom="">The <strong>Site settings</strong> screen also has a code-injection section for pasting Google Analytics tags, custom CSS, or any raw HTML that needs to land in <code>&lt;head&gt;</code> or before <code>&lt;/body&gt;</code> on every page. Pragmatic escape hatch.</p>
 <h3 id="one-click-build-from-the-editor">One-click build from the editor</h3>
 <p>Since the editor already has a local backend, I wired up a <strong>Build site</strong> button that runs the builder and streams the log back in real time. No alt-tab to a terminal.</p>
-<p><img src="/images/2026/04/build-log-panel.jpg" alt="Build log panel streaming output from the builder" loading="lazy" decoding="async" data-zoom="">Click, watch it go, see “Built in 8.2s”. If something fails, the error is right there in the panel. Small feature, large quality-of-life win.</p>
+<p><img src="/images/2026/04/build-log-panel.jpg" alt="Build log panel streaming output from the builder" loading="lazy" decoding="async" width="1031" height="508" data-zoom="">Click, watch it go, see “Built in 8.2s”. If something fails, the error is right there in the panel. Small feature, large quality-of-life win.</p>
 <h2 id="small-touches-that-matter">Small touches that matter</h2>
 <ul>
 <li><strong>Image lightbox.</strong> Click any image in a post (including galleries) and a full-screen overlay opens with ← → navigation and keyboard support.</li>
@@ -369,7 +390,7 @@
 <li><strong>Auto social icons.</strong> Add a LinkedIn link in site settings and the LinkedIn glyph appears in the top bar. Same for GitHub, X, email, RSS.</li>
 <li><strong>Gradient top bar</strong> that echoes the logo palette (navy → purple → magenta → peach).</li>
 </ul>
-<p><img src="/images/2026/04/homepage-feed.jpg" alt="Gradient top bar with the orb logo and social icons, above the featured post card" loading="lazy" decoding="async" data-zoom="">## Publishing to Azure Blob Storage</p>
+<p><img src="/images/2026/04/homepage-feed.jpg" alt="Gradient top bar with the orb logo and social icons, above the featured post card" loading="lazy" decoding="async" width="734" height="714" data-zoom="">## Publishing to Azure Blob Storage</p>
 <p>Shipping a post is three steps:</p>
 <ol>
 <li>Write it in the editor.</li>

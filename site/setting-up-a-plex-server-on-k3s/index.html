@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-01-28T18:37:12.000Z">  <meta property="article:tag" content="plex">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setting-up-a-plex-server-on-k3s/"},"headline":"Setting Up a Plex Server on k3s","description":"Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!","image":"https://robododd.com/images/2024/08/plex3.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-08-10T00:51:51.000Z","dateModified":"2025-01-28T18:37:12.000Z","keywords":"plex, Kubernetes, Beelink","articleSection":"plex"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,11 @@
       <p class="post-full-subtitle">Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/08/plex3.webp" alt="Setting Up a Plex Server on k3s" loading="eager" decoding="async">
+      <img src="/images/2024/08/plex3.webp" alt="Setting Up a Plex Server on k3s" loading="eager" decoding="async" width="974" height="641">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Running your own Plex server allows you to centralize and access your media collection from anywhere. Using Kubernetes with k3s offers a lightweight yet powerful platform to manage your Plex server in a scalable, resilient way. In this guide, I’ll walk you through deploying a Plex server on k3s using a manifest that’s been tried and tested in production.</p>
+            <p>Running your own Plex server allows you to centralize and access your media collection from anywhere. Using Kubernetes with k3s offers a lightweight yet powerful platform to manage your Plex server in a scalable, resilient way. In this guide, I’ll walk you through deploying a Plex server on k3s using a manifest that’s been tried and tested in production.</p>
 <h4 id="why-use-k3s-for-plex">Why Use k3s for Plex?</h4>
 <p>K3s is a lightweight Kubernetes distribution, perfect for home labs, small-scale clusters, or edge environments. It’s easy to set up, requires minimal resources, and integrates seamlessly with various Kubernetes tools and services. By running Plex on k3s, you can take advantage of Kubernetes’ powerful orchestration capabilities, such as automated scaling, self-healing, and easy deployment.</p>
 <h4 id="prerequisites">Prerequisites</h4>
@@ -349,7 +349,7 @@
 </ol>
 <h3 id="hardware-i-recommend"><strong>Hardware I Recommend</strong></h3>
 <p>Below are Amazon links to hardware I’ve personally used and recommend. These Beelink mini PCs are affordable, energy-efficient, and feature hardware transcoding, making them great options for a variety of setups.</p>
-<p><img src="/images/2025/01/image-8.png" alt="Beelink EQ14 Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-8.png" alt="Beelink EQ14 Image" loading="lazy" decoding="async" width="280" height="215" data-zoom=""></p>
 <p><strong>Beelink EQ14</strong></p>
 <ul>
 <li>CPU: Intel N150 up to 3.6GHz</li>
@@ -359,7 +359,7 @@
 <li>Price: $189.00 (on sale)</li>
 </ul>
 <p><a href="https://amzn.to/42kbyVv" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
-<p><img src="/images/2025/01/image-9.png" alt="Beelink EQ12 Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-9.png" alt="Beelink EQ12 Image" loading="lazy" decoding="async" width="315" height="282" data-zoom=""></p>
 <p><strong>Beelink EQ12</strong></p>
 <ul>
 <li>CPU: Intel Core 1220P (up to 4.4GHz)</li>
@@ -369,7 +369,7 @@
 <li>Price: $259.00</li>
 </ul>
 <p><a href="https://amzn.to/4hgM6Fk" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
-<p><img src="/images/2025/01/image-10.png" alt="Beelink Mini S12 Pro Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-10.png" alt="Beelink Mini S12 Pro Image" loading="lazy" decoding="async" width="286" height="249" data-zoom=""></p>
 <p><strong>Beelink Mini S12 Pro</strong></p>
 <ul>
 <li>CPU: N100 (4C/4T, Up to 3.4GHz)</li>
@@ -513,7 +513,7 @@
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h4 id="nfs-server-for-storing-data">NFS server for storing data</h4>
 <p>I’m using an NFS server to store all my movies and TV shows in this k3s setup. For details on setting up an NFS server, check out the link below.</p>
-<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/setting-up-an-nfs-server-on-a-raspberry-pi/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Setting Up an NFS Server on a Raspberry Pi</div><div class="kg-bookmark-description">Welcome! In this guide, I’ll walk you through the steps to set up a Raspberry Pi as an NFS (Network File System) server. This setup is perfect for sharing files across your network. Recommended Hardware To get started, I recommend using an external SSD as the storage location for your</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/images/icon/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/Screenshot-2025-01-13-153551.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/setting-up-an-nfs-server-on-a-raspberry-pi/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Setting Up an NFS Server on a Raspberry Pi</div><div class="kg-bookmark-description">Welcome! In this guide, I’ll walk you through the steps to set up a Raspberry Pi as an NFS (Network File System) server. This setup is perfect for sharing files across your network. Recommended Hardware To get started, I recommend using an external SSD as the storage location for your</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/images/icon/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/Screenshot-2025-01-13-153551.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async" width="900" height="544"></div></a></figure>
 <h4 id="leveraging-hardware-transcoding">Leveraging Hardware Transcoding</h4>
 <p>If you’re using Intel-based hardware like the N100 processor on the Beelink EQ-12, you can take advantage of hardware transcoding by mounting the <code>/dev/dri</code> directory into the Plex container. This allows Plex to access the GPU for hardware-accelerated transcoding, significantly improving performance, especially when streaming to multiple devices.</p>
 <p>In the manifest, the <code>dev-dri</code> volume mount is configured as follows:</p>
@@ -579,7 +579,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/how-to-set-up-plex-dvr-and-an-attic-antenna/">
-    <img class="post-card-image" src="/images/2025/02/image-10-1.webp" alt="How to Set Up Plex DVR and an Attic Antenna" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/02/image-10-1.webp" alt="How to Set Up Plex DVR and an Attic Antenna" loading="lazy" decoding="async" width="1792" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/how-to-set-up-plex-dvr-and-an-attic-antenna/">

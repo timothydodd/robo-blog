@@ -7,9 +7,13 @@ import { Eta } from "eta";
 import postcss from "postcss";
 import tailwindcss from "@tailwindcss/postcss";
 
+import { load as loadHtml } from "cheerio";
+
 import { createRenderer, renderMarkdown } from "./lib/markdown.mjs";
 import { buildRss } from "./lib/rss.mjs";
 import { buildSitemap } from "./lib/sitemap.mjs";
+import { buildArticleJsonLd, buildPageJsonLd, buildWebsiteJsonLd } from "./lib/jsonld.mjs";
+import { createImageSizer } from "./lib/imagesize.mjs";
 import {
   formatDate, readingTime, buildExcerpt, escapeHtml, tagsWithPrimary,
 } from "./lib/util.mjs";
@@ -107,28 +111,55 @@ async function main() {
   // ---- Renderer
   const md = createRenderer();
   const eta = new Eta({ views: TEMPLATES, cache: true, autoEscape: false });
+  const imageSizer = createImageSizer(CONTENT);
+
+  // Extract h2 (and h3) entries from rendered HTML for posts long enough to
+  // warrant a TOC. Headings already carry stable ids thanks to markdown-it-anchor.
+  function extractToc(html) {
+    const $ = loadHtml(`<root>${html}</root>`, null, false);
+    const items = [];
+    $("h2, h3").each((_, el) => {
+      const $el = $(el);
+      const id = $el.attr("id");
+      if (!id) return;
+      items.push({ level: el.tagName === "h3" ? 3 : 2, id, text: $el.text().trim() });
+    });
+    const h2Count = items.filter(i => i.level === 2).length;
+    return h2Count >= 3 ? items : null;
+  }
 
   // ---- Enrich posts
   const published = rawPosts.filter(p => p.status === "published");
-  const posts = published.map(p => {
+  const posts = await Promise.all(published.map(async p => {
     const { primary, rest } = tagsWithPrimary(p.tags || [], tagsBySlug);
-    const content_html = renderMarkdown(md, p.content);
+    const content_html = await renderMarkdown(md, p.content, { imageSizer });
+    const featureSize = p.feature_image ? await imageSizer.size(p.feature_image) : null;
     return {
       ...p,
       primary_tag: primary,
       tags: [primary, ...rest].filter(Boolean),
       content_html,
+      toc: extractToc(content_html),
+      feature_image_width: featureSize ? featureSize.width : null,
+      feature_image_height: featureSize ? featureSize.height : null,
       subtitle: p.excerpt || null,                       // explicit only — shown under post title
       excerpt: p.excerpt || buildExcerpt(p.content),     // derived — used for cards + meta description
       reading_time: readingTime(p.content),
       published_at_formatted: formatDate(p.published_at, site.locale),
+      updated_at_formatted: p.updated_at ? formatDate(p.updated_at, site.locale) : null,
     };
-  }).sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+  }));
+  posts.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 
-  const pages = rawPages.map(p => ({
-    ...p,
-    content_html: renderMarkdown(md, p.content),
-    excerpt: p.excerpt || buildExcerpt(p.content),
+  const pages = await Promise.all(rawPages.map(async p => {
+    const featureSize = p.feature_image ? await imageSizer.size(p.feature_image) : null;
+    return {
+      ...p,
+      content_html: await renderMarkdown(md, p.content, { imageSizer }),
+      excerpt: p.excerpt || buildExcerpt(p.content),
+      feature_image_width: featureSize ? featureSize.width : null,
+      feature_image_height: featureSize ? featureSize.height : null,
+    };
   }));
 
   // ---- Clear output dir contents.
@@ -156,7 +187,7 @@ async function main() {
   await fs.copyFile(path.join(ASSETS, "logo.png"), path.join(SITE, "assets", "logo.png"));
 
   // ---- Render layout helper
-  function renderPage({ body, pageTitle, pageDescription, canonicalPath, ogType, ogImage, bodyClass, articleMeta }) {
+  function renderPage({ body, pageTitle, pageDescription, canonicalPath, ogType, ogImage, bodyClass, articleMeta, jsonLd }) {
     return eta.render("layout", {
       site,
       body,
@@ -169,8 +200,11 @@ async function main() {
       ogImage: ogImage ? absoluteUrl(site.url, ogImage) : "",
       bodyClass: bodyClass || "",
       articleMeta: articleMeta || null,
+      jsonLd: jsonLd || null,
     });
   }
+
+  const baseUrl = site.url.replace(/\/$/, "");
 
   // ---- Homepage (paginated)
   const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
@@ -186,13 +220,15 @@ async function main() {
         next: i < totalPages ? `/page/${i + 1}/` : null,
       },
     });
+    const canonicalPath = i === 1 ? "/" : `/page/${i}/`;
     const html = renderPage({
       body,
       pageTitle: site.meta_title || site.title,
       pageDescription: site.meta_description || site.description || "",
-      canonicalPath: i === 1 ? "/" : `/page/${i}/`,
+      canonicalPath,
       ogImage: site.cover_image,
       bodyClass: "home-template" + (i === 1 ? " is-home" : ""),
+      jsonLd: i === 1 ? buildWebsiteJsonLd({ site, baseUrl }) : null,
     });
     const outPath = i === 1
       ? path.join(SITE, "index.html")
@@ -205,11 +241,12 @@ async function main() {
   for (const p of posts) {
     const related = posts.filter(r => r.slug !== p.slug && r.primary_tag?.slug === p.primary_tag?.slug).slice(0, 3);
     const body = eta.render("post", { post: p, related });
+    const canonicalPath = `/${p.slug}/`;
     const html = renderPage({
       body,
       pageTitle: `${p.title} — ${site.title}`,
       pageDescription: p.excerpt,
-      canonicalPath: `/${p.slug}/`,
+      canonicalPath,
       ogType: "article",
       ogImage: p.feature_image,
       bodyClass: "post-template",
@@ -218,6 +255,7 @@ async function main() {
         updated_at: p.updated_at,
         primary_tag: p.primary_tag,
       },
+      jsonLd: buildArticleJsonLd({ site, post: p, canonical: absoluteUrl(site.url, canonicalPath), baseUrl }),
     });
     await writeHtml(path.join(SITE, p.slug, "index.html"), html);
   }
@@ -226,13 +264,15 @@ async function main() {
   // ---- Pages
   for (const pg of pages) {
     const body = eta.render("page", { page: pg });
+    const canonicalPath = `/${pg.slug}/`;
     const html = renderPage({
       body,
       pageTitle: `${pg.title} — ${site.title}`,
       pageDescription: pg.excerpt || site.description || "",
-      canonicalPath: `/${pg.slug}/`,
+      canonicalPath,
       ogImage: pg.feature_image || site.cover_image,
       bodyClass: "page-template",
+      jsonLd: buildPageJsonLd({ site, page: pg, canonical: absoluteUrl(site.url, canonicalPath), baseUrl }),
     });
     await writeHtml(path.join(SITE, pg.slug, "index.html"), html);
   }

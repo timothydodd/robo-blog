@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-01-30T01:37:41.000Z">  <meta property="article:tag" content="Kubernetes">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/atomic-pi-kubernetes-cluster/"},"headline":"Beginner's Guide: Setup a Kubernetes Cluster","description":"Intro In this post, I'll walk you through the steps needed to install K3s, a lightweight Kubernetes distribution. For this tutorial, I'm setting it up on an Atomic Pi, a low-cost…","image":"https://robododd.com/images/2023/01/flower.svg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2023-05-21T15:53:10.000Z","dateModified":"2025-01-30T01:37:41.000Z","keywords":"Kubernetes, Atomic","articleSection":"Kubernetes"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,16 +330,41 @@
           </header>
 
         <figure class="post-full-image">
-      <img src="/images/2023/01/flower.svg" alt="Beginner's Guide: Setup a Kubernetes Cluster" loading="eager" decoding="async">
+      <img src="/images/2023/01/flower.svg" alt="Beginner's Guide: Setup a Kubernetes Cluster" loading="eager" decoding="async" width="576" height="210">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <h1 id="intro">Intro</h1>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                                                  <li><a href="#ubuntu" data-toc-link>Ubuntu</a>
+                            <ol>
+                                                              <li><a href="#create-a-bootable-usb-windows" data-toc-link>Create a Bootable USB (Windows)</a></li>
+                                                              <li><a href="#install-ubuntu-on-your-system" data-toc-link>Install Ubuntu on Your System</a></li>
+                            </ol></li>
+                                                                            <li><a href="#install-nodes" data-toc-link>Install Nodes</a>
+                            <ol>
+                                                              <li><a href="#master-node-setup" data-toc-link>Master Node Setup</a></li>
+                                                              <li><a href="#worker-node-setup" data-toc-link>Worker Node Setup</a></li>
+                            </ol></li>
+                                                                            <li><a href="#checking-the-cluster" data-toc-link>Checking the Cluster</a>
+                            </li>
+                                                                            <li><a href="#setup-local-workstation-kubectl" data-toc-link>Setup Local Workstation Kubectl</a>
+                            <ol>
+                                                              <li><a href="#get-the-tools" data-toc-link>Get the Tools</a></li>
+                                                              <li><a href="#copy-configuration" data-toc-link>Copy Configuration</a></li>
+                                                              <li><a href="#replace-the-ip" data-toc-link>Replace the IP</a></li>
+                            </ol></li>
+                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <h1 id="intro">Intro</h1>
 <p>In this post, I’ll walk you through the steps needed to install K3s, a lightweight Kubernetes distribution. For this tutorial, I’m setting it up on an Atomic Pi, a low-cost and low-power single-board computer, but you can use any similar device like a small PC or a Raspberry Pi.</p>
 <p>Whether you’re a developer looking to test a new application or a system administrator wanting to learn more about Kubernetes, this guide will provide the essential information to get you started.</p>
 <h3 id="hardware-i-recommend"><strong>Hardware I Recommend</strong></h3>
 <p>Below are some Amazon links to hardware I’ve personally used and recommend. These mini PCs are affordable and energy-efficient. The Intel machines have hardware transcoding, really good if you want to run a plex container.</p>
-<p><img src="/images/2025/01/image-11.png" alt="Raspberry Pi 4 Model B Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-11.png" alt="Raspberry Pi 4 Model B Image" loading="lazy" decoding="async" width="273" height="227" data-zoom=""></p>
 <p><strong>Raspberry Pi 4 Model B</strong></p>
 <ul>
 <li>CPU: Quad-core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5GHz</li>
@@ -349,7 +374,7 @@
 <li>Price: $61.99</li>
 </ul>
 <p><a href="https://amzn.to/4aIQwCo" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
-<p><img src="/images/2025/01/image-8.png" alt="Beelink EQ14 Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-8.png" alt="Beelink EQ14 Image" loading="lazy" decoding="async" width="280" height="215" data-zoom=""></p>
 <p><strong>Beelink EQ14</strong></p>
 <ul>
 <li>CPU: Intel N150 up to 3.6GHz</li>
@@ -359,7 +384,7 @@
 <li>Price: $189.00 (on sale)</li>
 </ul>
 <p><a href="https://amzn.to/42kbyVv" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
-<p><img src="/images/2025/01/image-9.png" alt="Beelink EQ12 Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-9.png" alt="Beelink EQ12 Image" loading="lazy" decoding="async" width="315" height="282" data-zoom=""></p>
 <p><strong>Beelink EQ12</strong></p>
 <ul>
 <li>CPU: Intel Core 1220P (up to 4.4GHz)</li>
@@ -369,7 +394,7 @@
 <li>Price: $259.00</li>
 </ul>
 <p><a href="https://amzn.to/4hgM6Fk" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
-<p><img src="/images/2025/01/image-10.png" alt="Beelink Mini S12 Pro Image" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-10.png" alt="Beelink Mini S12 Pro Image" loading="lazy" decoding="async" width="286" height="249" data-zoom=""></p>
 <p><strong>Beelink Mini S12 Pro</strong></p>
 <ul>
 <li>CPU: N100 (4C/4T, Up to 3.4GHz)</li>
@@ -389,7 +414,7 @@
 <li>In the “Boot selection” section, click the “Select” button and choose the Ubuntu ISO file you downloaded.</li>
 <li>Click the “Start” button to begin creating the bootable flash drive.</li>
 </ol>
-<p><img src="/images/2023/01/fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580.png" alt="fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2023/01/fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580.png" alt="fd04f13dd3e608cb1328684aeafae066111c9c13_2_517x580" loading="lazy" decoding="async" width="517" height="580" data-zoom=""></p>
 <p>For more detailed instructions, check out this <a href="https://ubuntu.com/tutorials/create-a-usb-stick-on-windows#1-overview" target="_blank" rel="noopener noreferrer">article</a>.</p>
 <h3 id="install-ubuntu-on-your-system">Install Ubuntu on Your System</h3>
 <ol>
@@ -464,7 +489,7 @@
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h2 id="conclusion">Conclusion</h2>
 <p>Now that your cluster is set up, check out my Uptime Kuma Article to test out your new k3s cluster:</p>
-<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/setup-uptime-kuma-on-kubernetes/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">How to Set Up Uptime Kuma on a k3s Kubernetes Cluster</div><div class="kg-bookmark-description">Discover how to set up Uptime Kuma on a k3s Kubernetes cluster with this step-by-step guide. Utilize MetalLB for local IP assignment, create necessary YAML configuration files, and deploy Uptime Kuma. Monitor your services efficiently on your local network.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/2024/07/uptime.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>    </section>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/setup-uptime-kuma-on-kubernetes/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">How to Set Up Uptime Kuma on a k3s Kubernetes Cluster</div><div class="kg-bookmark-description">Discover how to set up Uptime Kuma on a k3s Kubernetes cluster with this step-by-step guide. Utilize MetalLB for local IP assignment, create necessary YAML configuration files, and deploy Uptime Kuma. Monitor your services efficiently on your local network.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/2024/07/uptime.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async" width="1110" height="799"></div></a></figure>    </section>
 
         <aside class="post-full-tag-list gh-canvas">
       <strong>More on</strong>
@@ -478,7 +503,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
-    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" alt="LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" alt="LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring" loading="lazy" decoding="async" width="919" height="648">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
@@ -495,7 +520,7 @@
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/setup-uptime-kuma-on-kubernetes/">
-    <img class="post-card-image" src="/images/2024/07/uptime.webp" alt="How to Set Up Uptime Kuma on a k3s Kubernetes Cluster" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/07/uptime.webp" alt="How to Set Up Uptime Kuma on a k3s Kubernetes Cluster" loading="lazy" decoding="async" width="1110" height="799">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/setup-uptime-kuma-on-kubernetes/">
@@ -512,7 +537,7 @@
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/network-metallb/">
-    <img class="post-card-image" src="/images/2024/07/metal.jpg" alt="Simplifying Local Network IP Assignment for Kubernetes with MetalLB" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2024/07/metal.jpg" alt="Simplifying Local Network IP Assignment for Kubernetes with MetalLB" loading="lazy" decoding="async" width="822" height="403">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/network-metallb/">

@@ -10,6 +10,7 @@ import { TagMultiSelect } from "@/components/TagMultiSelect";
 import { ImagePicker } from "@/components/ImagePicker";
 import { useToast } from "@/components/ui/Toast";
 import { formatDateTimeLocal, localToIso, slugify } from "@/lib/utils";
+import { confirmDiscard, setDirty as setGlobalDirty } from "@/lib/dirty";
 
 interface Props { kind: "posts" | "pages" }
 
@@ -68,12 +69,35 @@ export function PostEdit({ kind }: Props) {
     return () => window.removeEventListener("keydown", handler);
   }, [save]);
 
+  // Publish dirty state outward + warn on tab-close/refresh while unsaved
+  useEffect(() => {
+    setGlobalDirty(dirty);
+    if (!dirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, [dirty]);
+
+  // Clear on unmount so the next screen doesn't inherit a stale flag
+  useEffect(() => () => { setGlobalDirty(false); }, []);
+
+  function goBack() {
+    if (!confirmDiscard()) return;
+    navigate(`/${kind}`);
+  }
+
   async function remove() {
     if (!post) return;
     if (!window.confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
     try {
       if (kind === "posts") await api.deletePost(slug);
       else await api.deletePage(slug);
+      setGlobalDirty(false);
       navigate(`/${kind}`);
     } catch (e: any) { toast(e.message || "Delete failed", "error"); }
   }
@@ -83,7 +107,7 @@ export function PostEdit({ kind }: Props) {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <header className="flex items-center justify-between mb-5 gap-3">
-        <Button variant="ghost" size="sm" onClick={() => navigate(`/${kind}`)}>
+        <Button variant="ghost" size="sm" onClick={goBack}>
           <ArrowLeft size={15} /> All {kind}
         </Button>
         <div className="flex items-center gap-2">

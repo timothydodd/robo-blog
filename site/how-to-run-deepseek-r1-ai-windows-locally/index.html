@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-02-04T19:13:14.000Z">  <meta property="article:tag" content="DeepSeek">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-run-deepseek-r1-ai-windows-locally/"},"headline":"How to Run the DeepSeek-R1 AI Model on a Windows PC Locally","description":"Learn how to run the DeepSeek AI model on a Windows machine with Ollama. Enhance your experience with Open WebUI, a sleek, self-hosted platform for managing advanced AI models effortlessly.","image":"https://robododd.com/images/2025/01/Screenshot-2025-01-28-162711.jpg","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-28T21:45:20.000Z","dateModified":"2025-02-04T19:13:14.000Z","keywords":"DeepSeek, Ollama AI, Docker, Windows, Open WebUI, Local Language Models, Windows PowerShell","articleSection":"DeepSeek"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,30 @@
       <p class="post-full-subtitle">Learn how to run the DeepSeek AI model on a Windows machine with Ollama. Enhance your experience with Open WebUI, a sleek, self-hosted platform for managing advanced AI models effortlessly.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/01/Screenshot-2025-01-28-162711.jpg" alt="How to Run the DeepSeek-R1 AI Model on a Windows PC Locally" loading="eager" decoding="async">
+      <img src="/images/2025/01/Screenshot-2025-01-28-162711.jpg" alt="How to Run the DeepSeek-R1 AI Model on a Windows PC Locally" loading="eager" decoding="async" width="824" height="461">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Running the DeepSeek AI model on a Windows machine is straightforward and brings advanced AI capabilities to your desktop. This guide will walk you through the setup process, from installing Ollama to running DeepSeek and exploring optional enhancements with Open WebUI.</p>
+            <nav class="post-toc" aria-label="Table of contents">
+        <p class="post-toc-title">Contents</p>
+        <ol>
+                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                            </li>
+                                                                            <li><a href="#step-1-install-ollama" data-toc-link>Step 1: Install Ollama</a>
+                            </li>
+                                                                            <li><a href="#step-2-run-deepseek-r1" data-toc-link>Step 2: Run DeepSeek-R1</a>
+                            </li>
+                                                                            <li><a href="#step-3-optionalenhance-with-open-webui" data-toc-link>Step 3: Optional - Enhance with Open WebUI</a>
+                            <ol>
+                                                              <li><a href="#setting-up-open-webui" data-toc-link>Setting Up Open WebUI</a></li>
+                            </ol></li>
+                                                                            <li><a href="#hardware-for-ollama" data-toc-link>Hardware for Ollama</a>
+                            </li>
+                                                                            <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                            </li>
+                                            </ol>
+      </nav>
+            <p>Running the DeepSeek AI model on a Windows machine is straightforward and brings advanced AI capabilities to your desktop. This guide will walk you through the setup process, from installing Ollama to running DeepSeek and exploring optional enhancements with Open WebUI.</p>
 <hr>
 <h2 id="prerequisites">Prerequisites</h2>
 <ol>
@@ -383,9 +402,9 @@
 <li>Use the <code>/?</code> command to view available options and features.</li>
 <li>If you encounter any issues, use the <code>/clear</code> command to reset the session context.</li>
 </ul>
-<p><img src="/images/2025/01/image-14.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-14.png" alt="" loading="lazy" decoding="async" width="1180" height="420" data-zoom=""></p>
 <h2 id="step-3-optionalenhance-with-open-webui">Step 3: Optional - Enhance with Open WebUI</h2>
-<p><img src="/images/2025/01/image-13.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-13.png" alt="" loading="lazy" decoding="async" width="1223" height="473" data-zoom=""></p>
 <p>If you want a sleek web-based interface for managing your AI models, you can integrate Open WebUI, a feature-rich self-hosted AI platform.</p>
 <h3 id="setting-up-open-webui">Setting Up Open WebUI</h3>
 <h4 id="install-docker-desktop">Install Docker Desktop</h4>
@@ -432,7 +451,7 @@
 <div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">http:<span class="token operator">/</span><span class="token operator">/</span>localhost:3000/
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <p>It may take a few moments for the Docker container to initialize.</p>
-<p><img src="/images/2025/01/image-16.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2025/01/image-16.png" alt="" loading="lazy" decoding="async" width="846" height="695" data-zoom=""></p>
 <p><strong>3.Add DeepSeek-R1</strong>:</p>
 <ul>
 <li>Once Open WebUI is running, DeepSeek-R1 should already be installed if you followed the previous steps.</li>
@@ -441,7 +460,7 @@
 <hr>
 <h2 id="hardware-for-ollama">Hardware for Ollama</h2>
 <p>If you’re looking for budget-friendly hardware to run Ollama efficiently, check out my latest post for the best GPU recommendations!</p>
-<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/budget-friendly-local-ai-hardware-for-running-ollama/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Budget-Friendly Local AI Hardware for Running Ollama</div><div class="kg-bookmark-description">Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://static.ghost.org/v5.0.0/images/link-icon.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/Screenshot-2025-01-29-121414.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
+<figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/budget-friendly-local-ai-hardware-for-running-ollama/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Budget-Friendly Local AI Hardware for Running Ollama</div><div class="kg-bookmark-description">Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://static.ghost.org/v5.0.0/images/link-icon.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/thumbnail/Screenshot-2025-01-29-121414.webp" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async" width="936" height="643"></div></a></figure>
 <hr>
 <h2 id="final-thoughts">Final Thoughts</h2>
 <p>Running DeepSeek on a Windows machine unlocks powerful AI capabilities without requiring specialized hardware. With tools like Ollama and Open WebUI, you can easily manage and interact with advanced language models, making AI experimentation accessible and fun.</p>
@@ -465,7 +484,7 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/how-to-run-the-deepseek-r1-ai-model-on-a-mac-locally/">
-    <img class="post-card-image" src="/images/2025/02/mac2.webp" alt="How to Run the DeepSeek-R1 AI Model on a Mac Locally" loading="lazy" decoding="async">
+    <img class="post-card-image" src="/images/2025/02/mac2.webp" alt="How to Run the DeepSeek-R1 AI Model on a Mac Locally" loading="lazy" decoding="async" width="1343" height="925">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/how-to-run-the-deepseek-r1-ai-model-on-a-mac-locally/">

@@ -6,7 +6,7 @@
     </header>
     <% if (it.page.feature_image) { %>
     <figure class="post-full-image">
-      <img src="<%= it.page.feature_image %>" alt="<%= it.page.feature_image_alt || it.page.title %>" loading="eager" decoding="async">
+      <img src="<%= it.page.feature_image %>" alt="<%= it.page.feature_image_alt || it.page.title %>" loading="eager" decoding="async"<% if (it.page.feature_image_width && it.page.feature_image_height) { %> width="<%= it.page.feature_image_width %>" height="<%= it.page.feature_image_height %>"<% } %>>
     </figure>
     <% } %>
     <section class="post-full-content gh-content gh-canvas">

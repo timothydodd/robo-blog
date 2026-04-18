@@ -92,6 +92,26 @@ function Toolbar({ editor }: { editor: Editor }) {
 }
 
 export function MarkdownEditor({ value, onChange, placeholder }: Props) {
+  // Hold the live editor reference so paste/drop handlers (whose closures were
+  // captured at useEditor init time) can dispatch against the latest instance.
+  const editorRef = useRef<Editor | null>(null);
+
+  async function insertImagesFromFiles(files: File[]) {
+    const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+    if (!imageFiles.length) return;
+    try {
+      const uploaded = await api.uploadImages(imageFiles);
+      const ed = editorRef.current;
+      if (!ed) return;
+      for (const u of uploaded) {
+        ed.chain().focus().setImage({ src: u.path }).run();
+      }
+    } catch {
+      // Surface upload errors via the existing toast elsewhere; silent here
+      // keeps the paste path simple and avoids cross-cutting a toast dep in.
+    }
+  }
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
@@ -108,7 +128,26 @@ export function MarkdownEditor({ value, onChange, placeholder }: Props) {
       const md: string = editor.storage.markdown.getMarkdown();
       onChange(md);
     },
+    editorProps: {
+      handlePaste: (_view, event) => {
+        const files = Array.from(event.clipboardData?.files || []);
+        if (!files.some((f) => f.type.startsWith("image/"))) return false;
+        event.preventDefault();
+        insertImagesFromFiles(files);
+        return true;
+      },
+      handleDrop: (_view, event, _slice, moved) => {
+        if (moved) return false; // internal drag, let ProseMirror handle it
+        const files = Array.from((event as DragEvent).dataTransfer?.files || []);
+        if (!files.some((f) => f.type.startsWith("image/"))) return false;
+        event.preventDefault();
+        insertImagesFromFiles(files);
+        return true;
+      },
+    },
   });
+
+  useEffect(() => { editorRef.current = editor; }, [editor]);
 
   // Sync incoming value when loading a different post
   useEffect(() => {

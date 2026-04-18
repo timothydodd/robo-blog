@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2024-05-16T13:34:11.000Z">  <meta property="article:tag" content="Apple">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setup-app-locking-apple-business-essentials/"},"headline":"Setup Stand Alone App Locking with Apple Business Essentials","description":"Learn how to set up App Locking with Apple Business Essentials using a custom XML configuration file. Follow this step-by-step guide to secure your devices, as this feature isn't available out-of-the-box. Tailor your setup for optimal security and functionality.","image":"https://robododd.com/images/2024/05/Screenshot-2024-05-15-174145-1.webp","author":{"@type":"Person","name":"Timothy Dodd","url":"https://robododd.com"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-05-15T21:50:41.000Z","dateModified":"2024-05-16T13:34:11.000Z","keywords":"Apple, IOS, MDM","articleSection":"Apple"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
@@ -330,11 +330,11 @@
       <p class="post-full-subtitle">Learn how to set up App Locking with Apple Business Essentials using a custom XML configuration file. Follow this step-by-step guide to secure your devices, as this feature isn't available out-of-the-box. Tailor your setup for optimal security and functionality.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/05/Screenshot-2024-05-15-174145-1.webp" alt="Setup Stand Alone App Locking with Apple Business Essentials" loading="eager" decoding="async">
+      <img src="/images/2024/05/Screenshot-2024-05-15-174145-1.webp" alt="Setup Stand Alone App Locking with Apple Business Essentials" loading="eager" decoding="async" width="1235" height="704">
           </figure>
     
     <section class="post-full-content gh-content gh-canvas">
-      <p>Ensuring your devices are securely locked to a single app can be crucial for various business scenarios, from kiosks to dedicated work apps. However, it took me quite some time to realize that this functionality isn’t available out-of-the-box with Apple Business Essentials. Instead, you must create a custom XML document to achieve this. Don’t worry, though—I’ve got you covered with a step-by-step guide to setting up AppLock via a custom configuration file.</p>
+            <p>Ensuring your devices are securely locked to a single app can be crucial for various business scenarios, from kiosks to dedicated work apps. However, it took me quite some time to realize that this functionality isn’t available out-of-the-box with Apple Business Essentials. Instead, you must create a custom XML document to achieve this. Don’t worry, though—I’ve got you covered with a step-by-step guide to setting up AppLock via a custom configuration file.</p>
 <h3 id="step-1-create-a-custom-configuration-file">Step 1: Create a Custom Configuration File</h3>
 <p>Begin by creating a custom configuration file. Here’s an example of the final XML configuration:</p>
 <div class="pre-wrapper"><pre class="language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> <span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">plist</span> <span class="token name">PUBLIC</span> <span class="token string">"-//Apple Inc//DTD PLIST 1.0//EN"</span> <span class="token string">"http://www.apple.com/DTDs/PropertyList-1.0.dtd"</span><span class="token punctuation">&gt;</span></span>
@@ -378,7 +378,7 @@
 </ol>
 <h3 id="step-3-identify-the-app-bundle-id">Step 3: Identify the App Bundle ID</h3>
 <p>To specify which app you want to lock in full-screen mode, you need to find the app’s bundle ID. Here’s how:</p>
-<p><img src="/images/2024/05/image.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image.png" alt="" loading="lazy" decoding="async" width="873" height="209" data-zoom=""></p>
 <ol>
 <li><strong>Find the App in the App Store</strong>:
 <ul>
@@ -392,13 +392,13 @@
 </ul>
 </li>
 </ol>
-<p><img src="/images/2024/05/image-1.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image-1.png" alt="" loading="lazy" decoding="async" width="1043" height="541" data-zoom=""></p>
 <p><strong>Fetch the Bundle ID</strong>:</p>
 <ul>
 <li>Go to <code>https://itunes.apple.com/lookup?id=1481691530</code> (replace <code>1481691530</code> with your app’s ID).</li>
 <li>This will prompt you to download a text file. Open this file and look for the <code>bundleId</code>.</li>
 </ul>
-<p><img src="/images/2024/05/image-2.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image-2.png" alt="" loading="lazy" decoding="async" width="829" height="270" data-zoom=""></p>
 <ol>
 <li><strong>Insert the Bundle ID</strong>:
 <ul>
@@ -423,7 +423,7 @@
 </ul>
 </li>
 </ol>
-<p><img src="/images/2024/05/image-3.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image-3.png" alt="" loading="lazy" decoding="async" width="1146" height="801" data-zoom=""></p>
 <ol>
 <li><strong>Select Custom Setting</strong>:
 <ul>
@@ -431,7 +431,7 @@
 </ul>
 </li>
 </ol>
-<p><img src="/images/2024/05/image-4.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image-4.png" alt="" loading="lazy" decoding="async" width="1173" height="848" data-zoom=""></p>
 <ol>
 <li><strong>Upload the Configuration File</strong>:
 <ul>
@@ -439,7 +439,7 @@
 </ul>
 </li>
 </ol>
-<p><img src="/images/2024/05/image-5.png" alt="" loading="lazy" decoding="async" data-zoom=""></p>
+<p><img src="/images/2024/05/image-5.png" alt="" loading="lazy" decoding="async" width="1400" height="950" data-zoom=""></p>
 <h3 id="step-6-assign-the-configuration-to-devices">Step 6: Assign the Configuration to Devices</h3>
 <ol>
 <li><strong>Assign to Devices</strong>:

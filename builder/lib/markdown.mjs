@@ -65,12 +65,12 @@ function normalizeCodeLanguages(source) {
   });
 }
 
-export function renderMarkdown(md, source) {
+export async function renderMarkdown(md, source, { imageSizer } = {}) {
   const html = md.render(normalizeCodeLanguages(source || ""));
-  return postProcess(html);
+  return postProcess(html, { imageSizer });
 }
 
-function postProcess(html) {
+async function postProcess(html, { imageSizer }) {
   const $ = loadHtml(`<root>${html}</root>`, null, false);
 
   // Wrap <pre> in <div class="pre-wrapper"> with a copy button.
@@ -82,12 +82,24 @@ function postProcess(html) {
     wrapper.append(`<button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button>`);
   });
 
-  // Lazy-load images, default alt="", and flag content images as zoomable for the lightbox.
-  $("img").each((_, el) => {
+  // Lazy-load, default alt="", flag zoomable, stamp intrinsic width/height
+  // so browsers reserve space and layout doesn't shift (CLS).
+  const imgs = $("img").toArray();
+  const dims = imageSizer
+    ? await Promise.all(imgs.map(el => imageSizer.size($(el).attr("src"))))
+    : imgs.map(() => null);
+
+  imgs.forEach((el, i) => {
     const $el = $(el);
     if (!$el.attr("loading")) $el.attr("loading", "lazy");
     if (!$el.attr("decoding")) $el.attr("decoding", "async");
     if ($el.attr("alt") === undefined) $el.attr("alt", "");
+
+    const d = dims[i];
+    if (d && !$el.attr("width") && !$el.attr("height")) {
+      $el.attr("width", String(d.width));
+      $el.attr("height", String(d.height));
+    }
 
     // Exclude bookmark thumbnails, bookmark icons, and file-card icons.
     const inBookmark = $el.closest(".kg-bookmark-card, .kg-file-card").length > 0;
