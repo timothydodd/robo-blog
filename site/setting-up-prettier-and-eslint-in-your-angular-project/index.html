@@ -340,41 +340,67 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#why-use-prettier-and-eslint" data-toc-link>Why Use Prettier and ESLint?</a>
-                            <ol>
-                                                              <li><a href="#prettier" data-toc-link>Prettier</a></li>
-                                                              <li><a href="#eslint" data-toc-link>ESLint</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-1-install-dependencies" data-toc-link>Step 1: Install Dependencies</a>
-                            <ol>
-                                                              <li><a href="#installed-packages" data-toc-link>Installed Packages:</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-2-configure-eslint" data-toc-link>Step 2: Configure ESLint</a>
-                            <ol>
-                                                              <li><a href="#key-point" data-toc-link>Key Point:</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-3-configure-prettier" data-toc-link>Step 3: Configure Prettier</a>
-                            <ol>
-                                                              <li><a href="#optional-prettierignore" data-toc-link>Optional: .prettierignore</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-4-install-vs-code-extensions" data-toc-link>Step 4: Install VS Code Extensions</a>
-                            </li>
-                                                                            <li><a href="#step-5-configure-auto-format-when-save-in-vs-code" data-toc-link>Step 5: Configure Auto-Format when save in VS Code</a>
-                            <ol>
-                                                              <li><a href="#packages" data-toc-link>Packages</a></li>
-                                                              <li><a href="#how-it-works" data-toc-link>How It Works:</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-6-test-it" data-toc-link>Step 6: Test it</a>
-                            </li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>Maintaining clean and consistent code is essential for any project, especially in a collaborative environment. Prettier and ESLint are popular tools that help enforce code quality and formatting standards. This guide walks you through setting up Prettier and ESLint in your Angular project and configuring auto-save for a seamless developer experience. This method should work in older Angular versions as well.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#why-use-prettier-and-eslint" data-toc-link>Why Use Prettier and ESLint?</a>
+                                <ol>
+                                                                        <li><a href="#prettier" data-toc-link>Prettier</a></li>
+                                                                        <li><a href="#eslint" data-toc-link>ESLint</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-1-install-dependencies" data-toc-link>Step 1: Install Dependencies</a>
+                                <ol>
+                                                                        <li><a href="#installed-packages" data-toc-link>Installed Packages:</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-2-configure-eslint" data-toc-link>Step 2: Configure ESLint</a>
+                                <ol>
+                                                                        <li><a href="#key-point" data-toc-link>Key Point:</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-3-configure-prettier" data-toc-link>Step 3: Configure Prettier</a>
+                                <ol>
+                                                                        <li><a href="#optional-prettierignore" data-toc-link>Optional: .prettierignore</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-4-install-vs-code-extensions" data-toc-link>Step 4: Install VS Code Extensions</a>
+                                </li>
+                                                                                        <li><a href="#step-5-configure-auto-format-when-save-in-vs-code" data-toc-link>Step 5: Configure Auto-Format when save in VS Code</a>
+                                <ol>
+                                                                        <li><a href="#packages" data-toc-link>Packages</a></li>
+                                                                        <li><a href="#how-it-works" data-toc-link>How It Works:</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-6-test-it" data-toc-link>Step 6: Test it</a>
+                                </li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/google-places-autocomplete-directive-angular-21/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">Google Places Autocomplete Directive – Angular 21</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/teaching-claude-modern-angular-best-practices-with-custom-instructions/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">Teaching Claude Modern Angular Best Practices with Custom Instructions</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">Dynamic Environment Variables in Angular: A Docker-Ready Solution</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>Maintaining clean and consistent code is essential for any project, especially in a collaborative environment. Prettier and ESLint are popular tools that help enforce code quality and formatting standards. This guide walks you through setting up Prettier and ESLint in your Angular project and configuring auto-save for a seamless developer experience. This method should work in older Angular versions as well.</p>
 <p>I put together a test project that does all these steps, you can check it out here:</p>
 <figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://github.com/timothydodd/prettier-eslint-angular-example/tree/master" target="_blank" rel="noopener noreferrer"><div class="kg-bookmark-content"><div class="kg-bookmark-title">GitHub - timothydodd/prettier-eslint-angular-example</div><div class="kg-bookmark-description">Contribute to timothydodd/prettier-eslint-angular-example development by creating an account on GitHub.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">GitHub</span><span class="kg-bookmark-publisher">timothydodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="https://opengraph.githubassets.com/5222352c6b04c1746f236e043447c3b2388eb2de67f07f780325b24c8158d964/timothydodd/prettier-eslint-angular-example" alt="" onerror="this.style.display = 'none'" loading="lazy" decoding="async"></div></a></figure>
 <h2 id="why-use-prettier-and-eslint"><strong>Why Use Prettier and ESLint?</strong></h2>
@@ -610,20 +636,22 @@ node_modules
 <p>Saving the file should automatically fix the file.</p>
 <h2 id="conclusion"><strong>Conclusion</strong></h2>
 <p>By integrating Prettier and ESLint into your Angular project, you ensure clean and consistent code while minimizing manual formatting efforts. With auto-save configured in VS Code, your development process becomes even smoother. Happy coding!</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/angular/">Angular</a>
-              <a href="/tag/prettier/">Prettier</a>
-              <a href="/tag/eslint/">ESLint</a>
-              <a href="/tag/typescript/">TypeScript</a>
-              <a href="/tag/clean-code/">Clean Code</a>
-              <a href="/tag/front-end-development/">Front-End Development</a>
-              <a href="/tag/linting/">Linting</a>
-              <a href="/tag/visual-studio-code/">Visual Studio Code</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/angular/">Angular</a>
+                      <a href="/tag/prettier/">Prettier</a>
+                      <a href="/tag/eslint/">ESLint</a>
+                      <a href="/tag/typescript/">TypeScript</a>
+                      <a href="/tag/clean-code/">Clean Code</a>
+                      <a href="/tag/front-end-development/">Front-End Development</a>
+                      <a href="/tag/linting/">Linting</a>
+                      <a href="/tag/visual-studio-code/">Visual Studio Code</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

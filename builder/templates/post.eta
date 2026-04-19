@@ -33,45 +33,75 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-      <% if (it.post.toc && it.post.toc.length) { %>
-      <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-          <% let openH3 = false; %>
-          <% it.post.toc.forEach(function(item, i){ %>
-            <% if (item.level === 2) { %>
-              <% if (openH3) { %></ol></li><% openH3 = false; } %>
-              <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a>
-              <%
-                const next = it.post.toc[i + 1];
-                if (next && next.level === 3) { openH3 = true;
-              %>
-              <ol>
-              <% } else { %>
-              </li>
+    <%
+      const hasToc = it.post.toc && it.post.toc.length;
+      const hasRelated = it.related && it.related.length;
+      const hasSidebar = hasToc || hasRelated;
+    %>
+    <div class="post-body<%= hasSidebar ? '' : ' post-body--no-sidebar' %>">
+      <% if (hasSidebar) { %>
+      <aside class="post-sidebar" aria-label="Article resources">
+        <% if (hasToc) { %>
+        <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+            <% let openH3 = false; %>
+            <% it.post.toc.forEach(function(item, i){ %>
+              <% if (item.level === 2) { %>
+                <% if (openH3) { %></ol></li><% openH3 = false; } %>
+                <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a>
+                <%
+                  const next = it.post.toc[i + 1];
+                  if (next && next.level === 3) { openH3 = true;
+                %>
+                <ol>
+                <% } else { %>
+                </li>
+                <% } %>
+              <% } else if (item.level === 3 && openH3) { %>
+                <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a></li>
+                <% const next = it.post.toc[i + 1]; if (!next || next.level !== 3) { %>
+                </ol></li>
+                <% openH3 = false; } %>
               <% } %>
-            <% } else if (item.level === 3 && openH3) { %>
-              <li><a href="#<%= item.id %>" data-toc-link><%= item.text %></a></li>
-              <% const next = it.post.toc[i + 1]; if (!next || next.level !== 3) { %>
-              </ol></li>
-              <% openH3 = false; } %>
-            <% } %>
-          <% }) %>
-        </ol>
-      </nav>
-      <% } %>
-      <%~ it.post.content_html %>
-    </section>
+            <% }) %>
+          </ol>
+        </nav>
+        <% } %>
 
-    <% if (it.post.tags && it.post.tags.length > 1) { %>
-    <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-      <% it.post.tags.forEach(function(t){ %>
-        <a href="/tag/<%= t.slug %>/"><%= t.name %></a>
-      <% }) %>
-    </aside>
-    <% } %>
+        <% if (hasRelated) { %>
+        <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+            <% it.related.forEach(function(p){ %>
+            <li>
+              <a class="post-sidebar-related-link" href="/<%= p.slug %>/">
+                <% if (p.primary_tag) { %><span class="post-sidebar-related-tag"><%= p.primary_tag.name %></span><% } %>
+                <span class="post-sidebar-related-headline"><%= p.title %></span>
+              </a>
+            </li>
+            <% }) %>
+          </ul>
+        </section>
+        <% } %>
+      </aside>
+      <% } %>
+
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <%~ it.post.content_html %>
+        </section>
+
+        <% if (it.post.tags && it.post.tags.length > 1) { %>
+        <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+          <% it.post.tags.forEach(function(t){ %>
+            <a href="/tag/<%= t.slug %>/"><%= t.name %></a>
+          <% }) %>
+        </aside>
+        <% } %>
+      </div>
+    </div>
   </article>
 
   <% if (it.related && it.related.length) { %>

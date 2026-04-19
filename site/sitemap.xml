@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://robododd.com/</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -98,7 +98,7 @@
   </url>
   <url>
     <loc>https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</loc>
-    <lastmod>2025-04-03</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -128,7 +128,7 @@
   </url>
   <url>
     <loc>https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</loc>
-    <lastmod>2025-03-10</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -278,19 +278,19 @@
   </url>
   <url>
     <loc>https://robododd.com/atomic-pi-kubernetes-cluster/</loc>
-    <lastmod>2025-01-30</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://robododd.com/about/</loc>
-    <lastmod>2025-01-16</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://robododd.com/privacy-policy/</loc>
-    <lastmod>2024-05-21</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -302,7 +302,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/ai/</loc>
-    <lastmod>2025-08-05</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -338,7 +338,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/angular/</loc>
-    <lastmod>2026-02-13</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -356,7 +356,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/atomic/</loc>
-    <lastmod>2025-01-30</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -434,7 +434,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/claude-3-7-sonnet/</loc>
-    <lastmod>2025-03-10</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -614,7 +614,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/front-end-development/</loc>
-    <lastmod>2025-05-26</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -662,13 +662,13 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/github/</loc>
-    <lastmod>2025-07-05</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/github-copilot/</loc>
-    <lastmod>2025-03-10</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -758,7 +758,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/kubernetes/</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1094,7 +1094,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/typescript/</loc>
-    <lastmod>2026-02-13</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1124,19 +1124,19 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/vs-code/</loc>
-    <lastmod>2025-05-26</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/vs-code-extensions/</loc>
-    <lastmod>2025-04-03</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/web-development/</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

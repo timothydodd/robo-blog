@@ -340,8 +340,34 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <p>In this article, I’ll guide you through setting up MetalLB, a network load-balancer that allows you to assign local area network (LAN) IP addresses to your Kubernetes deployments. This setup is particularly useful for environments where a cloud provider’s load balancer is unavailable or unnecessary.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/setup-uptime-kuma-on-kubernetes/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">How to Set Up Uptime Kuma on a k3s Kubernetes Cluster</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/grafana-loki-log-everything-locally/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>In this article, I’ll guide you through setting up MetalLB, a network load-balancer that allows you to assign local area network (LAN) IP addresses to your Kubernetes deployments. This setup is particularly useful for environments where a cloud provider’s load balancer is unavailable or unnecessary.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Please be aware that you must Disable servicelib and traefik when installing your master node.</p>
 <div class="pre-wrapper"><pre class="language-text"><code class="language-text">export INSTALL_K3S_EXEC="--disable servicelb --disable traefik"
@@ -395,15 +421,17 @@
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h3 id="conclusion">Conclusion</h3>
 <p>By following these steps, you’ll have MetalLB configured to provide network load-balancing with local IP addresses in your Kubernetes environment. This setup is ideal for development and testing scenarios where using a cloud provider’s load balancer might not be feasible.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/networking/">Networking</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/networking/">Networking</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

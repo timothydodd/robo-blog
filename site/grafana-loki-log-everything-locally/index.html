@@ -343,36 +343,62 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#alternatives" data-toc-link>Alternatives</a>
-                            </li>
-                                                                            <li><a href="#step-1-deploying-loki" data-toc-link>Step 1: Deploying Loki</a>
-                            <ol>
-                                                              <li><a href="#loki-deployment" data-toc-link>Loki Deployment</a></li>
-                                                              <li><a href="#loki-service" data-toc-link>Loki Service</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-2-setting-up-promtail" data-toc-link>Step 2: Setting Up Promtail</a>
-                            <ol>
-                                                              <li><a href="#promtail-deployment" data-toc-link>Promtail Deployment</a></li>
-                                                              <li><a href="#step-3-deploying-grafana" data-toc-link>Step 3: Deploying Grafana</a></li>
-                                                              <li><a href="#grafana-deployment" data-toc-link>Grafana Deployment</a></li>
-                            </ol></li>
-                                                                            <li><a href="#setting-up-lan-ips-with-metallb" data-toc-link>Setting Up LAN IPs with MetalLB</a>
-                            <ol>
-                                                              <li><a href="#grafana-service" data-toc-link>Grafana Service</a></li>
-                            </ol></li>
-                                                                            <li><a href="#accessing-grafana" data-toc-link>Accessing Grafana</a>
-                            </li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>Whether you’re a hobbyist delving into the depths of home networking and server management, or simply someone passionate about maintaining a robust home lab setup, having a reliable logging system is crucial. It not only aids in troubleshooting but also helps in optimizing the performance of your applications. This guide is tailored for home lab enthusiasts looking to deploy Loki for log aggregation, Promtail for log collection, and Grafana for visualizing and querying logs, all on a lightweight Kubernetes platform, K3s. Let’s dive into setting up a streamlined logging stack that can offer deep insights into your home lab’s workings.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#alternatives" data-toc-link>Alternatives</a>
+                                </li>
+                                                                                        <li><a href="#step-1-deploying-loki" data-toc-link>Step 1: Deploying Loki</a>
+                                <ol>
+                                                                        <li><a href="#loki-deployment" data-toc-link>Loki Deployment</a></li>
+                                                                        <li><a href="#loki-service" data-toc-link>Loki Service</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-2-setting-up-promtail" data-toc-link>Step 2: Setting Up Promtail</a>
+                                <ol>
+                                                                        <li><a href="#promtail-deployment" data-toc-link>Promtail Deployment</a></li>
+                                                                        <li><a href="#step-3-deploying-grafana" data-toc-link>Step 3: Deploying Grafana</a></li>
+                                                                        <li><a href="#grafana-deployment" data-toc-link>Grafana Deployment</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#setting-up-lan-ips-with-metallb" data-toc-link>Setting Up LAN IPs with MetalLB</a>
+                                <ol>
+                                                                        <li><a href="#grafana-service" data-toc-link>Grafana Service</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#accessing-grafana" data-toc-link>Accessing Grafana</a>
+                                </li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/setup-uptime-kuma-on-kubernetes/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">How to Set Up Uptime Kuma on a k3s Kubernetes Cluster</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/network-metallb/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>Whether you’re a hobbyist delving into the depths of home networking and server management, or simply someone passionate about maintaining a robust home lab setup, having a reliable logging system is crucial. It not only aids in troubleshooting but also helps in optimizing the performance of your applications. This guide is tailored for home lab enthusiasts looking to deploy Loki for log aggregation, Promtail for log collection, and Grafana for visualizing and querying logs, all on a lightweight Kubernetes platform, K3s. Let’s dive into setting up a streamlined logging stack that can offer deep insights into your home lab’s workings.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before diving into the deployment process, ensure you have the following:</p>
 <ul>
@@ -740,18 +766,20 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
 <h2 id="conclusion">Conclusion</h2>
 <p>Deploying Loki, Promtail, and Grafana on a K3s cluster provides a scalable and efficient logging solution for Kubernetes environments. By following the steps outlined in this guide, you’ll have a powerful toolset at your disposal for observability and log management.</p>
 <p>Remember to monitor your deployments and adjust resources as necessary to ensure optimal performance. Happy logging!</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/promtail/">Promtail</a>
-              <a href="/tag/loki/">Loki</a>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-              <a href="/tag/grafana/">Grafana</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/promtail/">Promtail</a>
+                      <a href="/tag/loki/">Loki</a>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                      <a href="/tag/grafana/">Grafana</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

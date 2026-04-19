@@ -340,31 +340,52 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#why-cloudflare-tunnel" data-toc-link>Why Cloudflare Tunnel?</a>
-                            </li>
-                                                                            <li><a href="#step-1-create-a-kubernetes-service" data-toc-link>Step 1: Create a Kubernetes Service</a>
-                            </li>
-                                                                            <li><a href="#step-2-set-up-a-cloudflare-tunnel" data-toc-link>Step 2: Set Up a Cloudflare Tunnel</a>
-                            <ol>
-                                                              <li><a href="#1-create-a-cloudflare-account" data-toc-link>1. Create a Cloudflare Account</a></li>
-                                                              <li><a href="#2-enable-zero-trust" data-toc-link>2. Enable Zero Trust</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-3-deploy-the-cloudflare-tunnel-agent-to-k3s" data-toc-link>Step 3: Deploy the Cloudflare Tunnel Agent to k3s</a>
-                            <ol>
-                                                              <li><a href="#copy-the-token" data-toc-link>Copy the Token</a></li>
-                                                              <li><a href="#create-the-deployment-manifest" data-toc-link>Create the Deployment Manifest</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-4-add-a-public-hostname-in-cloudflare" data-toc-link>Step 4: Add a Public Hostname in Cloudflare</a>
-                            </li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>If you’re running a <a href="https://k3s.io" target="_blank" rel="noopener noreferrer">k3s</a> cluster and want to expose services to the outside world, you might think you <em>have</em> to use something like MetalLB to assign local network IPs. While MetalLB is great for local access, it can feel overcomplicated if you don’t care about LAN IPs and just want remote access.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#why-cloudflare-tunnel" data-toc-link>Why Cloudflare Tunnel?</a>
+                                </li>
+                                                                                        <li><a href="#step-1-create-a-kubernetes-service" data-toc-link>Step 1: Create a Kubernetes Service</a>
+                                </li>
+                                                                                        <li><a href="#step-2-set-up-a-cloudflare-tunnel" data-toc-link>Step 2: Set Up a Cloudflare Tunnel</a>
+                                <ol>
+                                                                        <li><a href="#1-create-a-cloudflare-account" data-toc-link>1. Create a Cloudflare Account</a></li>
+                                                                        <li><a href="#2-enable-zero-trust" data-toc-link>2. Enable Zero Trust</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-3-deploy-the-cloudflare-tunnel-agent-to-k3s" data-toc-link>Step 3: Deploy the Cloudflare Tunnel Agent to k3s</a>
+                                <ol>
+                                                                        <li><a href="#copy-the-token" data-toc-link>Copy the Token</a></li>
+                                                                        <li><a href="#create-the-deployment-manifest" data-toc-link>Create the Deployment Manifest</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-4-add-a-public-hostname-in-cloudflare" data-toc-link>Step 4: Add a Public Hostname in Cloudflare</a>
+                                </li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">Make Your k3s Local Storage Persistent with Longhorn</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>If you’re running a <a href="https://k3s.io" target="_blank" rel="noopener noreferrer">k3s</a> cluster and want to expose services to the outside world, you might think you <em>have</em> to use something like MetalLB to assign local network IPs. While MetalLB is great for local access, it can feel overcomplicated if you don’t care about LAN IPs and just want remote access.</p>
 <p>Fortunately, Cloudflare Tunnels offer a clean, secure, and LAN-agnostic way to expose services — no need to fiddle with IPs or firewall rules. You can even route traffic directly to a Kubernetes service by name. Let’s walk through how to do that.</p>
 <hr>
 <h2 id="why-cloudflare-tunnel">Why Cloudflare Tunnel?</h2>
@@ -498,19 +519,21 @@ spec:
 <p>Cloudflare will route traffic from the public hostname to your internal service — just like that.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Using Cloudflare Tunnels with k3s is a lightweight and secure way to expose your services — no MetalLB, no port forwarding, no headaches. This approach is especially useful for self-hosted apps like Ghost, Uptime Kuma, or even your custom tools.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/cloudflare/">Cloudflare</a>
-              <a href="/tag/homelab/">homelab</a>
-              <a href="/tag/metallb/">MetalLb</a>
-              <a href="/tag/reverse-proxy/">reverse-proxy</a>
-              <a href="/tag/devops/">DevOps</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/cloudflare/">Cloudflare</a>
+                      <a href="/tag/homelab/">homelab</a>
+                      <a href="/tag/metallb/">MetalLb</a>
+                      <a href="/tag/reverse-proxy/">reverse-proxy</a>
+                      <a href="/tag/devops/">DevOps</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

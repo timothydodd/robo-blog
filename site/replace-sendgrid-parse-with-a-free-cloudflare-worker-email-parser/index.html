@@ -343,61 +343,67 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#why-choose-cloudflare-workers" data-toc-link>Why Choose Cloudflare Workers?</a>
-                            </li>
-                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#step-1-clone-and-customize-the-project" data-toc-link>Step 1: Clone and Customize the Project</a>
-                            <ol>
-                                                              <li><a href="#rename-for-your-project" data-toc-link>Rename for Your Project</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-2-customize-the-worker-code" data-toc-link>Step 2: Customize the Worker Code</a>
-                            <ol>
-                                                              <li><a href="#email-processing-flow" data-toc-link>Email Processing Flow:</a></li>
-                                                              <li><a href="#key-features" data-toc-link>Key Features:</a></li>
-                                                              <li><a href="#required-code-changes" data-toc-link>Required Code Changes:</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-3-upload-your-customized-project-to-github" data-toc-link>Step 3: Upload Your Customized Project to GitHub</a>
-                            </li>
-                                                                            <li><a href="#step-4-setup-worker-on-cloudflare" data-toc-link>Step 4: Setup Worker on Cloudflare</a>
-                            <ol>
-                                                              <li><a href="#deploy-via-cloudflare-dashboard" data-toc-link>Deploy via Cloudflare Dashboard</a></li>
-                                                              <li><a href="#configure-environment-variables" data-toc-link>Configure Environment Variables</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-5-configure-email-routing" data-toc-link>Step 5: Configure Email Routing</a>
-                            <ol>
-                                                              <li><a href="#setup-email-routing-in-cloudflare-dashboard" data-toc-link>Setup Email Routing in Cloudflare Dashboard</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-6-test-your-setup" data-toc-link>Step 6: Test Your Setup</a>
-                            <ol>
-                                                              <li><a href="#local-testing" data-toc-link>Local Testing</a></li>
-                                                              <li><a href="#live-testing" data-toc-link>Live Testing</a></li>
-                                                              <li><a href="#monitor-logs" data-toc-link>Monitor Logs</a></li>
-                            </ol></li>
-                                                                            <li><a href="#expected-email-data-format" data-toc-link>Expected Email Data Format</a>
-                            </li>
-                                                                            <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
-                            <ol>
-                                                              <li><a href="#common-issues" data-toc-link>Common Issues:</a></li>
-                                                              <li><a href="#debug-mode" data-toc-link>Debug Mode</a></li>
-                            </ol></li>
-                                                                            <li><a href="#advanced-customizations" data-toc-link>Advanced Customizations</a>
-                            <ol>
-                                                              <li><a href="#add-email-parsing" data-toc-link>Add Email Parsing</a></li>
-                                                              <li><a href="#add-attachment-detection" data-toc-link>Add Attachment Detection</a></li>
-                                                              <li><a href="#add-spam-filtering" data-toc-link>Add Spam Filtering</a></li>
-                            </ol></li>
-                                                                            <li><a href="#production-considerations" data-toc-link>Production Considerations</a>
-                            </li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>SendGrid recently announced they’re discontinuing their free Email Plan, forcing developers to migrate to paid plans. I wanted to move off of the Email Parser because I’m not sure if that will be paid only as well. If you’re looking for a cost-effective alternative, Cloudflare Workers provide an excellent solution for parsing and forwarding emails to your API.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#why-choose-cloudflare-workers" data-toc-link>Why Choose Cloudflare Workers?</a>
+                                </li>
+                                                                                        <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#step-1-clone-and-customize-the-project" data-toc-link>Step 1: Clone and Customize the Project</a>
+                                <ol>
+                                                                        <li><a href="#rename-for-your-project" data-toc-link>Rename for Your Project</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-2-customize-the-worker-code" data-toc-link>Step 2: Customize the Worker Code</a>
+                                <ol>
+                                                                        <li><a href="#email-processing-flow" data-toc-link>Email Processing Flow:</a></li>
+                                                                        <li><a href="#key-features" data-toc-link>Key Features:</a></li>
+                                                                        <li><a href="#required-code-changes" data-toc-link>Required Code Changes:</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-3-upload-your-customized-project-to-github" data-toc-link>Step 3: Upload Your Customized Project to GitHub</a>
+                                </li>
+                                                                                        <li><a href="#step-4-setup-worker-on-cloudflare" data-toc-link>Step 4: Setup Worker on Cloudflare</a>
+                                <ol>
+                                                                        <li><a href="#deploy-via-cloudflare-dashboard" data-toc-link>Deploy via Cloudflare Dashboard</a></li>
+                                                                        <li><a href="#configure-environment-variables" data-toc-link>Configure Environment Variables</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-5-configure-email-routing" data-toc-link>Step 5: Configure Email Routing</a>
+                                <ol>
+                                                                        <li><a href="#setup-email-routing-in-cloudflare-dashboard" data-toc-link>Setup Email Routing in Cloudflare Dashboard</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-6-test-your-setup" data-toc-link>Step 6: Test Your Setup</a>
+                                <ol>
+                                                                        <li><a href="#local-testing" data-toc-link>Local Testing</a></li>
+                                                                        <li><a href="#live-testing" data-toc-link>Live Testing</a></li>
+                                                                        <li><a href="#monitor-logs" data-toc-link>Monitor Logs</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#expected-email-data-format" data-toc-link>Expected Email Data Format</a>
+                                </li>
+                                                                                        <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
+                                <ol>
+                                                                        <li><a href="#common-issues" data-toc-link>Common Issues:</a></li>
+                                                                        <li><a href="#debug-mode" data-toc-link>Debug Mode</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#advanced-customizations" data-toc-link>Advanced Customizations</a>
+                                <ol>
+                                                                        <li><a href="#add-email-parsing" data-toc-link>Add Email Parsing</a></li>
+                                                                        <li><a href="#add-attachment-detection" data-toc-link>Add Attachment Detection</a></li>
+                                                                        <li><a href="#add-spam-filtering" data-toc-link>Add Spam Filtering</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#production-considerations" data-toc-link>Production Considerations</a>
+                                </li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>SendGrid recently announced they’re discontinuing their free Email Plan, forcing developers to migrate to paid plans. I wanted to move off of the Email Parser because I’m not sure if that will be paid only as well. If you’re looking for a cost-effective alternative, Cloudflare Workers provide an excellent solution for parsing and forwarding emails to your API.</p>
 <h2 id="why-choose-cloudflare-workers">Why Choose Cloudflare Workers?</h2>
 <ul>
 <li><strong>Free Tier</strong>: 100,000 requests per day at no cost</li>
@@ -673,16 +679,18 @@ In&nbsp;<code>src/index.js</code>, change lines 42 and 59:</p>
 <hr>
 <p><strong>Repository</strong>:&nbsp;<a href="https://github.com/timothydodd/mailvoid-cloudflare-worker" target="_blank" rel="noopener noreferrer">mailvoid-cloudflare-worker</a></p>
 <p><strong>Questions?</strong>&nbsp;Open an issue on the GitHub repository for support and feature requests.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/sendgrid/">sendgrid</a>
-              <a href="/tag/cloudflare/">Cloudflare</a>
-              <a href="/tag/email/">email</a>
-              <a href="/tag/github/">GitHub</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/sendgrid/">sendgrid</a>
+                      <a href="/tag/cloudflare/">Cloudflare</a>
+                      <a href="/tag/email/">email</a>
+                      <a href="/tag/github/">GitHub</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
   </main>
 

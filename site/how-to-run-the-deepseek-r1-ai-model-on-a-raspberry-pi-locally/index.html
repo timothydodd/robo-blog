@@ -340,43 +340,59 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#step-1-prepare-your-raspberry-pi" data-toc-link>Step 1: Prepare Your Raspberry Pi</a>
-                            <ol>
-                                                              <li><a href="#install-a-fresh-operating-system" data-toc-link>Install a Fresh Operating System</a></li>
-                                                              <li><a href="#update-your-system" data-toc-link>Update Your System</a></li>
-                                                              <li><a href="#verify-a-64-bit-os" data-toc-link>Verify a 64-bit OS</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-2-install-ollama-on-your-raspberry-pi" data-toc-link>Step 2: Install Ollama on Your Raspberry Pi</a>
-                            <ol>
-                                                              <li><a href="#install-curl" data-toc-link>Install Curl</a></li>
-                                                              <li><a href="#download-and-run-the-ollama-installer" data-toc-link>Download and Run the Ollama Installer</a></li>
-                                                              <li><a href="#verify-installation" data-toc-link>Verify Installation</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-3-run-the-deepseek-r1-model" data-toc-link>Step 3: Run the DeepSeek-R1 Model</a>
-                            <ol>
-                                                              <li><a href="#download-and-run-deepseek-r1" data-toc-link>Download and Run DeepSeek-R1</a></li>
-                                                              <li><a href="#interact-with-the-model" data-toc-link>Interact with the Model</a></li>
-                            </ol></li>
-                                                                            <li><a href="#a-note-about-raspberry-pi-hardware" data-toc-link>A Note About Raspberry Pi Hardware</a>
-                            </li>
-                                                                            <li><a href="#inexpensive-hardware-alternatives" data-toc-link>Inexpensive Hardware Alternatives</a>
-                            <ol>
-                                                              <li><a href="#nvidia-jetson-orin-nano" data-toc-link>NVIDIA Jetson Orin Nano</a></li>
-                                                              <li><a href="#apple-mac-mini-m4" data-toc-link>Apple Mac Mini (M4)</a></li>
-                            </ol></li>
-                                                                            <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
-                            </li>
-                                                                            <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>Artificial intelligence isn’t just for supercomputers anymore! With tools like Ollama and the new DeepSeek-R1 AI model, you can harness the power of advanced language models directly on your Raspberry Pi. In this guide, we’ll walk you through the steps to set up DeepSeek-R1 on your Raspberry Pi hardware. Whether you’re a seasoned Pi enthusiast or just starting out, this tutorial will help you get up and running quickly.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#step-1-prepare-your-raspberry-pi" data-toc-link>Step 1: Prepare Your Raspberry Pi</a>
+                                <ol>
+                                                                        <li><a href="#install-a-fresh-operating-system" data-toc-link>Install a Fresh Operating System</a></li>
+                                                                        <li><a href="#update-your-system" data-toc-link>Update Your System</a></li>
+                                                                        <li><a href="#verify-a-64-bit-os" data-toc-link>Verify a 64-bit OS</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-2-install-ollama-on-your-raspberry-pi" data-toc-link>Step 2: Install Ollama on Your Raspberry Pi</a>
+                                <ol>
+                                                                        <li><a href="#install-curl" data-toc-link>Install Curl</a></li>
+                                                                        <li><a href="#download-and-run-the-ollama-installer" data-toc-link>Download and Run the Ollama Installer</a></li>
+                                                                        <li><a href="#verify-installation" data-toc-link>Verify Installation</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-3-run-the-deepseek-r1-model" data-toc-link>Step 3: Run the DeepSeek-R1 Model</a>
+                                <ol>
+                                                                        <li><a href="#download-and-run-deepseek-r1" data-toc-link>Download and Run DeepSeek-R1</a></li>
+                                                                        <li><a href="#interact-with-the-model" data-toc-link>Interact with the Model</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#a-note-about-raspberry-pi-hardware" data-toc-link>A Note About Raspberry Pi Hardware</a>
+                                </li>
+                                                                                        <li><a href="#inexpensive-hardware-alternatives" data-toc-link>Inexpensive Hardware Alternatives</a>
+                                <ol>
+                                                                        <li><a href="#nvidia-jetson-orin-nano" data-toc-link>NVIDIA Jetson Orin Nano</a></li>
+                                                                        <li><a href="#apple-mac-mini-m4" data-toc-link>Apple Mac Mini (M4)</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#troubleshooting" data-toc-link>Troubleshooting</a>
+                                </li>
+                                                                                        <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/setting-up-an-nfs-server-on-a-raspberry-pi/">
+                <span class="post-sidebar-related-tag">Raspberry Pi</span>                <span class="post-sidebar-related-headline">Setting Up an NFS Server on a Raspberry Pi</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>Artificial intelligence isn’t just for supercomputers anymore! With tools like Ollama and the new DeepSeek-R1 AI model, you can harness the power of advanced language models directly on your Raspberry Pi. In this guide, we’ll walk you through the steps to set up DeepSeek-R1 on your Raspberry Pi hardware. Whether you’re a seasoned Pi enthusiast or just starting out, this tutorial will help you get up and running quickly.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before diving in, ensure you have the following:</p>
 <ol>
@@ -460,16 +476,18 @@ sudo apt upgrade -y
 <h2 id="final-thoughts">Final Thoughts</h2>
 <p>Running AI models like DeepSeek-R1 on Raspberry Pi hardware demonstrates just how accessible AI technology has become. With Ollama’s easy-to-use platform, you can experiment with cutting-edge language models from the comfort of your home. Whether you’re exploring natural language processing, building a chatbot, or just tinkering for fun, the possibilities are endless.</p>
 <p>And remember, you can achieve even better results by running this on more powerful hardware! Have questions or ideas? Drop a comment below!</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/raspberry-pi/">Raspberry Pi</a>
-              <a href="/tag/ollama-ai/">Ollama AI</a>
-              <a href="/tag/deepseek/">DeepSeek</a>
-              <a href="/tag/promtail/">Promtail</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/raspberry-pi/">Raspberry Pi</a>
+                      <a href="/tag/ollama-ai/">Ollama AI</a>
+                      <a href="/tag/deepseek/">DeepSeek</a>
+                      <a href="/tag/promtail/">Promtail</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

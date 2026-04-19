@@ -340,36 +340,62 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#supercharge-your-angular-development-with-ai-powered-code-generation" data-toc-link>Supercharge Your Angular Development with AI-Powered Code Generation</a>
-                            </li>
-                                                                            <li><a href="#angular-20-best-practices-for-ai-code-generation" data-toc-link>Angular 20 Best Practices for AI Code Generation</a>
-                            <ol>
-                                                              <li><a href="#signals-input-syntax" data-toc-link>Signals Input Syntax</a></li>
-                                                              <li><a href="#reactive-ui-updates-with-signals" data-toc-link>Reactive UI Updates with Signals</a></li>
-                                                              <li><a href="#control-flow-syntax" data-toc-link>Control Flow Syntax</a></li>
-                            </ol></li>
-                                                                            <li><a href="#state-management" data-toc-link>State Management</a>
-                            <ol>
-                                                              <li><a href="#services-with-behaviorsubjects" data-toc-link>Services with BehaviorSubjects</a></li>
-                                                              <li><a href="#prefer-signals-for-new-code" data-toc-link>Prefer Signals for New Code</a></li>
-                            </ol></li>
-                                                                            <li><a href="#component-guidelines" data-toc-link>Component Guidelines</a>
-                            <ol>
-                                                              <li><a href="#loading-states" data-toc-link>Loading States</a></li>
-                            </ol></li>
-                                                                            <li><a href="#testing" data-toc-link>Testing</a>
-                            </li>
-                                                                            <li><a href="#system-requirements" data-toc-link>System Requirements</a>
-                            <ol>
-                                                              <li><a href="#nodejs-version-requirements" data-toc-link>Node.js Version Requirements</a></li>
-                            </ol></li>
-                                            </ol>
-      </nav>
-            <h2 id="supercharge-your-angular-development-with-ai-powered-code-generation">Supercharge Your Angular Development with AI-Powered Code Generation</h2>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#supercharge-your-angular-development-with-ai-powered-code-generation" data-toc-link>Supercharge Your Angular Development with AI-Powered Code Generation</a>
+                                </li>
+                                                                                        <li><a href="#angular-20-best-practices-for-ai-code-generation" data-toc-link>Angular 20 Best Practices for AI Code Generation</a>
+                                <ol>
+                                                                        <li><a href="#signals-input-syntax" data-toc-link>Signals Input Syntax</a></li>
+                                                                        <li><a href="#reactive-ui-updates-with-signals" data-toc-link>Reactive UI Updates with Signals</a></li>
+                                                                        <li><a href="#control-flow-syntax" data-toc-link>Control Flow Syntax</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#state-management" data-toc-link>State Management</a>
+                                <ol>
+                                                                        <li><a href="#services-with-behaviorsubjects" data-toc-link>Services with BehaviorSubjects</a></li>
+                                                                        <li><a href="#prefer-signals-for-new-code" data-toc-link>Prefer Signals for New Code</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#component-guidelines" data-toc-link>Component Guidelines</a>
+                                <ol>
+                                                                        <li><a href="#loading-states" data-toc-link>Loading States</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#testing" data-toc-link>Testing</a>
+                                </li>
+                                                                                        <li><a href="#system-requirements" data-toc-link>System Requirements</a>
+                                <ol>
+                                                                        <li><a href="#nodejs-version-requirements" data-toc-link>Node.js Version Requirements</a></li>
+                                </ol></li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/google-places-autocomplete-directive-angular-21/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">Google Places Autocomplete Directive – Angular 21</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/dynamic-environment-variables-in-angular-a-docker-ready-solution/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">Dynamic Environment Variables in Angular: A Docker-Ready Solution</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
+                <span class="post-sidebar-related-tag">Angular</span>                <span class="post-sidebar-related-headline">10 Must-Have VS Code Extensions for Angular Developers</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <h2 id="supercharge-your-angular-development-with-ai-powered-code-generation">Supercharge Your Angular Development with AI-Powered Code Generation</h2>
 <p>As you may know, you can use custom instruction files (like <code>.claude/instructions.md</code> or <code>claude.md</code>) to guide Claude on what’s important for your project. I’ve put together comprehensive instructions that will help Claude generate modern, high-quality Angular code using the latest features.</p>
 <p>You can add these instructions directly to your project’s custom instruction file, or create a separate file called <code>angular-best-practices.md</code> and reference it in your main instruction file like this</p>
 <div class="pre-wrapper"><pre class="language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">###</span> Angular Development</span>
@@ -520,18 +546,20 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
 By adding these Angular best practices to your project's custom instructions, Claude will automatically generate modern, high-quality Angular code that follows the latest conventions and patterns. This ensures consistency across your codebase and helps you take full advantage of Angular's newest features like signals, modern control flow, and standalone components.
 
 Simply copy the instructions above into your project's instruction file and start building with Angular 20!</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/angular/">Angular</a>
-              <a href="/tag/angular-20/">Angular 20</a>
-              <a href="/tag/claude-ai/">Claude AI</a>
-              <a href="/tag/ai-assisted-development/">AI-Assisted Development</a>
-              <a href="/tag/ai-code-generation/">AI Code Generation</a>
-              <a href="/tag/ai-pair-programming/">AI Pair Programming</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/angular/">Angular</a>
+                      <a href="/tag/angular-20/">Angular 20</a>
+                      <a href="/tag/claude-ai/">Claude AI</a>
+                      <a href="/tag/ai-assisted-development/">AI-Assisted Development</a>
+                      <a href="/tag/ai-code-generation/">AI Code Generation</a>
+                      <a href="/tag/ai-pair-programming/">AI Pair Programming</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>
@@ -573,15 +601,15 @@ Simply copy the instructions above into your project's instruction file and star
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
-    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers in 2025" loading="lazy" decoding="async" width="1536" height="1024">
+    <img class="post-card-image" src="/images/2025/04/565be9b4-24ba-4718-89dd-0021a9996070.webp" alt="10 Must-Have VS Code Extensions for Angular Developers" loading="lazy" decoding="async" width="1536" height="1024">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/10-must-have-vs-code-extensions-for-angular-developers-in-2025/">
       <header class="post-card-header">
                 <div class="post-card-tags"><span class="post-card-primary-tag">Angular</span></div>
-                <h2 class="post-card-title">10 Must-Have VS Code Extensions for Angular Developers in 2025</h2>
+                <h2 class="post-card-title">10 Must-Have VS Code Extensions for Angular Developers</h2>
       </header>
-      <div class="post-card-excerpt"><p>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code in 2025</p></div>    </a>
+      <div class="post-card-excerpt"><p>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code</p></div>    </a>
     <footer class="post-card-meta">
       <time class="post-card-meta-date" datetime="2025-04-03T17:18:26.000Z">Apr 3, 2025</time>
       <span class="post-card-meta-length">3 min read</span>

@@ -5,7 +5,7 @@
     <link>https://robododd.com/</link>
     <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 19 Apr 2026 16:38:42 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 19:58:00 GMT</lastBuildDate>
     <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</title>
@@ -130,8 +130,8 @@
       <category>K3s</category>
     </item>
     <item>
-      <title>10 Must-Have VS Code Extensions for Angular Developers in 2025</title>
-      <description>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code in 2025</description>
+      <title>10 Must-Have VS Code Extensions for Angular Developers</title>
+      <description>Supercharge Your Angular Dev Environment: 10 Essential VS Code Extensions for Faster, Cleaner Code</description>
       <link>https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</link>
       <guid isPermaLink="true">https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</guid>
       <pubDate>Thu, 03 Apr 2025 17:18:26 GMT</pubDate>

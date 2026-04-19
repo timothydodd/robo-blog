@@ -340,27 +340,53 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#step-1-create-configuration-files" data-toc-link>Step 1: Create Configuration Files</a>
-                            <ol>
-                                                              <li><a href="#1-uptime-kuma-loadbalanceryaml" data-toc-link>1. uptime-kuma-loadbalancer.yaml</a></li>
-                                                              <li><a href="#2-uptime-kuma-pvcyaml" data-toc-link>2. uptime-kuma-pvc.yaml</a></li>
-                                                              <li><a href="#3-uptime-kumayaml" data-toc-link>3. uptime-kuma.yaml</a></li>
-                            </ol></li>
-                                                                            <li><a href="#step-2-apply-the-configurations" data-toc-link>Step 2: Apply the Configurations</a>
-                            </li>
-                                                                            <li><a href="#step-3-verify-the-deployment" data-toc-link>Step 3: Verify the Deployment</a>
-                            </li>
-                                                                            <li><a href="#accessing-uptime-kuma" data-toc-link>Accessing Uptime Kuma</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>In this article, I’ll explain how to set up Uptime Kuma on a k3s Kubernetes cluster. I’ll be using MetalLB on my k3s cluster to assign LAN IP addresses. You can check out my article explaining how to do this:</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#step-1-create-configuration-files" data-toc-link>Step 1: Create Configuration Files</a>
+                                <ol>
+                                                                        <li><a href="#1-uptime-kuma-loadbalanceryaml" data-toc-link>1. uptime-kuma-loadbalancer.yaml</a></li>
+                                                                        <li><a href="#2-uptime-kuma-pvcyaml" data-toc-link>2. uptime-kuma-pvc.yaml</a></li>
+                                                                        <li><a href="#3-uptime-kumayaml" data-toc-link>3. uptime-kuma.yaml</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#step-2-apply-the-configurations" data-toc-link>Step 2: Apply the Configurations</a>
+                                </li>
+                                                                                        <li><a href="#step-3-verify-the-deployment" data-toc-link>Step 3: Verify the Deployment</a>
+                                </li>
+                                                                                        <li><a href="#accessing-uptime-kuma" data-toc-link>Accessing Uptime Kuma</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/network-metallb/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/grafana-loki-log-everything-locally/">
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>In this article, I’ll explain how to set up Uptime Kuma on a k3s Kubernetes cluster. I’ll be using MetalLB on my k3s cluster to assign LAN IP addresses. You can check out my article explaining how to do this:</p>
 <figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="/network-metallb/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</div><div class="kg-bookmark-description">Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="/favicon.ico" alt="" loading="lazy" decoding="async"><span class="kg-bookmark-author">RoboDodd</span><span class="kg-bookmark-publisher">Tim Dodd</span></div></div><div class="kg-bookmark-thumbnail"><img src="/images/2024/07/metal.jpg" alt="" loading="lazy" decoding="async" width="822" height="403"></div></a></figure>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before you begin, ensure you have the following:</p>
@@ -444,17 +470,19 @@
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h2 id="accessing-uptime-kuma">Accessing Uptime Kuma</h2>
 <p>Once your deployment is running, you should be able to access Uptime Kuma on your local network at <a href="http://192.168.2.210:3001" target="_blank" rel="noopener noreferrer">http://192.168.2.210:3001</a>.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-              <a href="/tag/networking/">Networking</a>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/utility/">Utility</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                      <a href="/tag/networking/">Networking</a>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/utility/">Utility</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

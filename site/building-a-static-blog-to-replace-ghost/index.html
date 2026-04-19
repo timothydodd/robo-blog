@@ -340,29 +340,35 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#why-i-replaced-ghost-with-a-static-site" data-toc-link>Why I replaced Ghost with a static site</a>
-                            </li>
-                                                                            <li><a href="#how-the-system-works" data-toc-link>How the system works</a>
-                            </li>
-                                                                            <li><a href="#importing-posts-from-ghost" data-toc-link>Importing posts from Ghost</a>
-                            </li>
-                                                                            <li><a href="#a-local-editor-for-writing-posts" data-toc-link>A local editor for writing posts</a>
-                            <ol>
-                                                              <li><a href="#one-click-build-from-the-editor" data-toc-link>One-click build from the editor</a></li>
-                            </ol></li>
-                                                                            <li><a href="#small-touches-that-matter" data-toc-link>Small touches that matter</a>
-                            </li>
-                                                                            <li><a href="#migrating-from-ghost-or-anywhere-else" data-toc-link>Migrating from Ghost (or anywhere else)</a>
-                            </li>
-                                                                            <li><a href="#what-this-looks-like-in-numbers" data-toc-link>What this looks like in numbers</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <h2 id="why-i-replaced-ghost-with-a-static-site">Why I replaced Ghost with a static site</h2>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#why-i-replaced-ghost-with-a-static-site" data-toc-link>Why I replaced Ghost with a static site</a>
+                                </li>
+                                                                                        <li><a href="#how-the-system-works" data-toc-link>How the system works</a>
+                                </li>
+                                                                                        <li><a href="#importing-posts-from-ghost" data-toc-link>Importing posts from Ghost</a>
+                                </li>
+                                                                                        <li><a href="#a-local-editor-for-writing-posts" data-toc-link>A local editor for writing posts</a>
+                                <ol>
+                                                                        <li><a href="#one-click-build-from-the-editor" data-toc-link>One-click build from the editor</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#small-touches-that-matter" data-toc-link>Small touches that matter</a>
+                                </li>
+                                                                                        <li><a href="#migrating-from-ghost-or-anywhere-else" data-toc-link>Migrating from Ghost (or anywhere else)</a>
+                                </li>
+                                                                                        <li><a href="#what-this-looks-like-in-numbers" data-toc-link>What this looks like in numbers</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <h2 id="why-i-replaced-ghost-with-a-static-site">Why I replaced Ghost with a static site</h2>
 <p>RoboDodd has run on <a href="https://ghost.org/" target="_blank" rel="noopener noreferrer">Ghost</a> since 2022. Ghost is a great CMS, but the more I thought about what I actually needed — a place where people can read articles — the clearer it got that most of what was running existed for reasons I wasn’t using.</p>
 <p><strong>Security was the biggest reason.</strong> Every dynamic service is an attack surface. Login endpoints, admin panels, content APIs, database connections — all things automated scanners probe constantly, looking for the week’s fresh CVE. A running CMS is a running target: keeping it safe means keeping up with patches, tracking advisories, and trusting that every transitive dependency in the stack gets security updates faster than anyone can exploit them. Miss one, and someone else is running your site.</p>
 <p>A folder of static HTML files has none of that. There’s no login to brute-force, no database to query, no server-side code to exploit. There’s no admin panel to break into because there is no admin panel. The only thing a visitor’s browser can do is download pre-rendered pages — which is all I wanted it to do in the first place.</p>
@@ -427,16 +433,18 @@
 </ul>
 <p>The editor is a pleasure to use. The site loads instantly. Nothing is “managed” by anyone but me, and nothing runs unless I tell it to.</p>
 <p>If you’re paying to host Ghost (or any other CMS) for a read-only blog, I’d bet you can replace it with a weekend of work — and retire a whole class of security risk while you’re at it. That’s what I did, and I’m not going back.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/web-development/">Web Development</a>
-              <a href="/tag/open-source/">Open Source</a>
-              <a href="/tag/javascript/">JavaScript</a>
-              <a href="/tag/migration/">Migration</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/web-development/">Web Development</a>
+                      <a href="/tag/open-source/">Open Source</a>
+                      <a href="/tag/javascript/">JavaScript</a>
+                      <a href="/tag/migration/">Migration</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
   </main>
 

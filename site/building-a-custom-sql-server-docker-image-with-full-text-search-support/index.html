@@ -340,31 +340,37 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#building-our-custom-dockerfile" data-toc-link>Building Our Custom Dockerfile</a>
-                            <ol>
-                                                              <li><a href="#step-by-step-plan" data-toc-link>Step-by-Step Plan</a></li>
-                                                              <li><a href="#the-complete-dockerfile" data-toc-link>The Complete Dockerfile</a></li>
-                            </ol></li>
-                                                                            <li><a href="#build-and-verify-the-image" data-toc-link>Build and Verify the Image</a>
-                            <ol>
-                                                              <li><a href="#build-locally" data-toc-link>Build Locally</a></li>
-                                                              <li><a href="#run-and-connect" data-toc-link>Run and Connect</a></li>
-                                                              <li><a href="#verify-fts-installation" data-toc-link>Verify FTS Installation</a></li>
-                                                              <li><a href="#testing-full-text-search" data-toc-link>Testing Full-Text Search</a></li>
-                                                              <li><a href="#publishing-to-docker-hub" data-toc-link>Publishing to Docker Hub</a></li>
-                                                              <li><a href="#docker-compose-example" data-toc-link>Docker Compose Example</a></li>
-                            </ol></li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                                                            <li><a href="#resources" data-toc-link>Resources</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>When you use the standard SQL Server Docker image, you’ll quickly find that Full-Text Search (FTS) isn’t available out of the box. That can be a problem if you’re working on content-heavy apps where advanced text indexing and search are essential. This guide will walk you through building a custom SQL Server 2022 image with FTS enabled—or, if you prefer, you can skip the setup and use the ready-made container I’ve published to Docker Hub.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#building-our-custom-dockerfile" data-toc-link>Building Our Custom Dockerfile</a>
+                                <ol>
+                                                                        <li><a href="#step-by-step-plan" data-toc-link>Step-by-Step Plan</a></li>
+                                                                        <li><a href="#the-complete-dockerfile" data-toc-link>The Complete Dockerfile</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#build-and-verify-the-image" data-toc-link>Build and Verify the Image</a>
+                                <ol>
+                                                                        <li><a href="#build-locally" data-toc-link>Build Locally</a></li>
+                                                                        <li><a href="#run-and-connect" data-toc-link>Run and Connect</a></li>
+                                                                        <li><a href="#verify-fts-installation" data-toc-link>Verify FTS Installation</a></li>
+                                                                        <li><a href="#testing-full-text-search" data-toc-link>Testing Full-Text Search</a></li>
+                                                                        <li><a href="#publishing-to-docker-hub" data-toc-link>Publishing to Docker Hub</a></li>
+                                                                        <li><a href="#docker-compose-example" data-toc-link>Docker Compose Example</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                                                        <li><a href="#resources" data-toc-link>Resources</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>When you use the standard SQL Server Docker image, you’ll quickly find that Full-Text Search (FTS) isn’t available out of the box. That can be a problem if you’re working on content-heavy apps where advanced text indexing and search are essential. This guide will walk you through building a custom SQL Server 2022 image with FTS enabled—or, if you prefer, you can skip the setup and use the ready-made container I’ve published to Docker Hub.</p>
 <hr>
 <h2 id="building-our-custom-dockerfile">Building Our Custom Dockerfile</h2>
 <p>We’ll extend the official SQL Server 2022 image and add the Full-Text Search component.</p>
@@ -479,18 +485,20 @@ volumes:
 <li><a href="https://hub.docker.com/r/timdoddcool/mssql-fulltext" target="_blank" rel="noopener noreferrer">Docker Hub Repository: timdoddcool/mssql-fulltext</a></li>
 <li><a href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener noreferrer">Dockerfile Best Practices</a></li>
 </ul>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/sql/">sql</a>
-              <a href="/tag/docker/">Docker</a>
-              <a href="/tag/database/">database</a>
-              <a href="/tag/devops/">DevOps</a>
-              <a href="/tag/mssql/">mssql</a>
-              <a href="/tag/full-text-search/">full-text-search</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/sql/">sql</a>
+                      <a href="/tag/docker/">Docker</a>
+                      <a href="/tag/database/">database</a>
+                      <a href="/tag/devops/">DevOps</a>
+                      <a href="/tag/mssql/">mssql</a>
+                      <a href="/tag/full-text-search/">full-text-search</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
   </main>
 

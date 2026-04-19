@@ -340,33 +340,54 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#whats-in-the-release" data-toc-link>What’s in the Release</a>
-                            </li>
-                                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#on-an-older-minor-hop-dont-jump" data-toc-link>On an Older Minor? Hop, Don’t Jump</a>
-                            </li>
-                                                                            <li><a href="#ha-cluster-roll-dont-stop" data-toc-link>HA Cluster? Roll, Don’t Stop</a>
-                            </li>
-                                                                            <li><a href="#step-1-upgrade-the-server" data-toc-link>Step 1: Upgrade the Server</a>
-                            </li>
-                                                                            <li><a href="#step-2-upgrade-the-agents" data-toc-link>Step 2: Upgrade the Agents</a>
-                            </li>
-                                                                            <li><a href="#demo-1-in-place-pod-resize" data-toc-link>Demo 1: In-Place Pod Resize</a>
-                            </li>
-                                                                            <li><a href="#demo-2-oci-image-volume" data-toc-link>Demo 2: OCI Image Volume</a>
-                            </li>
-                                                                            <li><a href="#rollback-plan" data-toc-link>Rollback Plan</a>
-                            </li>
-                                                                            <li><a href="#takeaways" data-toc-link>Takeaways</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p><a href="https://docs.k3s.io/blog/2026/01/15/K3s-1.35-release" target="_blank" rel="noopener noreferrer">K3s 1.35</a> dropped on January 15, 2026, tracking upstream Kubernetes “Timbernetes.” Most of the release notes are the usual CRI/CNI/etcd churn, but two features are worth upgrading <em>today</em> for:</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#whats-in-the-release" data-toc-link>What’s in the Release</a>
+                                </li>
+                                                                                        <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#on-an-older-minor-hop-dont-jump" data-toc-link>On an Older Minor? Hop, Don’t Jump</a>
+                                </li>
+                                                                                        <li><a href="#ha-cluster-roll-dont-stop" data-toc-link>HA Cluster? Roll, Don’t Stop</a>
+                                </li>
+                                                                                        <li><a href="#step-1-upgrade-the-server" data-toc-link>Step 1: Upgrade the Server</a>
+                                </li>
+                                                                                        <li><a href="#step-2-upgrade-the-agents" data-toc-link>Step 2: Upgrade the Agents</a>
+                                </li>
+                                                                                        <li><a href="#demo-1-in-place-pod-resize" data-toc-link>Demo 1: In-Place Pod Resize</a>
+                                </li>
+                                                                                        <li><a href="#demo-2-oci-image-volume" data-toc-link>Demo 2: OCI Image Volume</a>
+                                </li>
+                                                                                        <li><a href="#rollback-plan" data-toc-link>Rollback Plan</a>
+                                </li>
+                                                                                        <li><a href="#takeaways" data-toc-link>Takeaways</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/make-your-k3s-local-storage-persistent-with-longhorn/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">Make Your k3s Local Storage Persistent with Longhorn</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">How to Set Up Cloudflare Tunnels for k3s Without MetalLB</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p><a href="https://docs.k3s.io/blog/2026/01/15/K3s-1.35-release" target="_blank" rel="noopener noreferrer">K3s 1.35</a> dropped on January 15, 2026, tracking upstream Kubernetes “Timbernetes.” Most of the release notes are the usual CRI/CNI/etcd churn, but two features are worth upgrading <em>today</em> for:</p>
 <ul>
 <li><strong>In-place pod resize</strong> is now GA — bump CPU/memory on a running pod without restarting it.</li>
 <li><strong>Image volumes</strong> are Stable — mount an OCI image as a read-only volume, so you can ship config blobs or model weights without baking them into container layers.</li>
@@ -508,17 +529,19 @@ EOF</span>
 <h2 id="takeaways">Takeaways</h2>
 <p>In-place resize alone was worth the upgrade — I’ve been restarting Pi-hole every time I wanted to give it more memory for its cache, and that’s a solved problem now. Image volumes take a beat to click, but once they do you’ll find config sprawl disappearing.</p>
 <p>Next up: wiring the image-volume pattern into my Ollama deployments so model weights are a pinned OCI reference instead of a 40 GB persistent volume I have to hand-manage. That’s a follow-up post.</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/homelab/">homelab</a>
-              <a href="/tag/devops/">DevOps</a>
-              <a href="/tag/containerization/">Containerization</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/homelab/">homelab</a>
+                      <a href="/tag/devops/">DevOps</a>
+                      <a href="/tag/containerization/">Containerization</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

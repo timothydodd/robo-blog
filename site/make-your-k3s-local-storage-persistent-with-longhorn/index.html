@@ -340,33 +340,54 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#step-1-install-longhorn-on-your-k3s-cluster" data-toc-link>Step 1: Install Longhorn on Your k3s Cluster</a>
-                            </li>
-                                                                            <li><a href="#step-2-create-a-longhorn-backed-pvc" data-toc-link>Step 2: Create a Longhorn-backed PVC</a>
-                            </li>
-                                                                            <li><a href="#step-3-scale-down-the-deployment" data-toc-link>Step 3: Scale Down the Deployment</a>
-                            </li>
-                                                                            <li><a href="#step-4-create-a-data-migration-pod" data-toc-link>Step 4: Create a Data Migration Pod</a>
-                            </li>
-                                                                            <li><a href="#step-5-copy-the-data" data-toc-link>Step 5: Copy the Data</a>
-                            </li>
-                                                                            <li><a href="#step-6-update-your-deployment-to-use-the-new-pvc" data-toc-link>Step 6: Update Your Deployment to Use the New PVC</a>
-                            </li>
-                                                                            <li><a href="#step-7-clean-up" data-toc-link>Step 7: Clean Up</a>
-                            </li>
-                                                                            <li><a href="#accessing-the-longhorn-dashboard" data-toc-link>Accessing the Longhorn Dashboard</a>
-                            </li>
-                                                                            <li><a href="#tips-notes" data-toc-link>Tips & Notes</a>
-                            </li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>If you’re using <code>k3s</code> in a home lab or production setup, chances are you’ve started with the default <code>local-path</code> storage class. While it’s quick and easy, it has a major downside: <strong>volumes are tied to a specific node</strong>. If that node fails, your data doesn’t follow your pod.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#step-1-install-longhorn-on-your-k3s-cluster" data-toc-link>Step 1: Install Longhorn on Your k3s Cluster</a>
+                                </li>
+                                                                                        <li><a href="#step-2-create-a-longhorn-backed-pvc" data-toc-link>Step 2: Create a Longhorn-backed PVC</a>
+                                </li>
+                                                                                        <li><a href="#step-3-scale-down-the-deployment" data-toc-link>Step 3: Scale Down the Deployment</a>
+                                </li>
+                                                                                        <li><a href="#step-4-create-a-data-migration-pod" data-toc-link>Step 4: Create a Data Migration Pod</a>
+                                </li>
+                                                                                        <li><a href="#step-5-copy-the-data" data-toc-link>Step 5: Copy the Data</a>
+                                </li>
+                                                                                        <li><a href="#step-6-update-your-deployment-to-use-the-new-pvc" data-toc-link>Step 6: Update Your Deployment to Use the New PVC</a>
+                                </li>
+                                                                                        <li><a href="#step-7-clean-up" data-toc-link>Step 7: Clean Up</a>
+                                </li>
+                                                                                        <li><a href="#accessing-the-longhorn-dashboard" data-toc-link>Accessing the Longhorn Dashboard</a>
+                                </li>
+                                                                                        <li><a href="#tips-notes" data-toc-link>Tips & Notes</a>
+                                </li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</span>
+              </a>
+            </li>
+                        <li>
+              <a class="post-sidebar-related-link" href="/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/">
+                <span class="post-sidebar-related-tag">K3s</span>                <span class="post-sidebar-related-headline">How to Set Up Cloudflare Tunnels for k3s Without MetalLB</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>If you’re using <code>k3s</code> in a home lab or production setup, chances are you’ve started with the default <code>local-path</code> storage class. While it’s quick and easy, it has a major downside: <strong>volumes are tied to a specific node</strong>. If that node fails, your data doesn’t follow your pod.</p>
 <p><strong>Longhorn</strong> solves this by providing <strong>replicated, distributed block storage</strong> that works seamlessly with Kubernetes.</p>
 <p>In this post, you’ll learn:</p>
 <ul>
@@ -507,22 +528,24 @@ kubectl delete pvc my-pvc
 <p><em>Have questions or want to automate this process?</em><br>
 Let me know in the comments</p>
 </blockquote>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/longhorn/">longhorn</a>
-              <a href="/tag/persistent-volume/">persistent-volume</a>
-              <a href="/tag/pvc/">pvc</a>
-              <a href="/tag/storage/">storage</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-              <a href="/tag/data-migration/">data-migration</a>
-              <a href="/tag/devops/">DevOps</a>
-              <a href="/tag/self-hosted/">self-hosted</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/longhorn/">longhorn</a>
+                      <a href="/tag/persistent-volume/">persistent-volume</a>
+                      <a href="/tag/pvc/">pvc</a>
+                      <a href="/tag/storage/">storage</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                      <a href="/tag/data-migration/">data-migration</a>
+                      <a href="/tag/devops/">DevOps</a>
+                      <a href="/tag/self-hosted/">self-hosted</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
     <aside class="read-more-wrap">
     <h3 class="read-more-heading">Read more</h3>

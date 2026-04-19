@@ -340,37 +340,43 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#why-a-good-gpu-matters-for-local-ai" data-toc-link>Why a Good GPU Matters for Local AI?</a>
-                            </li>
-                                                                            <li><a href="#best-budget-nvidia-gpus-cuda-based" data-toc-link>Best Budget NVIDIA GPUs (CUDA-Based)</a>
-                            <ol>
-                                                              <li><a href="#rtx-3060-12gb-vrambest-budget-pick" data-toc-link>RTX 3060 (12GB VRAM) - Best Budget Pick</a></li>
-                                                              <li><a href="#rtx-2060-super-8gb-vramsolid-budget-option" data-toc-link>RTX 2060 Super (8GB VRAM) - Solid Budget Option</a></li>
-                                                              <li><a href="#rtx-3050-8gb-vramentry-level-choice" data-toc-link>RTX 3050 (8GB VRAM) - Entry-Level Choice</a></li>
-                            </ol></li>
-                                                                            <li><a href="#best-budget-amd-gpus-rocm-based" data-toc-link>Best Budget AMD GPUs (ROCm-Based)</a>
-                            <ol>
-                                                              <li><a href="#rx-6700-xt-12gb-vrambest-amd-budget-pick" data-toc-link>RX 6700 XT (12GB VRAM) - Best AMD Budget Pick</a></li>
-                                                              <li><a href="#rx-6750-xt-12gb-vramslightly-faster-than-6700-xt" data-toc-link>RX 6750 XT (12GB VRAM) - Slightly Faster Than 6700 XT</a></li>
-                                                              <li><a href="#rx-6600-xt-8gb-vrambudget-amd-pick" data-toc-link>RX 6600 XT (8GB VRAM) - Budget AMD Pick</a></li>
-                            </ol></li>
-                                                                            <li><a href="#best-overall-picks-for-budget-ai-setups" data-toc-link>Best Overall Picks for Budget AI Setups</a>
-                            </li>
-                                                                            <li><a href="#full-systems" data-toc-link>Full Systems</a>
-                            <ol>
-                                                              <li><a href="#apple-2024-mac-mini-desktop" data-toc-link>Apple 2024 Mac Mini Desktop</a></li>
-                            </ol></li>
-                                                                            <li><a href="#jetson-orin-nano-super" data-toc-link>Jetson Orin Nano Super</a>
-                            </li>
-                                                                            <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>If you’re looking to run <strong>Ollama</strong> and <strong>LLMs (Large Language Models)</strong> locally without spending a fortune, you’ll need a <strong>GPU with good VRAM, CUDA (for NVIDIA), or ROCm (for AMD)</strong>. Choosing the right GPU can make a big difference in performance and model compatibility.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#why-a-good-gpu-matters-for-local-ai" data-toc-link>Why a Good GPU Matters for Local AI?</a>
+                                </li>
+                                                                                        <li><a href="#best-budget-nvidia-gpus-cuda-based" data-toc-link>Best Budget NVIDIA GPUs (CUDA-Based)</a>
+                                <ol>
+                                                                        <li><a href="#rtx-3060-12gb-vrambest-budget-pick" data-toc-link>RTX 3060 (12GB VRAM) - Best Budget Pick</a></li>
+                                                                        <li><a href="#rtx-2060-super-8gb-vramsolid-budget-option" data-toc-link>RTX 2060 Super (8GB VRAM) - Solid Budget Option</a></li>
+                                                                        <li><a href="#rtx-3050-8gb-vramentry-level-choice" data-toc-link>RTX 3050 (8GB VRAM) - Entry-Level Choice</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#best-budget-amd-gpus-rocm-based" data-toc-link>Best Budget AMD GPUs (ROCm-Based)</a>
+                                <ol>
+                                                                        <li><a href="#rx-6700-xt-12gb-vrambest-amd-budget-pick" data-toc-link>RX 6700 XT (12GB VRAM) - Best AMD Budget Pick</a></li>
+                                                                        <li><a href="#rx-6750-xt-12gb-vramslightly-faster-than-6700-xt" data-toc-link>RX 6750 XT (12GB VRAM) - Slightly Faster Than 6700 XT</a></li>
+                                                                        <li><a href="#rx-6600-xt-8gb-vrambudget-amd-pick" data-toc-link>RX 6600 XT (8GB VRAM) - Budget AMD Pick</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#best-overall-picks-for-budget-ai-setups" data-toc-link>Best Overall Picks for Budget AI Setups</a>
+                                </li>
+                                                                                        <li><a href="#full-systems" data-toc-link>Full Systems</a>
+                                <ol>
+                                                                        <li><a href="#apple-2024-mac-mini-desktop" data-toc-link>Apple 2024 Mac Mini Desktop</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#jetson-orin-nano-super" data-toc-link>Jetson Orin Nano Super</a>
+                                </li>
+                                                                                        <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>If you’re looking to run <strong>Ollama</strong> and <strong>LLMs (Large Language Models)</strong> locally without spending a fortune, you’ll need a <strong>GPU with good VRAM, CUDA (for NVIDIA), or ROCm (for AMD)</strong>. Choosing the right GPU can make a big difference in performance and model compatibility.</p>
 <p>I personally use an <strong>MSI RTX 2080 SUPER</strong>, and it runs <strong>Deepseek-R1</strong> smoothly. But if you’re looking for <strong>budget-friendly alternatives</strong>, I’ve compiled a list of solid options that balance <strong>performance, affordability, and availability</strong>.</p>
 <hr>
 <h2 id="why-a-good-gpu-matters-for-local-ai"><strong>Why a Good GPU Matters for Local AI?</strong></h2>
@@ -465,20 +471,22 @@
 <li><strong>For best AMD budget performance (Linux only):</strong> <strong>RX 6700 XT (12GB)</strong> works great if you can configure ROCm.</li>
 </ul>
 <p>? <strong>Looking for more AI hardware recommendations? Drop a comment below!</strong> ?</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/ollama-ai/">Ollama AI</a>
-              <a href="/tag/hardware/">Hardware</a>
-              <a href="/tag/nvidia/">NVIDIA</a>
-              <a href="/tag/amd/">AMD</a>
-              <a href="/tag/ai/">AI</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-              <a href="/tag/buying-guide/">Buying Guide</a>
-              <a href="/tag/apple/">Apple</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/ollama-ai/">Ollama AI</a>
+                      <a href="/tag/hardware/">Hardware</a>
+                      <a href="/tag/nvidia/">NVIDIA</a>
+                      <a href="/tag/amd/">AMD</a>
+                      <a href="/tag/ai/">AI</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                      <a href="/tag/buying-guide/">Buying Guide</a>
+                      <a href="/tag/apple/">Apple</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
   </main>
 

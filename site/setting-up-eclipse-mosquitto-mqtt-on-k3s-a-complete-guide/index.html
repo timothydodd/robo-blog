@@ -340,37 +340,43 @@
       </div>
     </div>
 
-    <section class="post-full-content gh-content gh-canvas">
-            <nav class="post-toc" aria-label="Table of contents">
-        <p class="post-toc-title">Contents</p>
-        <ol>
-                                                            <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
-                            </li>
-                                                                            <li><a href="#understanding-the-manifests" data-toc-link>Understanding the Manifests</a>
-                            <ol>
-                                                              <li><a href="#service-manifest" data-toc-link>Service Manifest</a></li>
-                            </ol></li>
-                                                                            <li><a href="#deployment-steps" data-toc-link>Deployment Steps</a>
-                            <ol>
-                                                              <li><a href="#1-prepare-the-configuration-file" data-toc-link>1. Prepare the Configuration File</a></li>
-                                                              <li><a href="#2-apply-the-manifests" data-toc-link>2. Apply the Manifests</a></li>
-                                                              <li><a href="#3-verify-the-deployment" data-toc-link>3. Verify the Deployment</a></li>
-                            </ol></li>
-                                                                            <li><a href="#alternative-using-a-persistentvolume-instead-of-nfs" data-toc-link>Alternative: Using a PersistentVolume Instead of NFS</a>
-                            <ol>
-                                                              <li><a href="#1-create-a-persistentvolumeclaim" data-toc-link>1. Create a PersistentVolumeClaim</a></li>
-                                                              <li><a href="#2-modified-deployment-manifest" data-toc-link>2. Modified Deployment Manifest</a></li>
-                            </ol></li>
-                                                                            <li><a href="#testing-the-mqtt-broker" data-toc-link>Testing the MQTT Broker</a>
-                            <ol>
-                                                              <li><a href="#setting-up-mqtt-explorer" data-toc-link>Setting Up MQTT Explorer</a></li>
-                                                              <li><a href="#publishing-subscribing-to-messages" data-toc-link>Publishing & Subscribing to Messages</a></li>
-                            </ol></li>
-                                                                            <li><a href="#conclusion" data-toc-link>Conclusion</a>
-                            </li>
-                                            </ol>
-      </nav>
-            <p>In today’s interconnected world, MQTT (Message Queuing Telemetry Transport) has become an essential protocol for IoT devices and applications requiring lightweight messaging. Eclipse Mosquitto, a popular open-source MQTT broker, provides a reliable and efficient implementation of this protocol. In this guide, I’ll walk you through setting up Mosquitto on a K3s Kubernetes cluster, making it accessible from your network, and ensuring your data persists beyond container restarts.</p>
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#prerequisites" data-toc-link>Prerequisites</a>
+                                </li>
+                                                                                        <li><a href="#understanding-the-manifests" data-toc-link>Understanding the Manifests</a>
+                                <ol>
+                                                                        <li><a href="#service-manifest" data-toc-link>Service Manifest</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#deployment-steps" data-toc-link>Deployment Steps</a>
+                                <ol>
+                                                                        <li><a href="#1-prepare-the-configuration-file" data-toc-link>1. Prepare the Configuration File</a></li>
+                                                                        <li><a href="#2-apply-the-manifests" data-toc-link>2. Apply the Manifests</a></li>
+                                                                        <li><a href="#3-verify-the-deployment" data-toc-link>3. Verify the Deployment</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#alternative-using-a-persistentvolume-instead-of-nfs" data-toc-link>Alternative: Using a PersistentVolume Instead of NFS</a>
+                                <ol>
+                                                                        <li><a href="#1-create-a-persistentvolumeclaim" data-toc-link>1. Create a PersistentVolumeClaim</a></li>
+                                                                        <li><a href="#2-modified-deployment-manifest" data-toc-link>2. Modified Deployment Manifest</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#testing-the-mqtt-broker" data-toc-link>Testing the MQTT Broker</a>
+                                <ol>
+                                                                        <li><a href="#setting-up-mqtt-explorer" data-toc-link>Setting Up MQTT Explorer</a></li>
+                                                                        <li><a href="#publishing-subscribing-to-messages" data-toc-link>Publishing & Subscribing to Messages</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#conclusion" data-toc-link>Conclusion</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>In today’s interconnected world, MQTT (Message Queuing Telemetry Transport) has become an essential protocol for IoT devices and applications requiring lightweight messaging. Eclipse Mosquitto, a popular open-source MQTT broker, provides a reliable and efficient implementation of this protocol. In this guide, I’ll walk you through setting up Mosquitto on a K3s Kubernetes cluster, making it accessible from your network, and ensuring your data persists beyond container restarts.</p>
 <hr>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before we begin, make sure you have:</p>
@@ -629,21 +635,23 @@ kubectl apply <span class="token parameter variable">-f</span> mosq-lb.yaml  <sp
 <li>Monitoring with Prometheus and Grafana</li>
 </ul>
 <p>Happy messaging!</p>
-    </section>
+        </section>
 
-        <aside class="post-full-tag-list gh-canvas">
-      <strong>More on</strong>
-              <a href="/tag/mqtt/">MQTT</a>
-              <a href="/tag/k3s/">K3s</a>
-              <a href="/tag/kubernetes/">Kubernetes</a>
-              <a href="/tag/iot/">IOT</a>
-              <a href="/tag/devops/">DevOps</a>
-              <a href="/tag/home-automation/">Home Automation</a>
-              <a href="/tag/metallb/">MetalLb</a>
-              <a href="/tag/nfs-server/">NFS Server</a>
-              <a href="/tag/home-lab/">Home Lab</a>
-          </aside>
-      </article>
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/mqtt/">MQTT</a>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/iot/">IOT</a>
+                      <a href="/tag/devops/">DevOps</a>
+                      <a href="/tag/home-automation/">Home Automation</a>
+                      <a href="/tag/metallb/">MetalLb</a>
+                      <a href="/tag/nfs-server/">NFS Server</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
 
   </main>
 
