@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Save, Trash2, ExternalLink } from "lucide-react";
-import { api, type Post, type Tag } from "@/lib/api";
+import { ArrowLeft, Save, Trash2, ExternalLink, Share2 } from "lucide-react";
+import { api, type Post, type SiteSettings, type Tag } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -20,6 +20,7 @@ export function PostEdit({ kind }: Props) {
   const { toast } = useToast();
   const [post, setPost] = useState<Post | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
+  const [site, setSite] = useState<SiteSettings | null>(null);
   const [slugEdited, setSlugEdited] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -27,12 +28,14 @@ export function PostEdit({ kind }: Props) {
   useEffect(() => {
     (async () => {
       try {
-        const [p, t] = await Promise.all([
+        const [p, t, s] = await Promise.all([
           kind === "posts" ? api.getPost(slug) : api.getPage(slug),
           api.listTags(),
+          api.getSite(),
         ]);
         setPost(p);
         setTags(t);
+        setSite(s);
         setDirty(false);
         setSlugEdited(false);
       } catch (e: any) { toast(e.message || "Load failed", "error"); }
@@ -91,6 +94,20 @@ export function PostEdit({ kind }: Props) {
     navigate(`/${kind}`);
   }
 
+  function announceOnX() {
+    if (!post || !site) return;
+    const base = site.url.replace(/\/$/, "");
+    const url = `${base}/${post.slug}/`;
+    const primaryTag = post.tags?.[0];
+    const hashtag = primaryTag ? ` #${primaryTag.replace(/-/g, "")}` : "";
+    const handle = site.twitter ? ` via ${site.twitter}` : "";
+    const maxTitle = 240 - url.length - hashtag.length - handle.length - 2;
+    const title = post.title.length > maxTitle ? post.title.slice(0, maxTitle - 1) + "…" : post.title;
+    const text = `${title}${hashtag}${handle}`;
+    const intent = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(intent, "_blank", "noopener,noreferrer");
+  }
+
   async function remove() {
     if (!post) return;
     if (!window.confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
@@ -115,6 +132,11 @@ export function PostEdit({ kind }: Props) {
             <a href={`/${post.slug}/`} target="_blank" rel="noreferrer" className="text-xs text-zinc-500 hover:text-[color:var(--color-brand)] inline-flex items-center gap-1">
               <ExternalLink size={12} /> View live
             </a>
+          )}
+          {kind === "posts" && post.status === "published" && site && (
+            <Button variant="ghost" size="sm" onClick={announceOnX} title="Open X with a pre-filled announcement for this post">
+              <Share2 size={14} /> Announce on X
+            </Button>
           )}
           <Button variant="ghost" size="sm" onClick={remove}><Trash2 size={14} /> Delete</Button>
           <Button onClick={save} disabled={saving || !dirty}>

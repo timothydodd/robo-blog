@@ -5,8 +5,16 @@
     <link>https://robododd.com/</link>
     <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 19 Apr 2026 19:58:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 20:50:23 GMT</lastBuildDate>
     <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition</title>
+      <description>A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here&apos;s what&apos;s actually worth buying for Ollama in April 2026.</description>
+      <link>https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/</link>
+      <guid isPermaLink="true">https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/</guid>
+      <pubDate>Sun, 19 Apr 2026 20:49:41 GMT</pubDate>
+      <category>Ollama AI</category>
+    </item>
     <item>
       <title>Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</title>
       <description>K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here&apos;s the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.</description>
@@ -159,14 +167,6 @@
       <link>https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</link>
       <guid isPermaLink="true">https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</guid>
       <pubDate>Tue, 11 Mar 2025 01:29:22 GMT</pubDate>
-      <category>3D Printing</category>
-    </item>
-    <item>
-      <title>3D-Printed Low-Poly Mesh Panel for NZXT H510 Elite – Better Airflow</title>
-      <description>Enhance your NZXT H510 Elite with a 3D-printed low-poly panel for better airflow and a unique look. Follow this guide to print, and assemble your front panel.</description>
-      <link>https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</link>
-      <guid isPermaLink="true">https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</guid>
-      <pubDate>Mon, 10 Mar 2025 17:44:24 GMT</pubDate>
       <category>3D Printing</category>
     </item>
   </channel>

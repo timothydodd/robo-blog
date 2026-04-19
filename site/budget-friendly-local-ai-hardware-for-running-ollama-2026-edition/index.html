@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition — RoboDodd</title>
+  <meta name="description" content="A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here's what's actually worth buying for Ollama in April 2026.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition — RoboDodd">
+  <meta property="og:description" content="A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here's what's actually worth buying for Ollama in April 2026.">
+  <meta property="og:url" content="https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/">
+  <meta property="og:image" content="https://robododd.com/images/2026/04/feature-local-ai-2026.jpg">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-04-19T20:49:41.377Z">
+  <meta property="article:modified_time" content="2026-04-19T20:49:41.377Z">  <meta property="article:tag" content="Ollama AI">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/"},"headline":"Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition","description":"A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here's what's actually worth buying for Ollama in April 2026.","image":"https://robododd.com/images/2026/04/feature-local-ai-2026.jpg","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.jpg"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-19T20:49:41.377Z","dateModified":"2026-04-19T20:49:41.377Z","keywords":"Ollama AI, Hardware, NVIDIA, AMD, AI, Home Lab, Buying Guide, Apple","articleSection":"Ollama AI"}</script>    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cookiedialog@1.0.3/dist/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: '🍪 We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+    <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+            <h1 class="post-full-title">Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition</h1>
+      <p class="post-full-subtitle">A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here's what's actually worth buying for Ollama in April 2026.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2026/04/feature-local-ai-2026.jpg" alt="Local AI home-lab hardware — GPUs, mini PC, and unified-memory workstation" loading="eager" decoding="async" width="1107" height="688">
+          </figure>
+    
+    <div class="post-full-topline gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/ollama-ai/">Ollama AI</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2026-04-19T20:49:41.377Z">Apr 19, 2026</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>13 min read</span>
+      </div>
+      <div class="post-full-byline">
+                <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.jpg" alt="" width="28" height="28" decoding="async">
+                <span class="post-full-byline-name">Tim Dodd</span>
+      </div>
+    </div>
+
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#what-actually-changed-since-last-year" data-toc-link>What Actually Changed Since Last Year</a>
+                                </li>
+                                                                                        <li><a href="#why-vram-still-rules-everything" data-toc-link>Why VRAM Still Rules Everything</a>
+                                </li>
+                                                                                        <li><a href="#best-budget-nvidia-gpus-april-2026" data-toc-link>Best Budget NVIDIA GPUs (April 2026)</a>
+                                <ol>
+                                                                        <li><a href="#rtx-5060-ti-16gb-best-new-card-llm-value" data-toc-link>RTX 5060 Ti 16GB — Best New-Card LLM Value</a></li>
+                                                                        <li><a href="#rtx-5090-32gb-the-throughput-flagship" data-toc-link>RTX 5090 32GB — The Throughput Flagship</a></li>
+                                                                        <li><a href="#rtx-5070-5070-ti-skip-or-shop-carefully" data-toc-link>RTX 5070 / 5070 Ti — Skip or Shop Carefully</a></li>
+                                                                        <li><a href="#rtx-3090-24gb-used-still-the-vram-king" data-toc-link>RTX 3090 24GB (Used) — Still the $/GB-VRAM King</a></li>
+                                                                        <li><a href="#rtx-3060-12gb-the-comeback-kid" data-toc-link>RTX 3060 12GB — The Comeback Kid</a></li>
+                                                                        <li><a href="#rtx-4090-24gb-used-if-money-is-less-tight" data-toc-link>RTX 4090 24GB (Used) — If Money Is Less Tight</a></li>
+                                                                        <li><a href="#honorable-mention-used-tesla-p40-p100" data-toc-link>Honorable Mention: Used Tesla P40 / P100</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#best-budget-amd-gpus-april-2026" data-toc-link>Best Budget AMD GPUs (April 2026)</a>
+                                <ol>
+                                                                        <li><a href="#rx-9070-xt-16gb-amds-best-llm-pick" data-toc-link>RX 9070 XT 16GB — AMD’s Best LLM Pick</a></li>
+                                                                        <li><a href="#rx-9060-xt-16gb-the-budget-amd-pick" data-toc-link>RX 9060 XT 16GB — The Budget AMD Pick</a></li>
+                                                                        <li><a href="#rx-7900-xt-20gb-last-gen-20gb-on-the-cheap" data-toc-link>RX 7900 XT 20GB — Last-Gen 20GB on the Cheap</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#intel-arc-b580-12gb-worth-a-mention" data-toc-link>Intel Arc B580 12GB — Worth a Mention</a>
+                                </li>
+                                                                                        <li><a href="#apple-silicon-still-the-quiet-winner" data-toc-link>Apple Silicon — Still the Quiet Winner</a>
+                                <ol>
+                                                                        <li><a href="#mac-mini-m4-pro-24gb-or-64gb" data-toc-link>Mac Mini M4 Pro (24GB or 64GB)</a></li>
+                                                                        <li><a href="#mac-studio-m4-max-128gb-m3-ultra-512gb" data-toc-link>Mac Studio M4 Max 128GB / M3 Ultra 512GB</a></li>
+                                                                        <li><a href="#m5-is-coming" data-toc-link>M5 Is Coming</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#unified-memory-boxes-the-biggest-shift-since-2025" data-toc-link>Unified-Memory Boxes — The Biggest Shift Since 2025</a>
+                                <ol>
+                                                                        <li><a href="#nvidia-dgx-spark" data-toc-link>NVIDIA DGX Spark</a></li>
+                                                                        <li><a href="#framework-desktop-amd-ryzen-ai-max-395-strix-halo" data-toc-link>Framework Desktop — AMD Ryzen AI Max+ 395 “Strix Halo”</a></li>
+                                                                        <li><a href="#other-strix-halo-mini-pcs" data-toc-link>Other Strix Halo Mini PCs</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#jetson-in-2026-still-a-no-for-llms" data-toc-link>Jetson in 2026 — Still a No for LLMs</a>
+                                </li>
+                                                                                        <li><a href="#diy-multi-gpu-still-a-thing" data-toc-link>DIY Multi-GPU — Still a Thing</a>
+                                </li>
+                                                                                        <li><a href="#my-2026-recommendations-by-budget" data-toc-link>My 2026 Recommendations by Budget</a>
+                                </li>
+                                                                                        <li><a href="#final-thoughts" data-toc-link>Final Thoughts</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+                <section class="post-sidebar-related" aria-label="Related articles">
+          <h3 class="post-sidebar-related-title">Read more</h3>
+          <ul class="post-sidebar-related-list">
+                        <li>
+              <a class="post-sidebar-related-link" href="/budget-friendly-local-ai-hardware-for-running-ollama/">
+                <span class="post-sidebar-related-tag">Ollama AI</span>                <span class="post-sidebar-related-headline">Budget-Friendly Local AI Hardware for Running Ollama</span>
+              </a>
+            </li>
+                      </ul>
+        </section>
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>Back in January 2025 I wrote <a href="/budget-friendly-local-ai-hardware-for-running-ollama/">Budget-Friendly Local AI Hardware for Running Ollama</a>. A lot of that post has not aged well. The RTX 50 series shipped, AMD finally made ROCm behave on Windows, NVIDIA put a 128GB unified-memory box on shelves for under $4K, and a global DRAM shortage pushed nearly every GPU 40–80% over MSRP. Oh, and NVIDIA reportedly isn’t releasing any new gaming GPUs at all in 2026. Fun times.</p>
+<p>My daily driver is still the MSI RTX 2080 SUPER I mentioned last year, and the M4 Mac Mini I picked up shortly after has quietly turned into the most-used AI box in the house. But if I were starting from zero in April 2026, the shopping list looks very different.</p>
+<hr>
+<h2 id="what-actually-changed-since-last-year">What Actually Changed Since Last Year</h2>
+<p>Four things, in rough order of importance:</p>
+<ol>
+<li><strong>8GB is over.</strong> Any modern Ollama workload past a 7B toy model wants 12GB minimum, and 16GB is the new “don’t regret it in six months” floor. The old guidance of “8GB is fine” just isn’t true anymore.</li>
+<li><strong>Unified memory went mainstream.</strong> Framework Desktop, NVIDIA DGX Spark, Strix Halo mini PCs, Mac Studio with 512GB — these are now the correct answer for 70B-and-up models at home. They didn’t really exist as consumer products when I wrote the original post.</li>
+<li><strong>AMD is finally usable on Windows.</strong> The January 2026 Adrenalin driver ships Ollama, LM Studio and ComfyUI as a one-click optional install for RX 7700+ and Ryzen AI 300/400/Max systems. That alone re-opens AMD as a real recommendation instead of a “if you like tinkering on Linux” footnote.</li>
+<li><strong>The DRAM crunch.</strong> AI demand is eating ~20% of global DRAM. Micron says the shortage lasts into at least Q4 2027. Every number in this post should be read as “April 2026 and probably higher next month.”</li>
+</ol>
+<p>With that out of the way — here’s what’s worth buying.</p>
+<hr>
+<h2 id="why-vram-still-rules-everything">Why VRAM Still Rules Everything</h2>
+<p>Nothing here has changed conceptually. The model has to fit in memory. What’s shifted is the math:</p>
+<ul>
+<li><strong>8GB VRAM</strong> — 7–9B models only, with shrinking context. Don’t buy for LLMs in 2026.</li>
+<li><strong>12GB VRAM</strong> — 7B comfortably, 13B at Q4, a 30B model if you squeeze. Fine as an entry point.</li>
+<li><strong>16GB VRAM</strong> — the new sweet spot. 14B comfortably, 20B at Q4, 30B if you’re willing to give up context.</li>
+<li><strong>24GB VRAM</strong> — runs most 30B-class models without sweat and 70B at aggressive quantization. This is where “serious local AI” starts.</li>
+<li><strong>32GB+ or unified memory 64GB+</strong> — 70B dense, MoE models, long context. DGX Spark / Mac Studio / Strix Halo territory.</li>
+</ul>
+<p>CUDA vs. ROCm vs. Metal vs. Vulkan vs. SYCL is still a real consideration — NVIDIA’s stack is still the smoothest — but the gap is smaller in 2026 than it was a year ago.</p>
+<hr>
+<h2 id="best-budget-nvidia-gpus-april-2026">Best Budget NVIDIA GPUs (April 2026)</h2>
+<h3 id="rtx-5060-ti-16gb-best-new-card-llm-value">RTX 5060 Ti 16GB — Best New-Card LLM Value</h3>
+<p><img src="/images/2026/04/rtx-5060-ti-16gb.jpg" alt="PNY GeForce RTX 5060 Ti 16GB Overclocked Dual Fan" loading="lazy" decoding="async" width="6000" height="4000" data-zoom="">If you want a brand-new GPU with a warranty and 16GB of VRAM, this is the one.</p>
+<ul>
+<li>✅ 16GB GDDR7 — the magic number for 2026.</li>
+<li>✅ Runs 14B models at 33–40 tokens/sec, 8B at 70+.</li>
+<li>✅ Actually available near MSRP ($479–$549 street; $429 MSRP).</li>
+<li>❌ 128-bit bus is narrow; prompt processing on long context suffers vs. a 3090.</li>
+<li>❌ Avoid the 8GB variant — same card, crippled for AI.</li>
+</ul>
+<p><strong>Typical price: $479–$549.</strong></p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/48cIUIb" target="_blank" rel="noopener noreferrer">MSI RTX 5060 Ti 16G</a> ($489)</li>
+</ul>
+<hr>
+<h3 id="rtx-5090-32gb-the-throughput-flagship">RTX 5090 32GB — The Throughput Flagship</h3>
+<p><img src="/images/2026/04/rtx-5090.jpg" alt="NVIDIA GeForce RTX 5090 Founders Edition" loading="lazy" decoding="async" width="700" height="393" data-zoom="">The halo product. 32GB of GDDR7 on a 512-bit bus means it’ll chew through 30B dense at FP16 and 70B at Q4/FP4 faster than anything else you can put in a consumer PC.</p>
+<ul>
+<li>✅ 32GB is enough for serious workloads without going multi-GPU.</li>
+<li>✅ Fastest per-token speed of any single consumer card in 2026.</li>
+<li>❌ MSRP is $1,999; AIB reality is $2,900–$3,900; premium/liquid-cooled SKUs crack $5K.</li>
+<li>❌ Basically unobtainable at MSRP. Founders Editions are a lottery.</li>
+</ul>
+<p><strong>Typical price: $2,900–$3,900.</strong> Only buy at this price if you know exactly why you want it.</p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4tlJ34r" target="_blank" rel="noopener noreferrer">ASUS ROG RTX 5090 32GB</a> ($3,998)</li>
+</ul>
+<hr>
+<h3 id="rtx-5070-5070-ti-skip-or-shop-carefully">RTX 5070 / 5070 Ti — Skip or Shop Carefully</h3>
+<p><img src="/images/2026/04/rtx-5070.jpg" alt="NVIDIA GeForce RTX 5070" loading="lazy" decoding="async" width="700" height="393" data-zoom="">The 5070 Ti (16GB, ~$1,000 street) is a fine GPU that NVIDIA quietly put on the endangered list because of the memory shortage. The 5070 (12GB, ~$635) gives you the same VRAM as a used RTX 3060 12GB for 3x the money. Neither is a smart LLM buy in April 2026.</p>
+<p>The rumored “Super” refresh that would have fixed this has been <a href="https://videocardz.com/newz/geforce-rtx-50-super-release-reportedly-put-on-hold" target="_blank" rel="noopener noreferrer">put on hold</a>.</p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4cAS3eW" target="_blank" rel="noopener noreferrer">GIGABYTE RTX 5070 WINDFORCE OC SFF 12G</a> ($635)</li>
+</ul>
+<hr>
+<h3 id="rtx-3090-24gb-used-still-the-vram-king">RTX 3090 24GB (Used) — Still the $/GB-VRAM King</h3>
+<p><img src="/images/2026/04/rtx-3090-fe.jpg" alt="NVIDIA GeForce RTX 3090 Founders Edition — still the used-market value champion for 24GB" loading="lazy" decoding="async" width="4032" height="3024" data-zoom="">If you only read one recommendation in this post, read this one.</p>
+<ul>
+<li>✅ 24GB VRAM for under $1,000. Nothing else comes close.</li>
+<li>✅ Full CUDA ecosystem, mature tooling, every llama.cpp / vLLM / Ollama optimization targets it.</li>
+<li>✅ Runs 30B comfortably, 70B at Q4.</li>
+<li>❌ Used market only. Watch for ex-mining cards; check thermals and bring a BIOS reader.</li>
+<li>❌ Big, power-hungry (350W), loud.</li>
+</ul>
+<p><strong>Typical price: $775–$975 used.</strong> This card continues to be the answer for people who ask “what’s the best bang-for-buck for local LLMs?”</p>
+<p>If you’d rather buy new/near-new and skip the mining-card lottery, a premium SKU like the EVGA FTW3 Ultra is still floating around — expect to pay a hefty premium over the used street price.</p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4vFy4ob" target="_blank" rel="noopener noreferrer">EVGA GeForce RTX 3090 FTW3 Ultra Gaming, 24GB GDDR6X</a> ($1,479)</li>
+</ul>
+<hr>
+<h3 id="rtx-3060-12gb-the-comeback-kid">RTX 3060 12GB — The Comeback Kid</h3>
+<p><img src="/images/2026/04/rtx-3060-12gb.jpg" alt="Zotac GeForce RTX 3060 12GB" loading="lazy" decoding="async" width="4642" height="2611" data-zoom="">No joke: <a href="https://www.tomshardware.com/pc-components/gpus/nvidia-rtx-3060-comeback-in-2026-could-alleviate-soaring-gpu-prices-and-memory-shortages-rumored-rtx-5050-9gb-abruptly-shelved-amid-speculation" target="_blank" rel="noopener noreferrer">NVIDIA restarted production of the RTX 3060 12GB in Q1 2026</a> specifically to take pressure off GDDR7-constrained new cards and serve cheap local-AI builds. The reason I picked this card last year is exactly the reason NVIDIA re-released it.</p>
+<ul>
+<li>✅ 12GB VRAM, ~$200–$250 used, ~$339 new.</li>
+<li>✅ Low power, fits in small cases, easy to find.</li>
+<li>❌ Still 192-bit bus and GDDR6 — not fast, just capable.</li>
+</ul>
+<p><strong>Typical price: $200–$250 used, ~$339 new.</strong></p>
+<hr>
+<h3 id="rtx-4090-24gb-used-if-money-is-less-tight">RTX 4090 24GB (Used) — If Money Is Less Tight</h3>
+<p>Production ended October 2024. Used prices sit at $1,800–$2,400, AI-targeted listings cluster around $1,800–$2,000. Gets you the same 24GB as a 3090 with dramatically better prompt-processing speed and much lower idle power. If you need it quiet and fast and can absorb the cost, it’s still the best 24GB card ever made. If you’re optimizing dollars-per-VRAM, get a 3090 instead.</p>
+<p><strong>Typical price: $1,800–$2,400 used.</strong></p>
+<hr>
+<h3 id="honorable-mention-used-tesla-p40-p100">Honorable Mention: Used Tesla P40 / P100</h3>
+<p>The P40 24GB ($200–$300) and P100 16GB (~$177) are still kicking around as the “I enjoy suffering for cheap VRAM” tier. No tensor cores, weak FP16 on the P40, blower-fan mods required, slow prompt processing. But 24GB of VRAM for $250 is hard to ignore if you already run a homelab server with room for a dual-slot card and airflow for it. Not a general-audience recommendation.</p>
+<hr>
+<h2 id="best-budget-amd-gpus-april-2026">Best Budget AMD GPUs (April 2026)</h2>
+<p>The big news is software, not silicon. The <a href="https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/advanced/advancedrad/windows/llm/llamacpp.html" target="_blank" rel="noopener noreferrer">January 2026 Adrenalin driver</a> ships Ollama and LM Studio as optional one-click installs on Windows for RX 7700+ and Ryzen AI Max systems. ROCm 7 is the current release with pre-built llama.cpp binaries. This is the ergonomic jump AMD users have been waiting three years for.</p>
+<p>Windows support for older Radeon and for Ryzen AI APUs is still patchy — Vulkan (<code>OLLAMA_VULKAN=1</code>) is the most reliable fallback. Linux is better than Windows for anything pre-RDNA 4.</p>
+<h3 id="rx-9070-xt-16gb-amds-best-llm-pick">RX 9070 XT 16GB — AMD’s Best LLM Pick</h3>
+<p><img src="/images/2026/04/rx-9070-xt.jpg" alt="Sapphire Pulse Radeon RX 9070 XT" loading="lazy" decoding="async" width="1996" height="474" data-zoom="">- ✅ 16GB, widely available (200+ listings online at any time).</p>
+<ul>
+<li>✅ RDNA 4 — finally a first-class ROCm citizen out of the box.</li>
+<li>✅ Raw compute beats the RTX 5070 Ti in most benchmarks.</li>
+<li>❌ $719 on Amazon vs. $599 MSRP; ASUS bumped prices 17.5% in the last quarter.</li>
+<li>❌ Still not as polished as CUDA for the long tail of AI tooling.</li>
+</ul>
+<p><strong>Typical price: $650–$720 new.</strong></p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/48Xc2mZ" target="_blank" rel="noopener noreferrer">GIGABYTE Radeon RX 9070 XT Gaming OC 16G</a> ($739.99)</li>
+</ul>
+<hr>
+<h3 id="rx-9060-xt-16gb-the-budget-amd-pick">RX 9060 XT 16GB — The Budget AMD Pick</h3>
+<ul>
+<li>✅ 16GB for $459 (the 8GB version is $349 and should be ignored for AI).</li>
+<li>✅ Low power draw, fits in small cases.</li>
+<li>❌ Narrow bus, so prompt processing is noticeably slower than the 9070 XT.</li>
+</ul>
+<p><strong>Typical price: $459 new (16GB variant only).</strong></p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4sLOpVL" target="_blank" rel="noopener noreferrer">GIGABYTE Radeon RX 9060 XT Gaming OC 16G</a> ($459.99)</li>
+</ul>
+<hr>
+<h3 id="rx-7900-xt-20gb-last-gen-20gb-on-the-cheap">RX 7900 XT 20GB — Last-Gen 20GB on the Cheap</h3>
+<p>AMD’s previous-gen flagship is still around at new-card prices that undercut a used 3090 and give you 20GB of VRAM with a warranty. Not quite 24GB, but enough to run 30B comfortably and 70B at tight quantization. The XTX 24GB variant is $775–$800 used on eBay if you want the extra 4GB — but at that price a used 3090 beats it on ecosystem.</p>
+<ul>
+<li>✅ 20GB VRAM new, with warranty.</li>
+<li>✅ Works with the new Adrenalin one-click LM Studio/Ollama install.</li>
+<li>❌ RDNA 3 isn’t a first-class ROCm target the way RDNA 4 is.</li>
+</ul>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4tpthFY" target="_blank" rel="noopener noreferrer">XFX Radeon RX 7900 XT Gaming, 20GB GDDR6</a> ($679.99)</li>
+</ul>
+<hr>
+<h2 id="intel-arc-b580-12gb-worth-a-mention">Intel Arc B580 12GB — Worth a Mention</h2>
+<p><img src="/images/2026/04/intel-arc-b580.jpg" alt="Intel Arc B580 Limited Edition" loading="lazy" decoding="async" width="4000" height="3000" data-zoom="">Intel’s Battlemage launch finally produced a usable LLM card. IPEX-LLM and SYCL have stabilized enough that the B580 works out of the box on Windows or Linux without any real wrangling.</p>
+<ul>
+<li>✅ 12GB VRAM for $250–$300.</li>
+<li>✅ Huge improvement in Intel’s AI software stack vs. Alchemist.</li>
+<li>❌ SYCL runs at roughly 70–75% of a comparable NVIDIA card on token throughput.</li>
+<li>❌ Smaller community, fewer Ollama tutorials that “just work.”</li>
+</ul>
+<p><strong>Typical price: $250–$300.</strong> Only buy it if you specifically want new-card Intel. For most people, a used RTX 3060 12GB or the re-issued new 3060 is the safer pick.</p>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4sNv1aF" target="_blank" rel="noopener noreferrer">ASRock Intel Arc B580 Challenger 12GB OC</a> ($309.99)</li>
+</ul>
+<hr>
+<h2 id="apple-silicon-still-the-quiet-winner">Apple Silicon — Still the Quiet Winner</h2>
+<p>I’ve been running an M4 Mac Mini as a 24/7 Ollama server for over a year now. It still beats my RTX 2080 SUPER desktop on the models I run. Apple Silicon’s unified memory architecture means the same pool of fast RAM acts as VRAM — and there’s a lot of it.</p>
+<h3 id="mac-mini-m4-pro-24gb-or-64gb">Mac Mini M4 Pro (24GB or 64GB)</h3>
+<p><img src="/images/2026/04/mac-mini-m4.jpg" alt="Apple Mac mini (M4, 2024)" loading="lazy" decoding="async" width="2125" height="1785" data-zoom="">- ✅ $1,399 for the 24GB/512GB Pro, ~$2,000 configured with 64GB.</p>
+<ul>
+<li>✅ Tiny, silent, ~30W idle.</li>
+<li>✅ 64GB model runs 32B at Q4 comfortably (10–14 tokens/sec).</li>
+<li>❌ Apple’s RAM-tax pricing is still painful.</li>
+<li>❌ Base 16GB M4 is a trap for LLMs — skip it.</li>
+</ul>
+<p><strong>Amazon Links:</strong></p>
+<ul>
+<li><a href="https://amzn.to/4mKiYd8" target="_blank" rel="noopener noreferrer">Apple 2024 Mac mini M4 Pro, 12‑core CPU / 16‑core GPU, 24GB Unified Memory</a> ($1,399)</li>
+</ul>
+<hr>
+<h3 id="mac-studio-m4-max-128gb-m3-ultra-512gb">Mac Studio M4 Max 128GB / M3 Ultra 512GB</h3>
+<p><img src="/images/2026/04/mac-studio.jpg" alt="Apple Mac Studio with Studio Display" loading="lazy" decoding="async" width="5712" height="4284" data-zoom="">- ✅ M4 Max 128GB (~$3,950) runs 70B Q4 at 18–25 tokens/sec with no CPU offload.</p>
+<ul>
+<li>✅ M3 Ultra 512GB (starts ~$10K) is currently the only sub-$20K consumer box that can hold DeepSeek R1 671B in memory (~17–18 tokens/sec).</li>
+<li>❌ Long-context prompt processing has always been Apple Silicon’s weak point.</li>
+</ul>
+<hr>
+<h3 id="m5-is-coming">M5 Is Coming</h3>
+<p><a href="https://www.apple.com/newsroom/2026/03/apple-introduces-macbook-pro-with-all-new-m5-pro-and-m5-max/" target="_blank" rel="noopener noreferrer">M5, M5 Pro and M5 Max MacBook Pros shipped in March 2026</a>. The interesting part for local AI: every GPU core now has a Neural Accelerator, delivering 3.3–4x faster prompt processing. That addresses Apple’s single biggest LLM weakness. M5 Mac Mini and Mac Studio M5 Max are expected at WWDC in June; M5 Ultra has slipped to Q4 2026.</p>
+<p>If you can wait until summer, you probably should.</p>
+<hr>
+<h2 id="unified-memory-boxes-the-biggest-shift-since-2025">Unified-Memory Boxes — The Biggest Shift Since 2025</h2>
+<p>This entire category barely existed when I wrote the original post. It’s now the answer for “I want to run 70B+ at home without a multi-GPU rig.”</p>
+<h3 id="nvidia-dgx-spark">NVIDIA DGX Spark</h3>
+<ul>
+<li>GB10 Grace-Blackwell superchip, <strong>128GB LPDDR5X unified memory</strong>, 1 petaFLOP.</li>
+<li>Shipped late 2025, now sold at Micro Center, Newegg, Best Buy, and NVIDIA Marketplace.</li>
+<li><strong>$3,999 at launch, bumped to $4,699</strong> for the Founders Edition in February 2026 due to memory supply.</li>
+<li>~35–40 tokens/sec on 120B models; prompt processing around 1,700 tokens/sec rivals a triple-3090 rig.</li>
+<li>The CES 2026 software update added TensorRT-LLM optimizations and speculative decoding for ~2.5x further gains.</li>
+</ul>
+<p>If you want NVIDIA’s software stack with 128GB on your desk and you can stomach the price, this is the box.</p>
+<hr>
+<h3 id="framework-desktop-amd-ryzen-ai-max-395-strix-halo">Framework Desktop — AMD Ryzen AI Max+ 395 “Strix Halo”</h3>
+<ul>
+<li><strong>$1,999 for 128GB config</strong> (395+, 16C/32T Zen 5, Radeon 8060S RDNA 3.5 iGPU, 256-bit bus).</li>
+<li>Up to 96GB can be allocated as VRAM via AMD’s Variable Graphics Memory feature.</li>
+<li>Runs 70B models in LM Studio at usable speeds on a fraction of the power draw of a discrete GPU rig.</li>
+<li>First-class Linux support out of the box.</li>
+</ul>
+<p>At $1,999 for 128GB of usable unified memory and a credible RDNA 3.5 iGPU, this is the <strong>killer value in this category</strong>. If I were building a dedicated home-lab AI box today, this is what I’d buy.</p>
+<hr>
+<h3 id="other-strix-halo-mini-pcs">Other Strix Halo Mini PCs</h3>
+<ul>
+<li><strong>GMKtec EVO-X2</strong> — $1,499–$2,228 depending on memory config. Ships faster than Framework in most cases.</li>
+<li><strong>Minisforum MS-S1 Max</strong> — 128GB/256-bit bus in a compact mini PC form factor.</li>
+<li><strong>Minisforum BD395i</strong> — Mini-ITX board for DIY builders who want Strix Halo in their own case.</li>
+<li><strong>Corsair AI Workstation 300</strong> — $3,399 in current configs (up from launch pricing due to the DRAM crunch).</li>
+</ul>
+<hr>
+<h2 id="jetson-in-2026-still-a-no-for-llms">Jetson in 2026 — Still a No for LLMs</h2>
+<p>Last year I pulled the Jetson Orin Nano Super out of this list after testing it. My opinion hasn’t changed. The Orin Nano Super at $249 is a neat robotics / edge-AI device that technically runs Llama 3.1 8B — but it’s not a serious local LLM platform.</p>
+<p>The new <a href="https://developer.nvidia.com/blog/unlock-faster-smarter-edge-models-with-7x-gen-ai-performance-on-nvidia-jetson-agx-thor/" target="_blank" rel="noopener noreferrer">Jetson AGX Thor</a> (128GB unified, runs 100B+ models) is genuinely impressive — but it’s priced for industry, not for a home desk.</p>
+<hr>
+<h2 id="diy-multi-gpu-still-a-thing">DIY Multi-GPU — Still a Thing</h2>
+<p>Dual RTX 3090 is still the enthusiast go-to for 48GB on a budget. Two used 3090s total $1,300–$1,600 — less than a single RTX 5090. You’ll need a 2x PCIe x16 motherboard, a 1000W+ PSU, and an NVLink bridge ($40–$80, 3090 only). Generation is 30–50% slower per token than a single 4090, but 48GB lets you run 70B at better quantization.</p>
+<p>For the truly adventurous: 4x AMD MI50 32GB ($150–$200 each) gets you 128GB of VRAM for under $1,000, and people have genuinely run Qwen3 235B on these rigs. You will fight drivers. You will read forum posts from 2023. This is a labor-of-love build, not a weekend project.</p>
+<hr>
+<h2 id="my-2026-recommendations-by-budget">My 2026 Recommendations by Budget</h2>
+<ul>
+<li><strong>Under $300 — “Just let me try Ollama”:</strong> Used RTX 3060 12GB (~$200–$250) or new if you can get one at MSRP.</li>
+<li><strong>$400–$550 — New card, actual future-proofing:</strong> RTX 5060 Ti <strong>16GB</strong> (not the 8GB variant).</li>
+<li><strong>$700–$1,000 — The sweet spot:</strong> Used RTX 3090 24GB. Still the $/VRAM king. Or an RX 9070 XT 16GB if you specifically want AMD.</li>
+<li><strong>$1,500–$2,000 — Capacity over speed:</strong> Framework Desktop 128GB ($1,999). This is the pick I’d make for a dedicated home AI box in 2026.</li>
+<li><strong>$1,800–$2,400 — Speed with some capacity:</strong> Used RTX 4090 24GB.</li>
+<li><strong>$3,000–$4,700 — NVIDIA’s software stack with real capacity:</strong> DGX Spark 128GB.</li>
+<li><strong>$3,950+ — Silent, polished, unified:</strong> Mac Studio M4 Max 128GB. Or wait for the M5 Studio at WWDC.</li>
+<li><strong>$10K+ / “I want to run DeepSeek R1 at home”:</strong> Mac Studio M3 Ultra 512GB.</li>
+<li><strong>DIY tinkerer:</strong> Dual used RTX 3090 (48GB total, $1,300–$1,600).</li>
+</ul>
+<hr>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>If you had asked me a year ago what a $2,000 local-AI budget should buy, I would have said “a decent PC with an RTX 3060 or 3090 in it.” In April 2026, I’d point you straight at a Framework Desktop instead. That’s a big shift.</p>
+<p>The other big shift is that 8GB is officially done for LLMs, and 12GB is the new entry point rather than the recommendation. If you’re buying new, budget for 16GB minimum. If you’re buying used, buy a 3090 and don’t look back.</p>
+<p>And one last piece of advice that wasn’t true a year ago: <strong>seriously consider waiting</strong> if you don’t need the hardware today. The DRAM shortage is expected to last into 2027, Apple’s M5 Mac Studio is a couple of months out, and NVIDIA’s “Super” refresh is still notionally on the schedule for later this year. Every number in this post is higher than it was three months ago. Prices might come down. They might not. But if you’re patient, you have options.</p>
+        </section>
+
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/ollama-ai/">Ollama AI</a>
+                      <a href="/tag/hardware/">Hardware</a>
+                      <a href="/tag/nvidia/">NVIDIA</a>
+                      <a href="/tag/amd/">AMD</a>
+                      <a href="/tag/ai/">AI</a>
+                      <a href="/tag/home-lab/">Home Lab</a>
+                      <a href="/tag/buying-guide/">Buying Guide</a>
+                      <a href="/tag/apple/">Apple</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
+
+    <aside class="read-more-wrap">
+    <h3 class="read-more-heading">Read more</h3>
+    <div class="read-more">
+              <article class="post-card">
+    <a class="post-card-image-link" href="/budget-friendly-local-ai-hardware-for-running-ollama/">
+    <img class="post-card-image" src="/images/2025/01/Screenshot-2025-01-29-121414.webp" alt="Budget-Friendly Local AI Hardware for Running Ollama" loading="lazy" decoding="async" width="936" height="643">
+  </a>
+    <div class="post-card-content">
+    <a class="post-card-content-link" href="/budget-friendly-local-ai-hardware-for-running-ollama/">
+      <header class="post-card-header">
+                <div class="post-card-tags"><span class="post-card-primary-tag">Ollama AI</span></div>
+                <h2 class="post-card-title">Budget-Friendly Local AI Hardware for Running Ollama</h2>
+      </header>
+      <div class="post-card-excerpt"><p>Looking to run AI models like Ollama locally without breaking the bank? Here’s a guide to the best budget GPUs for LLMs, from NVIDIA’s RTX 3060 to AMD’s RX 6700 XT.</p></div>    </a>
+    <footer class="post-card-meta">
+      <time class="post-card-meta-date" datetime="2025-01-29T17:20:12.000Z">Jan 29, 2025</time>
+      <span class="post-card-meta-length">4 min read</span>
+    </footer>
+  </div>
+</article>
+          </div>
+  </aside>
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>
