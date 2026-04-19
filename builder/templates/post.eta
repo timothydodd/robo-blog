@@ -6,9 +6,13 @@
       <% if (it.post.subtitle) { %><p class="post-full-subtitle"><%= it.post.subtitle %></p><% } %>
     </header>
 
-    <% if (it.post.feature_image) { %>
+    <% if (it.post.feature_image) {
+         const heroSrcset = it.post.feature_image_srcset;
+         const heroHasSrcset = heroSrcset && heroSrcset.length > 1;
+         const heroSrcsetAttr = heroHasSrcset ? heroSrcset.map(v => `${v.url} ${v.width}w`).join(', ') : null;
+    %>
     <figure class="post-full-image">
-      <img src="<%= it.post.feature_image %>" alt="<%= it.post.feature_image_alt || it.post.title %>" loading="eager" decoding="async"<% if (it.post.feature_image_width && it.post.feature_image_height) { %> width="<%= it.post.feature_image_width %>" height="<%= it.post.feature_image_height %>"<% } %>>
+      <img src="<%= it.post.feature_image %>"<% if (heroHasSrcset) { %> srcset="<%= heroSrcsetAttr %>" sizes="(min-width: 1200px) 1200px, 100vw"<% } %> alt="<%= it.post.feature_image_alt || it.post.title %>" fetchpriority="high" loading="eager" decoding="async"<% if (it.post.feature_image_width && it.post.feature_image_height) { %> width="<%= it.post.feature_image_width %>" height="<%= it.post.feature_image_height %>"<% } %>>
       <% if (it.post.feature_image_caption) { %><figcaption><%= it.post.feature_image_caption %></figcaption><% } %>
     </figure>
     <% } %>

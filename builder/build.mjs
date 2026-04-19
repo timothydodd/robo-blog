@@ -80,18 +80,56 @@ function absoluteUrl(baseUrl, p) {
 
 // ---------------------------------------------------------------------------
 
-async function runTailwind() {
+// Conservative pure-JS CSS minifier. Avoids pulling in cssnano (and its
+// postcss-colormin / calc / merge-rules / etc. graph) just to shave a couple
+// of KB. Hits the easy wins: strip comments, collapse whitespace, trim around
+// syntactic tokens, drop trailing semicolons.
+function minifyCss(css) {
+  return css
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s*([{}:;,>+~])\s*/g, "$1")
+    .replace(/;}/g, "}")
+    .trim();
+}
+
+// Returns the combined, minified CSS string that should ship to the browser.
+// Tailwind is run over app.css, then the third-party cookiedialog CSS is
+// appended (so the one inlined `<style>` block covers both), and the whole
+// thing is minified.
+async function buildSiteCss() {
   const inputPath = path.join(ASSETS, "app.css");
-  const outputPath = path.join(SITE, "assets", "app.css");
   const input = await fs.readFile(inputPath, "utf8");
-  // No minifier — avoids the lightningcss native-binary dependency. Unminified CSS
-  // still gzips to a few KB on the wire. Consumer can layer cssnano later if desired.
-  const result = await postcss([tailwindcss()]).process(input, {
+  const tailwindResult = await postcss([tailwindcss()]).process(input, {
     from: inputPath,
-    to: outputPath,
+    to: path.join(SITE, "assets", "app.css"),
     map: false,
   });
-  await fs.writeFile(outputPath, result.css);
+  let vendor = "";
+  try {
+    vendor = await fs.readFile(path.join(ASSETS, "vendor", "cookiedialog.min.css"), "utf8");
+  } catch { /* optional */ }
+  return minifyCss(tailwindResult.css + "\n" + vendor);
+}
+
+// Walks site/**/*.html and replaces the app.css <link> with an inline <style>
+// so the stylesheet never round-trips over the network.
+async function inlineStylesheet(css) {
+  const tag = `<style>${css}</style>`;
+  const link = /<link rel="stylesheet" href="\/assets\/app\.css">/g;
+
+  async function walk(dir) {
+    for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) { await walk(full); continue; }
+      if (!entry.name.endsWith(".html")) continue;
+      const html = await fs.readFile(full, "utf8");
+      if (!link.test(html)) { link.lastIndex = 0; continue; }
+      link.lastIndex = 0;
+      await fs.writeFile(full, html.replace(link, tag));
+    }
+  }
+  await walk(SITE);
 }
 
 // ---------------------------------------------------------------------------
@@ -128,12 +166,18 @@ async function main() {
     return h2Count >= 3 ? items : null;
   }
 
+  // Feature images are displayed at three distinct sizes: ~380px (small card),
+  // ~690px (large card), up to ~1200px (article hero). 400/800/1200 covers the
+  // 1x cases and gives high-DPI screens 2x variants to pick from.
+  const FEATURE_VARIANT_WIDTHS = [400, 800, 1200];
+
   // ---- Enrich posts
   const published = rawPosts.filter(p => p.status === "published");
   const posts = await Promise.all(published.map(async p => {
     const { primary, rest } = tagsWithPrimary(p.tags || [], tagsBySlug);
     const content_html = await renderMarkdown(md, p.content, { imageSizer });
     const featureSize = p.feature_image ? await imageSizer.size(p.feature_image) : null;
+    const featureSrcset = p.feature_image ? await imageSizer.variants(p.feature_image, FEATURE_VARIANT_WIDTHS) : null;
     return {
       ...p,
       primary_tag: primary,
@@ -142,6 +186,7 @@ async function main() {
       toc: extractToc(content_html),
       feature_image_width: featureSize ? featureSize.width : null,
       feature_image_height: featureSize ? featureSize.height : null,
+      feature_image_srcset: featureSrcset,
       subtitle: p.excerpt || null,                       // explicit only — shown under post title
       excerpt: p.excerpt || buildExcerpt(p.content),     // derived — used for cards + meta description
       reading_time: readingTime(p.content),
@@ -153,12 +198,14 @@ async function main() {
 
   const pages = await Promise.all(rawPages.map(async p => {
     const featureSize = p.feature_image ? await imageSizer.size(p.feature_image) : null;
+    const featureSrcset = p.feature_image ? await imageSizer.variants(p.feature_image, FEATURE_VARIANT_WIDTHS) : null;
     return {
       ...p,
       content_html: await renderMarkdown(md, p.content, { imageSizer }),
       excerpt: p.excerpt || buildExcerpt(p.content),
       feature_image_width: featureSize ? featureSize.width : null,
       feature_image_height: featureSize ? featureSize.height : null,
+      feature_image_srcset: featureSrcset,
     };
   }));
 
@@ -183,8 +230,26 @@ async function main() {
   // ---- Copy images + static JS
   await copyDir(path.join(CONTENT, "images"), path.join(SITE, "images"));
   await fs.mkdir(path.join(SITE, "assets"), { recursive: true });
+  await fs.mkdir(path.join(SITE, "assets", "vendor"), { recursive: true });
   await fs.copyFile(path.join(ASSETS, "main.js"), path.join(SITE, "assets", "main.js"));
   await fs.copyFile(path.join(ASSETS, "logo.png"), path.join(SITE, "assets", "logo.png"));
+  // Vendored cookiedialog — self-hosted so we don't block render on a jsDelivr
+  // roundtrip. The corresponding <script> tag in site.json.code_injection_head
+  // loads this with `defer`.
+  try {
+    await fs.copyFile(
+      path.join(ASSETS, "vendor", "cookiedialog.min.js"),
+      path.join(SITE, "assets", "vendor", "cookiedialog.min.js"),
+    );
+  } catch (e) {
+    if (e.code !== "ENOENT") throw e;
+  }
+
+  // ---- Write the responsive variants queued during enrichment. They land
+  // inside site/images/ alongside their source file, matching the URLs the
+  // templates emitted via srcset.
+  const nVariants = await imageSizer.writePendingVariants(path.join(SITE, "images"));
+  if (nVariants > 0) console.log(`  ${nVariants} responsive image variants`);
 
   // ---- Render layout helper
   function renderPage({ body, pageTitle, pageDescription, canonicalPath, ogType, ogImage, bodyClass, articleMeta, jsonLd }) {
@@ -309,9 +374,12 @@ async function main() {
   await fs.writeFile(path.join(SITE, "robots.txt"),
     `User-agent: *\nAllow: /\nSitemap: ${site.url.replace(/\/$/, "")}/sitemap.xml\n`);
 
-  // ---- Tailwind
+  // ---- Tailwind + inline stylesheet
   console.log("  running tailwind…");
-  await runTailwind();
+  const css = await buildSiteCss();
+  await fs.writeFile(path.join(SITE, "assets", "app.css"), css);
+  await inlineStylesheet(css);
+  console.log(`  inlined ${(css.length / 1024).toFixed(1)} KB of CSS into every page`);
 
   console.log(`Done in ${((Date.now() - t0) / 1000).toFixed(1)}s → site/`);
 }

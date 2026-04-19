@@ -1,8 +1,23 @@
 <% const p = it.post; const size = it.size || 'small'; %>
+<%
+  // Cards on the home/tag feed: 1 col mobile, 2 col ≥720px, 3 col ≥1024px.
+  // Large card is full row on mobile, then a 1.35fr/1fr split at desktop.
+  const cardSizes = size === 'large'
+    ? '(min-width: 1024px) 690px, (min-width: 720px) 54vw, 100vw'
+    : '(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw';
+  const hasSrcset = p.feature_image_srcset && p.feature_image_srcset.length > 1;
+  const srcsetAttr = hasSrcset
+    ? p.feature_image_srcset.map(v => `${v.url} ${v.width}w`).join(', ')
+    : null;
+%>
 <article class="post-card<%= size === 'large' ? ' post-card-large' : '' %>">
-  <% if (p.feature_image) { %>
+  <% if (p.feature_image) {
+       // The large card at the top of the feed is the LCP target — load it
+       // eagerly. Everything else below the fold stays lazy.
+       const eager = size === 'large';
+  %>
   <a class="post-card-image-link" href="/<%= p.slug %>/">
-    <img class="post-card-image" src="<%= p.feature_image %>" alt="<%= p.feature_image_alt || p.title %>" loading="lazy" decoding="async"<% if (p.feature_image_width && p.feature_image_height) { %> width="<%= p.feature_image_width %>" height="<%= p.feature_image_height %>"<% } %>>
+    <img class="post-card-image" src="<%= p.feature_image %>"<% if (hasSrcset) { %> srcset="<%= srcsetAttr %>" sizes="<%= cardSizes %>"<% } %> alt="<%= p.feature_image_alt || p.title %>"<% if (eager) { %> fetchpriority="high" loading="eager"<% } else { %> loading="lazy"<% } %> decoding="async"<% if (p.feature_image_width && p.feature_image_height) { %> width="<%= p.feature_image_width %>" height="<%= p.feature_image_height %>"<% } %>>
   </a>
   <% } %>
   <div class="post-card-content">
