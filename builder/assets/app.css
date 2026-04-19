@@ -270,31 +270,6 @@
   line-height: 1;
 }
 
-/* ---------- Mobile polish (post header + canvas) ----------
-   Below 560px the post canvas gets slightly tighter padding, the
-   meta line shrinks so TAG · DATE · READ fits on a single line more
-   reliably, the TOC tightens its padding, and the header trims a bit
-   of vertical rhythm. Keeps everything breathing on 360px screens. */
-@media (max-width: 560px) {
-  .gh-canvas { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .post-full-image { padding: 0 1.25rem; }
-  .post-full-header { padding-bottom: 1.25rem; }
-  .post-full-topline {
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .post-full-meta {
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    gap: 0.4rem;
-  }
-  .post-full-byline-avatar { width: 26px; height: 26px; }
-  .post-full-byline-avatar--initials { font-size: 0.66rem; }
-  .post-full-byline-name { font-size: 0.8rem; }
-  .post-full-subtitle { font-size: 1rem; margin-top: 0.75rem; }
-  .post-toc { padding: 0.85rem 1rem; margin-bottom: 1.75rem; }
-  .post-toc > ol > li::before { margin-right: 0.4rem; }
-}
 .post-full-meta-tag { color: var(--color-accent); }
 .post-full-meta-tag:hover { color: var(--color-accent-deep); }
 .post-full-meta-sep { opacity: 0.45; font-weight: 400; }
@@ -314,7 +289,7 @@
 }
 
 .post-full-image {
-  max-width: 880px; margin: 0 auto 3rem; padding: 0 1.5rem;
+  max-width: 880px; margin: 0 auto 1rem; padding: 0 1.5rem;
 }
 .post-full-image img {
   width: 100%; border-radius: var(--radius-card); box-shadow: var(--shadow-card);
@@ -337,10 +312,32 @@
 .gh-content h3 { font-size: 1.35em; }
 .gh-content h4 { font-size: 1.15em; }
 .gh-content p { margin: 0; }
+.gh-content p + p { margin-top: 1.25em; }
 .gh-content a { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .gh-content a:hover { text-decoration-thickness: 2px; }
-.gh-content ul, .gh-content ol { padding-left: 1.5rem; }
+.gh-content ul, .gh-content ol { padding-left: 0.75rem; margin-top: 0.5rem; }
+.gh-content ul { list-style: none; }
+.gh-content ul > li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+.gh-content ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.6rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-accent);
+  opacity: 0.85;
+}
+.gh-content ol > li::marker {
+  color: var(--color-accent);
+  font-weight: 600;
+}
 .gh-content li { margin: 0.4rem 0; }
+.gh-content li > ul, .gh-content li > ol { margin-top: 0.4rem; }
 .gh-content blockquote {
   position: relative;
   margin: 2.5rem 0;
@@ -378,7 +375,7 @@
   background: #f3f5f7; color: #c7254e; padding: 0.12em 0.35em; border-radius: 4px;
   font-size: 0.9em; font-family: var(--font-mono);
 }
-.gh-content img { border-radius: var(--radius-card); margin: 1rem auto; }
+.gh-content img { border-radius: var(--radius-card); border: 1px solid var(--color-rule); margin: 1rem auto; }
 .gh-content figure { margin: 1rem 0; }
 .gh-content figcaption { text-align: center; color: var(--color-muted); font-size: 0.9rem; margin-top: 0.5rem; }
 
@@ -494,7 +491,7 @@
 /* ---------- Code blocks + PrismJS tomorrow (light-bg adapted) ---------- */
 
 .pre-wrapper {
-  position: relative; margin: 1.5rem 0;
+  position: relative; margin: 0.5rem 0 1.5rem;
   border-radius: 8px; overflow: hidden;
   background: #2d2d2d;
 }
@@ -665,4 +662,38 @@
   .lightbox-close { top: 0.75rem; right: 0.75rem; }
   .lightbox-prev  { left: 0.5rem; }
   .lightbox-next  { right: 0.5rem; }
+}
+
+/* ---------- Mobile polish (post header + canvas) ----------
+   Below 560px the post canvas gets slightly tighter padding, the
+   meta line shrinks so TAG · DATE · READ fits on a single line more
+   reliably, the TOC tightens its padding, and the header trims a bit
+   of vertical rhythm. Keeps everything breathing on 360px screens.
+   Kept at end of file so it wins the cascade against the base rules. */
+@media (max-width: 560px) {
+  .site-main { padding: 1rem 0.75rem 1rem; }
+  .site-hero { margin-top: 1.25rem; padding: 0 0.75rem; }
+  .gh-canvas { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .post-full { padding-top: 0.75rem; }
+  .post-full-image { padding: 0; margin: 0 0 0.75rem; max-width: none; }
+  .post-full-image img { border-radius: 0; }
+  .post-full-header { padding-bottom: 1.25rem; padding-left: 0; padding-right: 0; }
+  .post-full-meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    gap: 0.4rem;
+  }
+  .post-full-byline-avatar { width: 26px; height: 26px; }
+  .post-full-byline-avatar--initials { font-size: 0.66rem; }
+  .post-full-byline-name { font-size: 0.8rem; }
+  .post-full-title { font-size: clamp(1.5rem, 7vw, 1.9rem); }
+  .post-full-subtitle { font-size: 0.98rem; margin-top: 0.65rem; }
+  .gh-content h2 { font-size: 1.35em; }
+  .gh-content h3 { font-size: 1.15em; }
+  .post-toc { padding: 0.85rem 1rem; margin-bottom: 1.75rem; }
+  .post-toc > ol > li::before { margin-right: 0.4rem; }
+  .read-more-wrap { padding: 2rem 0.75rem 0; margin-top: 3rem; }
+  .site-foot { margin-top: 3rem; }
+  .site-foot-inner { padding: 1.5rem 0.75rem; }
+  .site-head-inner { padding: 0.6rem 0.75rem; }
 }

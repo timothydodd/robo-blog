@@ -319,26 +319,27 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <div class="post-full-topline">
-        <div class="post-full-meta">
-                      <a class="post-full-meta-tag" href="/tag/web-development/">Web Development</a>
-            <span class="post-full-meta-sep" aria-hidden="true">·</span>
-                    <time datetime="2026-04-17T23:30:00.000Z">Apr 17, 2026</time>
-          <span class="post-full-meta-sep" aria-hidden="true">·</span>
-          <span>6 min read</span>
-        </div>
-        <div class="post-full-byline">
-                    <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.jpg" alt="" width="28" height="28" decoding="async">
-                    <span class="post-full-byline-name">Tim Dodd</span>
-        </div>
-      </div>
-      <h1 class="post-full-title">Building a Static Blog to Replace Ghost</h1>
+            <h1 class="post-full-title">Building a Static Blog to Replace Ghost</h1>
       <p class="post-full-subtitle">I replaced my self-hosted Ghost blog with a static site — cheaper, faster, and with almost no attack surface. Here's the stack and how you can do the same.</p>    </header>
 
         <figure class="post-full-image">
       <img src="/images/2026/04/new-blog-4e07363f.jpg" alt="RoboDodd orb logo dispersing into a stream of glowing code particles" loading="eager" decoding="async" width="1298" height="745">
           </figure>
     
+    <div class="post-full-topline gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/web-development/">Web Development</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2026-04-17T23:30:00.000Z">Apr 17, 2026</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>6 min read</span>
+      </div>
+      <div class="post-full-byline">
+                <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.jpg" alt="" width="28" height="28" decoding="async">
+                <span class="post-full-byline-name">Tim Dodd</span>
+      </div>
+    </div>
+
     <section class="post-full-content gh-content gh-canvas">
             <nav class="post-toc" aria-label="Table of contents">
         <p class="post-toc-title">Contents</p>
@@ -369,7 +370,7 @@
 <p><strong>Cost</strong> reminded me of the first two every month.</p>
 <p>So I built a replacement. The goal was simple: write posts in a nice local editor, save them as JSON and Markdown, build static HTML, ship it to cheap storage. Total control, minimal moving parts, nothing to break into.</p>
 <h2 id="how-the-system-works">How the system works</h2>
-<p><img src="/images/2026/04/architecture-diagram.jpg" alt="High-level flow: editor writes JSON, builder renders HTML, GitHub Action deploys to Azure" loading="lazy" decoding="async" width="1191" height="785" data-zoom="">Four small pieces, each doing one thing:</p>
+<p><img src="/images/2026/04/architecture-diagram.jpg" alt="Architecture flow: local Editor reads and writes to content/ (JSON, Markdown, images); builder renders to site/ (static HTML); on git push, a GitHub Action syncs site/ to an Azure Blob $web container, with Cloudflare in front serving visitors" loading="lazy" decoding="async" width="1176" height="328" data-zoom="">Four small pieces, each doing one thing:</p>
 <ul>
 <li><code>content/</code> — the source of truth. One JSON file per post, one per page, plus a tags list and site settings. Images live in a dated folder structure.</li>
 <li><code>editor/</code> — a React app I run locally. Never deployed. It reads and writes the JSON files through a tiny local backend.</li>

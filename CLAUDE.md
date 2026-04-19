@@ -34,6 +34,7 @@ Static blog replacing Ghost at **robododd.com**. Content lives in JSON (+ Markdo
   ```
   First tag is the primary tag (shown on cards, in article header, on tag pages).
 - `content/pages/<slug>.json` — same shape minus `tags` / `featured`.
+- `content/drafts/<slug>.json` — same shape as a post with `status: "draft"`. Gitignored. Builder skips drafts; editor lists them alongside published posts. The editor server routes saves by `status`: draft → `content/drafts/`, published → `content/posts/`.
 - `content/tags.json` — `[{slug, name, description}]`, sorted by slug.
 - `content/images/YYYY/MM/<file>` — served at `/images/...` on the built site, at `/media/...` by the editor's API.
 
@@ -67,6 +68,10 @@ Static blog replacing Ghost at **robododd.com**. Content lives in JSON (+ Markdo
 
 Templates mirror Casper's DOM class names (`gh-canvas`, `gh-content`, `post-card-large`, `site-hero-cover`, etc.) — don't rename these casually, the CSS keys off them.
 
+Two easy traps:
+- `renderMarkdown()` is **async** — it resolves image dimensions via `sharp` (`builder/lib/imagesize.mjs`) so every `<img>` gets `width`/`height` stamped. Callers must `await` it or the output becomes `[object Promise]`.
+- Partial body renders (`eta.render("post", …)`, `eta.render("home", …)`) don't inherit the layout's context. Pass any cross-cutting data the template reads explicitly — e.g. `post.eta` reads `it.site.author` for the byline, so `site` has to be in the render args.
+
 ## The editor
 
 `editor/` is a **local-only** React + Vite + Tailwind v4 app. Never deployed. Fastify (`editor/server/index.mjs`) is a thin REST wrapper over `content/` file I/O:
@@ -77,6 +82,8 @@ Templates mirror Casper's DOM class names (`gh-canvas`, `gh-content`, `post-card
 The Markdown editor (`editor/src/components/MarkdownEditor.tsx`) is TipTap + `tiptap-markdown`. Call `editor.storage.markdown.getMarkdown()` to read back Markdown. Ctrl/Cmd+S triggers save. Slug auto-generates from title unless the user edits the slug field (`slugEdited` flag).
 
 UI primitives in `editor/src/components/ui/` are hand-rolled (shadcn-style, not the actual shadcn registry) — keep them tiny; add new primitives inline if needed rather than pulling a component library.
+
+Unsaved-changes guard: `editor/src/lib/dirty.ts` is a module-level coordinator, not React state. `PostEdit` calls `setDirty(true/false)` as its buffer changes; sidebar `NavLink`s and a `beforeunload` handler call `confirmDiscard()` before navigating. The app runs on `BrowserRouter`, so React Router's `useBlocker` isn't available — this module-level flag is the workaround.
 
 ## Deployment
 
