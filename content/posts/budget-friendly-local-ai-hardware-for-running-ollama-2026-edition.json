@@ -1,5 +1,5 @@
 {
-  "title": "Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition",
+  "title": "Local AI Hardware for Ollama: 2026 Edition",
   "slug": "budget-friendly-local-ai-hardware-for-running-ollama-2026-edition",
   "status": "published",
   "published_at": "2026-04-19T20:49:41.377Z",
@@ -8,7 +8,7 @@
   "feature_image": "/images/2026/04/feature-local-ai-2026.jpg",
   "feature_image_alt": "Local AI home-lab hardware — GPUs, mini PC, and unified-memory workstation",
   "feature_image_caption": null,
-  "excerpt": "A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here's what's actually worth buying for Ollama in April 2026.",
+  "excerpt": "My 2026 take on Ollama hardware: what's worth buying now, from a used RTX 3090 to a DGX Spark — and what to skip in the DRAM crunch.",
   "tags": [
     "ollama-ai",
     "hardware",

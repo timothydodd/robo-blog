@@ -5,11 +5,11 @@
     <link>https://robododd.com/</link>
     <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 19 Apr 2026 20:50:23 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 21:11:11 GMT</lastBuildDate>
     <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Budget-Friendly Local AI Hardware for Running Ollama — 2026 Edition</title>
-      <description>A year later and the local-AI hardware landscape has flipped. The RTX 50 series landed, AMD got its act together on Windows, DGX Spark and Framework Desktop put 128GB of unified memory on your desk, and a global DRAM shortage made everything cost more. Here&apos;s what&apos;s actually worth buying for Ollama in April 2026.</description>
+      <title>Local AI Hardware for Ollama: 2026 Edition</title>
+      <description>My 2026 take on Ollama hardware: what&apos;s worth buying now, from a used RTX 3090 to a DGX Spark — and what to skip in the DRAM crunch.</description>
       <link>https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/</link>
       <guid isPermaLink="true">https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/</guid>
       <pubDate>Sun, 19 Apr 2026 20:49:41 GMT</pubDate>
