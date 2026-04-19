@@ -35,7 +35,7 @@
   <header class="site-head">
     <div class="site-head-inner">
       <a class="site-head-brand" href="/" aria-label="<%= it.site.title %> — home">
-        <img class="site-head-logo" src="/assets/logo.png" alt="" width="40" height="40" decoding="async">
+        <img class="site-head-logo" src="/assets/logo.webp" alt="" width="40" height="40" decoding="async">
         <span class="site-head-wordmark">RoboDodd</span>
       </a>
       <nav class="site-head-nav" aria-label="Primary">

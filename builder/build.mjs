@@ -214,6 +214,7 @@ async function main() {
   await fs.mkdir(path.join(SITE, "assets", "vendor"), { recursive: true });
   await fs.copyFile(path.join(ASSETS, "main.js"), path.join(SITE, "assets", "main.js"));
   await fs.copyFile(path.join(ASSETS, "logo.png"), path.join(SITE, "assets", "logo.png"));
+  await fs.copyFile(path.join(ASSETS, "logo.webp"), path.join(SITE, "assets", "logo.webp"));
   // Vendored cookiedialog — self-hosted so we don't block render on a jsDelivr
   // roundtrip. The corresponding <script> tag in site.json.code_injection_head
   // loads this with `defer`.

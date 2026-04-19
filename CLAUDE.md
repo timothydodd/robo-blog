@@ -16,6 +16,7 @@ Static blog replacing Ghost at **robododd.com**. Content lives in JSON (+ Markdo
 
 - `npm run import` — one-shot Ghost export → `content/`. Expects the Ghost JSON at repo root. Idempotent; overwrites `content/posts/`, `content/pages/`, `content/tags.json`, `content/site.json`, appends to `content/images/`.
 - `npm run build` — renders `content/` → `site/`. Deletes `site/` first. Runs Tailwind CLI at the end against `site/**/*.html` + `builder/templates/**/*.eta`.
+- `npm run optimize-images` — re-encodes PNG/JPEG > 100 KB under `content/images/` as WEBP (quality 82), resizes anything wider than 1920 px, rewrites references in `content/posts/*.json` / `content/pages/*.json` / `content/site.json`, deletes originals when the new file is strictly smaller. Idempotent. Run after importing a post with large raw screenshots.
 - `npm run dev` — local editor (5173) + backend (5174).
 - `npm run preview` — serves `site/` on 4000 via `npx serve`.
 
@@ -64,13 +65,15 @@ Static blog replacing Ghost at **robododd.com**. Content lives in JSON (+ Markdo
 4. Sorts posts desc by `published_at`. Drafts are skipped.
 5. Renders Eta templates. `_post-card.eta` is a partial used by `home.eta` and `tag.eta`.
 6. Emits paginated home pages (`/` + `/page/N/`), `<slug>/index.html` per post/page, `tag/<slug>/index.html` per used tag, plus `rss.xml`, `sitemap.xml`, `robots.txt`.
-7. Compiles `builder/assets/app.css` → `site/assets/app.css` via PostCSS + `@tailwindcss/postcss` (scanning already-rendered HTML under `site/**/*.html`). Uses the PostCSS plugin, not the CLI — this avoids the `@parcel/watcher` native binary dance and keeps the toolchain cross-platform (Windows/WSL/Linux/macOS).
+7. After the images copy, writes responsive WEBP variants for every `feature_image` (400/800/1200 w) into `site/images/` via `imageSizer.writePendingVariants()`. `_post-card.eta` and `post.eta` emit `srcset` + `sizes` referencing those URLs. The first card on the home feed and the article hero also get `fetchpriority="high"` + `loading="eager"` for LCP.
+8. Compiles `builder/assets/app.css` → `site/assets/app.css` via PostCSS + `@tailwindcss/postcss` (scanning already-rendered HTML under `site/**/*.html`). Concatenates `builder/assets/vendor/cookiedialog.min.css` onto the tailwind output and runs a lightweight pure-JS minifier (no cssnano dep). Uses the PostCSS plugin, not the CLI — this avoids the `@parcel/watcher` native binary dance and keeps the toolchain cross-platform (Windows/WSL/Linux/macOS).
 
 Templates mirror Casper's DOM class names (`gh-canvas`, `gh-content`, `post-card-large`, `site-hero-cover`, etc.) — don't rename these casually, the CSS keys off them.
 
 Two easy traps:
 - `renderMarkdown()` is **async** — it resolves image dimensions via `sharp` (`builder/lib/imagesize.mjs`) so every `<img>` gets `width`/`height` stamped. Callers must `await` it or the output becomes `[object Promise]`.
 - Partial body renders (`eta.render("post", …)`, `eta.render("home", …)`) don't inherit the layout's context. Pass any cross-cutting data the template reads explicitly — e.g. `post.eta` reads `it.site.author` for the byline, so `site` has to be in the render args.
+- `imageSizer` has dual purpose: `size(src)` probes metadata; `variants(src, widths)` *queues* variant generation and returns the srcset descriptor. Actual encode/write happens in `writePendingVariants(siteImagesDir)`, which must run **after** `content/images/` has been copied to `site/images/` so the variants land alongside their sources.
 
 ## The editor
 
@@ -97,6 +100,8 @@ Unsaved-changes guard: `editor/src/lib/dirty.ts` is a module-level coordinator, 
 - **Cloudflare on robododd.com.** Image downloads needed a browser UA; live site fetches (WebFetch) may 403. User can disable CF rules on request.
 - **Don't try to re-implement search, members, subscriptions, or newsletters.** This is a static read-only blog by design.
 - **Tailwind v4 config is CSS-first** (`@theme`, `@source` in `builder/assets/app.css` and `editor/src/index.css`). No `tailwind.config.js`.
+- **Third-party assets are self-hosted**, not loaded from CDNs. Drop the file under `builder/assets/vendor/` and reference `/assets/vendor/…` (CSS gets merged into `app.css` at build, JS gets copied to `site/assets/vendor/`). `content/site.json.code_injection_head` must not point at jsDelivr or any other cross-origin CDN — that was a render-blocking perf hit.
+- **Two logo files** live side-by-side: `logo.webp` (80×80, referenced by the site-head `<img>`) and `logo.png` (64×64, used for the favicon because browser favicon support for WEBP is uneven). Keep both; `build.mjs` copies both into `site/assets/`.
 - **Plan file** `/home/tim/.claude/plans/declarative-wondering-boole.md` holds the approved architecture plan — reference it when large structural changes come up.
 
 ## Style
