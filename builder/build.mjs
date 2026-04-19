@@ -112,25 +112,6 @@ async function buildSiteCss() {
   return minifyCss(tailwindResult.css + "\n" + vendor);
 }
 
-// Walks site/**/*.html and replaces the app.css <link> with an inline <style>
-// so the stylesheet never round-trips over the network.
-async function inlineStylesheet(css) {
-  const tag = `<style>${css}</style>`;
-  const link = /<link rel="stylesheet" href="\/assets\/app\.css">/g;
-
-  async function walk(dir) {
-    for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) { await walk(full); continue; }
-      if (!entry.name.endsWith(".html")) continue;
-      const html = await fs.readFile(full, "utf8");
-      if (!link.test(html)) { link.lastIndex = 0; continue; }
-      link.lastIndex = 0;
-      await fs.writeFile(full, html.replace(link, tag));
-    }
-  }
-  await walk(SITE);
-}
 
 // ---------------------------------------------------------------------------
 
@@ -374,12 +355,12 @@ async function main() {
   await fs.writeFile(path.join(SITE, "robots.txt"),
     `User-agent: *\nAllow: /\nSitemap: ${site.url.replace(/\/$/, "")}/sitemap.xml\n`);
 
-  // ---- Tailwind + inline stylesheet
+  // ---- Tailwind (merged with vendor CSS, minified, written as a single
+  // cacheable stylesheet the <link> in layout.eta points at).
   console.log("  running tailwind…");
   const css = await buildSiteCss();
   await fs.writeFile(path.join(SITE, "assets", "app.css"), css);
-  await inlineStylesheet(css);
-  console.log(`  inlined ${(css.length / 1024).toFixed(1)} KB of CSS into every page`);
+  console.log(`  wrote ${(css.length / 1024).toFixed(1)} KB minified CSS → site/assets/app.css`);
 
   console.log(`Done in ${((Date.now() - t0) / 1000).toFixed(1)}s → site/`);
 }
