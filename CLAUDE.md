@@ -109,3 +109,16 @@ Unsaved-changes guard: `editor/src/lib/dirty.ts` is a module-level coordinator, 
 - No emojis in code or docs unless asked.
 - Don't add co-authored lines to git commits.
 - Commit only when the user asks; otherwise leave them to review the diff.
+
+## Feature image aesthetic
+
+Article `feature_image`s follow a consistent synthwave/cyberpunk-lite look that matches the site's accent color (`#C2368F`). When generating or commissioning a new hero image, target this palette and composition:
+
+- **Background:** deep navy / dark purple, often with a subtle gradient toward magenta and a faint grid or scanline underlay.
+- **Accent palette:** hot magenta `#C2368F` + cyan neon, with optional warm orange bloom around focal logos. Avoid muted corporate gradients.
+- **Subject styles (pick one, don't mix):**
+  - *Isometric 3D neon* — matte cubes/hex-rings/servers with thin neon edge-lighting, soft volumetric glow, floor reflection (e.g. `k3s-135-upgrade.webp`, `cloudflare-storage-connector.webp`).
+  - *Outlined cartoon neon* — friendly characters or mascots with magenta/cyan rim-light on a navy backdrop (e.g. the original `cloud-azure.webp`, `itsfine.jpg`).
+  - *Robot-at-a-console* — cyberpunk robot facing a glowing UI wall, used for AI / tooling posts (e.g. `computer-a.jpg`).
+- **Composition:** 3:2 or 16:9, single clear focal point, generous negative space, no embedded captions or article titles. Logos are fine when the post is about a specific product — keep them glowing/rim-lit so they read as part of the scene, not pasted on.
+- **File:** save as WEBP, quality 82, max width 1920 px, under `content/images/<YYYY>/<MM>/<kebab-slug>.webp`. Run `npm run optimize-images` if starting from a large PNG/JPEG.

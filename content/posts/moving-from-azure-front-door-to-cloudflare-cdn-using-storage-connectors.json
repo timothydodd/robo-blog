@@ -5,7 +5,7 @@
   "published_at": "2025-11-12T18:00:21.000Z",
   "updated_at": "2025-11-12T18:13:37.000Z",
   "created_at": "2025-11-12T17:56:45.000Z",
-  "feature_image": "/images/2025/11/cloud-azure.webp",
+  "feature_image": "/images/2026/04/cloudflare-storage-connector.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
   "excerpt": "Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.",
