@@ -482,7 +482,11 @@
   color: var(--color-ink-soft);
   text-decoration: none;
   transition: color 0.15s ease, transform 0.15s ease;
-  display: inline-block;
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .post-toc a:hover {
   color: var(--color-accent);
@@ -817,12 +821,19 @@
     align-items: start;
   }
   .post-body:not(.post-body--no-sidebar) .post-sidebar {
-    display: block;
-    position: sticky;
-    top: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
     align-self: start;
   }
   .post-sidebar .post-toc { margin: 0; }
+  /* Short TOC: pin the whole sidebar (TOC + Related) as a single block. */
+  .post-sidebar.toc-fits {
+    position: sticky;
+    top: 5rem;
+  }
+  /* Long TOC: sidebar just scrolls naturally with the page. */
+  .post-sidebar .post-sidebar-related { margin-top: 0; }
 
   /* Let the article content column take its full width — the two-column
      grid, not gh-canvas, is what constrains width on desktop. */

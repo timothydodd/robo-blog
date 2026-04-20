@@ -114,6 +114,37 @@
   })();
 
   // ---------------------------------------------------------------------------
+  // Sidebar layout mode — picks between pinning the TOC (when it fits in the
+  // viewport) and pinning the Related list (when the TOC is too tall and
+  // should scroll with the page). Toggled via classes on .post-sidebar.
+  // ---------------------------------------------------------------------------
+  (function () {
+    const sidebar = document.querySelector(".post-sidebar");
+    if (!sidebar) return;
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const viewH = window.innerHeight || document.documentElement.clientHeight;
+      // 5rem top offset + 1rem breathing room.
+      const available = viewH - 96;
+      const fits = sidebar.scrollHeight <= available;
+      sidebar.classList.toggle("toc-fits", fits);
+      sidebar.classList.toggle("toc-overflow", !fits);
+    }
+    function onResize() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+    window.addEventListener("resize", onResize, { passive: true });
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(onResize).observe(sidebar);
+    }
+    update();
+  })();
+
+  // ---------------------------------------------------------------------------
   // Smooth-scroll in-page anchor links
   // ---------------------------------------------------------------------------
   document.addEventListener("click", function (e) {
