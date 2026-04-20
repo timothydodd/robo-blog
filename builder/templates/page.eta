@@ -2,7 +2,7 @@
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
       <h1 class="post-full-title"><%= it.page.title %></h1>
-      <% if (it.page.excerpt) { %><p class="post-full-custom-excerpt"><%= it.page.excerpt %></p><% } %>
+      <% if (it.page.subtitle) { %><p class="post-full-custom-excerpt"><%= it.page.subtitle %></p><% } %>
     </header>
     <% if (it.page.feature_image) { %>
     <figure class="post-full-image">

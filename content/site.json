@@ -34,6 +34,10 @@
   ],
   "secondary_navigation": [
     {
+      "url": "/about/",
+      "label": "About"
+    },
+    {
       "url": "/privacy-policy/",
       "label": "Privacy Policy"
     }

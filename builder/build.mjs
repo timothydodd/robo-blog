@@ -183,6 +183,7 @@ async function main() {
     return {
       ...p,
       content_html: await renderMarkdown(md, p.content, { imageSizer }),
+      subtitle: p.excerpt || null,
       excerpt: p.excerpt || buildExcerpt(p.content),
       feature_image_width: featureSize ? featureSize.width : null,
       feature_image_height: featureSize ? featureSize.height : null,
