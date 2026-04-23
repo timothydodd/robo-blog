@@ -194,10 +194,13 @@
     root.setAttribute("role", "dialog");
     root.setAttribute("aria-modal", "true");
     root.setAttribute("aria-hidden", "true");
+    const iconClose = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+    const iconPrev = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>';
+    const iconNext = '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>';
     root.innerHTML =
-      '<button class="lightbox-close" aria-label="Close">✕</button>' +
-      '<button class="lightbox-prev" aria-label="Previous image">‹</button>' +
-      '<button class="lightbox-next" aria-label="Next image">›</button>' +
+      '<button class="lightbox-close" aria-label="Close">' + iconClose + '</button>' +
+      '<button class="lightbox-prev" aria-label="Previous image">' + iconPrev + '</button>' +
+      '<button class="lightbox-next" aria-label="Next image">' + iconNext + '</button>' +
       '<figure class="lightbox-stage"><img alt=""><figcaption class="lightbox-caption"></figcaption></figure>' +
       '<div class="lightbox-counter"></div>';
 

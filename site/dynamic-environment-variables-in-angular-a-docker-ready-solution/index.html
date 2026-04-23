@@ -249,7 +249,7 @@
           }
         ],
         texts: {
-          title: '🍪 We use cookies',
+          title: 'We use cookies',
           description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
           acceptAll: 'Accept All',
           rejectAll: 'Reject All',
@@ -399,11 +399,15 @@
 <p>In this guide, we’ll build a robust solution that lets you inject environment variables at container startup, making your Angular apps truly portable across different environments without rebuilding.</p>
 <h2 id="the-problem-build-time-vs-runtime-configuration">The Problem: Build-Time vs Runtime Configuration</h2>
 <p>Angular’s default environment system bakes configuration values into your JavaScript bundles during the build process. This means:</p>
+<p><strong>Pros</strong></p>
 <ul>
-<li>✅ Great for development and simple deployments</li>
-<li>❌ Requires rebuilding for different environments</li>
-<li>❌ Can’t change configs after deployment</li>
-<li>❌ Makes container deployments inflexible</li>
+<li>Great for development and simple deployments</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Requires rebuilding for different environments</li>
+<li>Can’t change configs after deployment</li>
+<li>Makes container deployments inflexible</li>
 </ul>
 <p>What we need is a way to inject configuration values when our container starts up, not when we build our app.</p>
 <h2 id="the-solution-runtime-configuration-with-docker">The Solution: Runtime Configuration with Docker</h2>
@@ -640,7 +644,7 @@
 <span class="token comment"># Start nginx</span>
 <span class="token builtin class-name">exec</span> nginx <span class="token parameter variable">-g</span> <span class="token string">"daemon off;"</span>
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<div class="kg-card kg-callout-card kg-callout-card-blue"><div class="kg-callout-emoji">💡</div><div class="kg-callout-text">Quick note about the <code spellcheck="false" style="white-space: pre-wrap;">generate-env-config.sh</code>. Take note of the <code spellcheck="false" style="white-space: pre-wrap;">OUTPUT_FILE</code> and <code spellcheck="false" style="white-space: pre-wrap;">ENV_VARS</code> this will work for this example and nginx, but you might want to change it for your setup.</div></div>
+<div class="kg-card kg-callout-card kg-callout-card-blue"><div class="kg-callout-text">Quick note about the <code spellcheck="false" style="white-space: pre-wrap;">generate-env-config.sh</code>. Take note of the <code spellcheck="false" style="white-space: pre-wrap;">OUTPUT_FILE</code> and <code spellcheck="false" style="white-space: pre-wrap;">ENV_VARS</code> this will work for this example and nginx, but you might want to change it for your setup.</div></div>
 <p>Step 6: Create the Dockerfile</p>
 <p><strong><code>Dockerfile</code></strong>:</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token comment"># Stage 1: Build the Angular app</span>
@@ -750,7 +754,7 @@ docker run -p 8080:80 \
 </ol>
 <h2 id="wrapping-up">Wrapping Up</h2>
 <p>Runtime environment variables in Angular might seem tricky, but this Docker-based approach gives you the flexibility of server-side configuration with the simplicity of client-side deployment. Your DevOps team will thank you, and you’ll never have to rebuild just to change an API URL again!</p>
-<p>The complete example code is available on <a href="https://github.com/timothydodd/angular-dynamic-variables" target="_blank" rel="noopener noreferrer">GitHub</a>, so you can see it all working together. Happy deploying! 🎉</p>
+<p>The complete example code is available on <a href="https://github.com/timothydodd/angular-dynamic-variables" target="_blank" rel="noopener noreferrer">GitHub</a>, so you can see it all working together. Happy deploying!</p>
         </section>
 
                 <aside class="post-full-tag-list gh-canvas">

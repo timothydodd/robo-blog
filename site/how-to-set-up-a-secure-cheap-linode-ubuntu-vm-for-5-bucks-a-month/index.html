@@ -249,7 +249,7 @@
           }
         ],
         texts: {
-          title: '🍪 We use cookies',
+          title: 'We use cookies',
           description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
           acceptAll: 'Accept All',
           rejectAll: 'Reject All',
@@ -386,8 +386,10 @@
 <p>Fire up <strong>PowerShell (Windows)</strong> or <strong>Terminal (Mac/Linux)</strong> and run:</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">ssh</span> root@your-vm-ip
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<p>✅ Accept the <strong>SHA fingerprint</strong>.<br>
-✅ Enter the <strong>password</strong> you just created.</p>
+<ul>
+<li>Accept the <strong>SHA fingerprint</strong>.</li>
+<li>Enter the <strong>password</strong> you just created.</li>
+</ul>
 <p><img src="/images/2025/02/image-23.png" alt="" loading="lazy" decoding="async" width="780" height="181" data-zoom=""></p>
 <p>Congrats, you’re in. Now, let’s <strong>lock this thing down</strong>.</p>
 <hr>
@@ -395,7 +397,7 @@
 <p><strong>Create a new user</strong> (because using <code>root</code> is <strong>bad practice</strong>):</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">adduser robo
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<p>✔️ Set a password (skip the extra profile questions by pressing Enter).</p>
+<p>Set a password (skip the extra profile questions by pressing Enter).</p>
 <p><img src="/images/2025/02/image-24.png" alt="" loading="lazy" decoding="async" width="785" height="397" data-zoom=""></p>
 <p><strong>Give them admin power</strong>:</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">sudo</span> robo
@@ -410,9 +412,11 @@
 <p><strong>Create an SSH key on your local machine (logout if your still on your vm)</strong>:</p>
 <div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-b</span> <span class="token number">4096</span>
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<p>✔️ Choose a filename (or just hit Enter).<br>
-✔️ <strong>Set a passphrase</strong> (optional, but good for security).<br>
-✔️ Find your new key (<code>id_ed25519.pub</code> or <code>id_rsa.pub</code> in <code>~/.ssh</code>).</p>
+<ul>
+<li>Choose a filename (or just hit Enter).</li>
+<li><strong>Set a passphrase</strong> (optional, but good for security).</li>
+<li>Find your new key (<code>id_ed25519.pub</code> or <code>id_rsa.pub</code> in <code>~/.ssh</code>).</li>
+</ul>
 <p><strong>Copy the key to your VM</strong>:</p>
 <div class="pre-wrapper"><pre class="language-text"><code class="language-text">scp ~/.ssh/id_ed25519.pub robo@your-vm-ip:~/.ssh/authorized_keys
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
@@ -444,13 +448,15 @@ PasswordAuthentication no
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <p>If that works, congrats! You now have a <strong>super secure</strong> and <strong>cheap</strong> Linode VM.</p>
 <h2 id="final-thoughts">Final Thoughts</h2>
-<p>✅ <strong>$5/month server? Check.</strong><br>
-✅ <strong>No root login? Check.</strong><br>
-✅ <strong>No password logins? Check.</strong><br>
-✅ <strong>Changed SSH port? Check.</strong></p>
+<ul>
+<li><strong>$5/month server?</strong> Check.</li>
+<li><strong>No root login?</strong> Check.</li>
+<li><strong>No password logins?</strong> Check.</li>
+<li><strong>Changed SSH port?</strong> Check.</li>
+</ul>
 <p>Your <strong>Linode is now secure</strong> and ready for action. Whether you’re hosting a site, running a bot, or just messing around, <strong>nobody’s brute-forcing their way in</strong>.</p>
-<p>? <strong>Next Steps</strong>:<br>
-Want to make it even better? Install <strong>UFW (Uncomplicated Firewall)</strong>, set up <strong>fail2ban</strong>, or add <strong>automatic updates</strong>. But that’s a story for another day.</p>
+<p><strong>Next Steps:</strong></p>
+<p>Want to make it even better? Install <strong>UFW (Uncomplicated Firewall)</strong>, set up <strong>fail2ban</strong>, or add <strong>automatic updates</strong>. But that’s a story for another day.</p>
 <hr>
 <p>Let me know if you need <strong>help</strong> or have <strong>suggestions</strong> in the comments!</p>
         </section>

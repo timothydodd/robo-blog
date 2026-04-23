@@ -249,7 +249,7 @@
           }
         ],
         texts: {
-          title: '🍪 We use cookies',
+          title: 'We use cookies',
           description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
           acceptAll: 'Accept All',
           rejectAll: 'Reject All',
@@ -419,7 +419,7 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h3 id="signals-input-syntax">Signals Input Syntax</h3>
 <p><strong>ALWAYS use the modern Angular signals input syntax instead of @Input decorators:</strong></p>
-<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ✅ Correct - Modern signals input syntax</span>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// Correct - Modern signals input syntax</span>
 <span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">{</span>
     myInput <span class="token operator">=</span> <span class="token generic-function"><span class="token function">input</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyType<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Optional input</span>
     requiredInput <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">required</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyType<span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Required input</span>
@@ -430,7 +430,7 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ❌ Avoid - Old @Input decorator syntax</span>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// Avoid - Old @Input decorator syntax</span>
 <span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">MyComponent</span> <span class="token punctuation">{</span>
     <span class="token decorator"><span class="token at operator">@</span><span class="token function">Input</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> myInput<span class="token operator">:</span> MyType<span class="token punctuation">;</span>
     <span class="token decorator"><span class="token at operator">@</span><span class="token function">Input</span></span><span class="token punctuation">(</span><span class="token punctuation">{</span> required<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span> requiredInput<span class="token operator">:</span> MyType<span class="token punctuation">;</span>
@@ -445,7 +445,7 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
 </ul>
 <h3 id="reactive-ui-updates-with-signals">Reactive UI Updates with Signals</h3>
 <p><strong>Use Angular signals for reactive state management that automatically updates the UI:</strong></p>
-<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// ✅ Correct - Using signals for reactive state</span>
+<div class="pre-wrapper"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// Correct - Using signals for reactive state</span>
 <span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">DashboardComponent</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> logger <span class="token operator">=</span> <span class="token function">inject</span><span class="token punctuation">(</span>LogService<span class="token punctuation">)</span><span class="token punctuation">;</span>
     currentUser <span class="token operator">=</span> <span class="token generic-function"><span class="token function">signal</span><span class="token generic class-name"><span class="token operator">&lt;</span>User <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -473,7 +473,7 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
 <h3 id="control-flow-syntax">Control Flow Syntax</h3>
 <p><strong>ALWAYS use the modern Angular control flow syntax instead of structural directives:</strong></p>
-<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- ✅ Correct - New control flow syntax --&gt;</span>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- Correct - New control flow syntax --&gt;</span>
 @if (condition) {
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>Content when true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
 } @else if (otherCondition) {
@@ -492,7 +492,7 @@ ng generate component <span class="token tag"><span class="token tag"><span clas
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>Content loaded<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
 } }
 </code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
-<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- ❌ Avoid - Old structural directive syntax --&gt;</span>
+<div class="pre-wrapper"><pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- Avoid - Old structural directive syntax --&gt;</span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">*ngIf</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>condition<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Content<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">*ngFor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>let item of items; trackBy: trackById<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>{{ item.name }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">[ngSwitch]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
