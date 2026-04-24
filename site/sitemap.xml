@@ -2,45 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://robododd.com/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/3d-print-cyberboy-v1-for-raspberry-pi-4-a-cyberdeck-remix/</loc>
-    <lastmod>2025-03-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/3d-printed-baking-soda-bracket-for-your-garbage-can/</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</loc>
-    <lastmod>2025-03-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/angular-19-essentials-first-steps-for-new-developers/</loc>
-    <lastmod>2025-05-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/atomic-pi-kubernetes-cluster/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama-2026-edition/</loc>
@@ -49,14 +13,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama/</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/building-a-custom-sql-server-docker-image-with-full-text-search-support/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <loc>https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/</loc>
+    <lastmod>2026-04-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -67,20 +25,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</loc>
-    <lastmod>2025-03-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/</loc>
-    <lastmod>2025-01-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/dynamic-environment-variables-in-angular-a-docker-ready-solution/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <loc>https://robododd.com/google-places-autocomplete-directive-angular-21/</loc>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -91,32 +37,8 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/google-places-autocomplete-directive-angular-21/</loc>
-    <lastmod>2026-02-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/grafana-loki-log-everything-locally/</loc>
-    <lastmod>2025-02-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/host-loc/</loc>
-    <lastmod>2025-04-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-install-windows-11-without-internet-or-a-microsoft-account/</loc>
-    <lastmod>2025-05-09</lastmod>
+    <loc>https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/</loc>
+    <lastmod>2025-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -127,104 +49,20 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/how-to-run-deepseek-r1-ai-windows-locally/</loc>
-    <lastmod>2025-02-04</lastmod>
+    <loc>https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/</loc>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-mac-locally/</loc>
-    <lastmod>2025-02-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/</loc>
-    <lastmod>2025-01-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/</loc>
+    <loc>https://robododd.com/building-a-custom-sql-server-docker-image-with-full-text-search-support/</loc>
     <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/</loc>
-    <lastmod>2025-04-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-set-up-plex-dvr-and-an-attic-antenna/</loc>
-    <lastmod>2025-02-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/how-to-use-ai-to-generate-epic-images-locally-on-windows/</loc>
-    <lastmod>2025-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/introducing-utilplex-com-a-tool-to-help-your-coding-workflow/</loc>
-    <lastmod>2024-02-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/local-network-https-on-chrome/</loc>
-    <lastmod>2024-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/</loc>
-    <lastmod>2025-02-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/make-your-k3s-local-storage-persistent-with-longhorn/</loc>
-    <lastmod>2025-05-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/</loc>
-    <lastmod>2025-11-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/moving-pulumi-resources-from-one-project-to-another/</loc>
-    <lastmod>2024-01-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/my-top-2025-amazon-fathers-day-tech-gifts/</loc>
+    <loc>https://robododd.com/3d-printed-baking-soda-bracket-for-your-garbage-can/</loc>
     <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/network-metallb/</loc>
-    <lastmod>2024-07-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/ntunl-a-self-hosted-secure-alternative-to-ngrok-for-exposing-local-services/</loc>
-    <lastmod>2024-11-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://robododd.com/pfsense-setup-guide/</loc>
-    <lastmod>2025-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -235,14 +73,44 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/setting-up-a-plex-server-on-k3s/</loc>
-    <lastmod>2025-01-28</lastmod>
+    <loc>https://robododd.com/my-top-2025-amazon-fathers-day-tech-gifts/</loc>
+    <lastmod>2026-04-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/setting-up-an-nfs-server-on-a-raspberry-pi/</loc>
-    <lastmod>2025-03-11</lastmod>
+    <loc>https://robododd.com/dynamic-environment-variables-in-angular-a-docker-ready-solution/</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/make-your-k3s-local-storage-persistent-with-longhorn/</loc>
+    <lastmod>2025-05-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-install-windows-11-without-internet-or-a-microsoft-account/</loc>
+    <lastmod>2025-05-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-set-up-cloudflare-tunnels-for-k3s-without-metallb/</loc>
+    <lastmod>2025-04-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/10-must-have-vs-code-extensions-for-angular-developers-in-2025/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/angular-19-essentials-first-steps-for-new-developers/</loc>
+    <lastmod>2025-05-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -253,20 +121,68 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/setting-up-prettier-and-eslint-in-your-angular-project/</loc>
-    <lastmod>2025-05-08</lastmod>
+    <loc>https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</loc>
+    <lastmod>2025-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/setup-app-locking-apple-business-essentials/</loc>
-    <lastmod>2024-05-16</lastmod>
+    <loc>https://robododd.com/custom-3d-print-low-poly-nzxt-h510-elite-front-mesh-panel/</loc>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/setup-uptime-kuma-on-kubernetes/</loc>
-    <lastmod>2024-07-02</lastmod>
+    <loc>https://robododd.com/how-to-enable-claude-3-7-sonnet-in-github-copilot-pro-organization-guide-for-vs-code/</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-use-ai-to-generate-epic-images-locally-on-windows/</loc>
+    <lastmod>2025-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/3d-print-cyberboy-v1-for-raspberry-pi-4-a-cyberdeck-remix/</loc>
+    <lastmod>2025-03-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-mac-locally/</loc>
+    <lastmod>2025-02-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-set-up-plex-dvr-and-an-attic-antenna/</loc>
+    <lastmod>2025-02-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/budget-friendly-local-ai-hardware-for-running-ollama/</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-run-deepseek-r1-ai-windows-locally/</loc>
+    <lastmod>2025-02-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/</loc>
+    <lastmod>2025-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -277,14 +193,98 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/teaching-claude-modern-angular-best-practices-with-custom-instructions/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <loc>https://robododd.com/setting-up-an-nfs-server-on-a-raspberry-pi/</loc>
+    <lastmod>2025-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/</loc>
-    <lastmod>2026-04-18</lastmod>
+    <loc>https://robododd.com/setting-up-prettier-and-eslint-in-your-angular-project/</loc>
+    <lastmod>2025-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/ntunl-a-self-hosted-secure-alternative-to-ngrok-for-exposing-local-services/</loc>
+    <lastmod>2024-11-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/</loc>
+    <lastmod>2025-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/setting-up-a-plex-server-on-k3s/</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/setup-uptime-kuma-on-kubernetes/</loc>
+    <lastmod>2024-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/network-metallb/</loc>
+    <lastmod>2024-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/host-loc/</loc>
+    <lastmod>2025-04-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/setup-app-locking-apple-business-essentials/</loc>
+    <lastmod>2024-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/</loc>
+    <lastmod>2025-01-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/grafana-loki-log-everything-locally/</loc>
+    <lastmod>2025-02-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/introducing-utilplex-com-a-tool-to-help-your-coding-workflow/</loc>
+    <lastmod>2024-02-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/moving-pulumi-resources-from-one-project-to-another/</loc>
+    <lastmod>2024-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/local-network-https-on-chrome/</loc>
+    <lastmod>2024-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/pfsense-setup-guide/</loc>
+    <lastmod>2025-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/atomic-pi-kubernetes-cluster/</loc>
+    <lastmod>2026-04-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -314,19 +314,19 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/ai-assisted-development/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/ai-code-generation/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/ai-pair-programming/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -344,13 +344,13 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/angular/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/angular-20/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -446,7 +446,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/claude-ai/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
