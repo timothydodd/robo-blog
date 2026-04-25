@@ -5,8 +5,8 @@
   "published_at": "2025-03-20T22:18:14.000Z",
   "updated_at": "2025-03-20T22:18:14.000Z",
   "created_at": "2025-03-20T21:53:53.000Z",
-  "feature_image": "/images/2025/03/Screenshot-2025-03-20-181537.webp",
-  "feature_image_alt": null,
+  "feature_image": "/images/2025/03/mosquitto-mqtt-k3s.webp",
+  "feature_image_alt": "Synthwave-styled isometric render of an MQTT broker cube hub linked to a k3s cluster and IoT devices over a glowing magenta and cyan grid",
   "feature_image_caption": null,
   "excerpt": "Deploy Eclipse Mosquitto on K3s with persistent storage for a lightweight, reliable MQTT broker perfect for your IoT projects and smart home automation.",
   "tags": [

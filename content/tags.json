@@ -5,6 +5,11 @@
     "description": null
   },
   {
+    "slug": "acurite",
+    "name": "AcuRite",
+    "description": null
+  },
+  {
     "slug": "ai",
     "name": "AI",
     "description": null
@@ -615,6 +620,16 @@
     "description": null
   },
   {
+    "slug": "rtl-433",
+    "name": "rtl_433",
+    "description": null
+  },
+  {
+    "slug": "sdr",
+    "name": "SDR",
+    "description": null
+  },
+  {
     "slug": "self-hosted",
     "name": "self-hosted",
     "description": null
@@ -697,6 +712,11 @@
   {
     "slug": "vs-code-extensions",
     "name": "VS Code Extensions",
+    "description": null
+  },
+  {
+    "slug": "weather-station",
+    "name": "Weather Station",
     "description": null
   },
   {

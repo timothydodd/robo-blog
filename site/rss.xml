@@ -5,8 +5,16 @@
     <link>https://robododd.com/</link>
     <description>Explore detailed guides, setups, and experiments for Kubernetes, app development, and home labs. Empowering your tech journey with clear insights.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 24 Apr 2026 17:11:48 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 25 Apr 2026 18:30:32 GMT</lastBuildDate>
     <atom:link href="https://robododd.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s</title>
+      <description>Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.</description>
+      <link>https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/</link>
+      <guid isPermaLink="true">https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/</guid>
+      <pubDate>Sat, 25 Apr 2026 17:00:00 GMT</pubDate>
+      <category>rtl_433</category>
+    </item>
     <item>
       <title>Local AI Hardware for Ollama: 2026 Edition</title>
       <description>My 2026 take on Ollama hardware: what&apos;s worth buying now, from a used RTX 3090 to a DGX Spark — and what to skip in the DRAM crunch.</description>
@@ -160,14 +168,6 @@
       <guid isPermaLink="true">https://robododd.com/setting-up-eclipse-mosquitto-mqtt-on-k3s-a-complete-guide/</guid>
       <pubDate>Thu, 20 Mar 2025 22:18:14 GMT</pubDate>
       <category>MQTT</category>
-    </item>
-    <item>
-      <title>3D-Printed Modular Rack for Mac Mini M4 &amp; Beelink EQ12/EQ13</title>
-      <description>3D-print a modular, screw-free rack for your Mac Mini M4 &amp; Beelink EQ12/EQ13. Stack securely, optimize airflow, and keep your setup organized!</description>
-      <link>https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</link>
-      <guid isPermaLink="true">https://robododd.com/3d-printed-modular-rack-for-mac-mini-m4-beelink-eq12-eq13/</guid>
-      <pubDate>Tue, 11 Mar 2025 01:29:22 GMT</pubDate>
-      <category>3D Printing</category>
     </item>
   </channel>
 </rss>

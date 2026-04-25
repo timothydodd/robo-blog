@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s — RoboDodd</title>
+  <meta name="description" content="Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <link rel="canonical" href="https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/">
+  <link rel="icon" href="/assets/logo.png" type="image/png">
+  <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="RoboDodd">
+  <meta property="og:title" content="Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s — RoboDodd">
+  <meta property="og:description" content="Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.">
+  <meta property="og:url" content="https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/">
+  <meta property="og:image" content="https://robododd.com/images/2026/04/antenna-post.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-04-25T17:00:00.000Z">
+  <meta property="article:modified_time" content="2026-04-25T17:00:00.000Z">  <meta property="article:tag" content="rtl_433">  
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/main.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/"},"headline":"Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s","description":"Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.","image":"https://robododd.com/images/2026/04/antenna-post.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-25T17:00:00.000Z","dateModified":"2026-04-25T17:00:00.000Z","keywords":"rtl_433, MQTT, K3s, IOT, Home Automation, Docker, homelab, SDR, AcuRite, Weather Station","articleSection":"rtl_433"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+<script>
+  const CONFIG = {
+    googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
+    microsoftClarityId: 'mfmxg11bzf', // Replace with your actual Clarity ID
+    debugMode: false
+  };
+  function log(message, level = 'debug', data = null) {
+    if (level === 'error') {
+      console.error(message, data || '');
+    } else if (level === 'warn') {
+      console.warn(message, data || '');
+    } else if (level === 'info') {
+      console.log(message, data || '');
+    } else if (CONFIG.debugMode) {
+      console.log(message, data || '');
+    }
+  }
+
+  // Initialize Google Analytics with current or default consent
+  function initializeGoogleAnalytics(consent = null) {
+        
+    if (window.gtag) {
+      log('Google Analytics already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Google Analytics...', 'debug');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+
+    script.onerror = function() {
+      log('Failed to load Google Analytics script', 'error');
+    };
+
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Set consent state based on existing consent or default to denied
+      const consentState = consent && consent.categories ? {
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied',
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied'
+      } : {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+
+      gtag('consent', 'default', {
+        ...consentState,
+        'wait_for_update': 500
+      });
+
+      gtag('config', CONFIG.googleAnalyticsId, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Strict;Secure',
+      });
+
+      log('Google Analytics loaded', 'info', consentState);
+    };
+  }
+
+  // Initialize Microsoft Clarity with current or default consent
+  function initializeMicrosoftClarity(consent = null) {
+    if (window.clarity) {
+      log('Microsoft Clarity already loaded', 'debug');
+      return;
+    }
+
+    log('Initializing Microsoft Clarity...', 'debug');
+
+    (function(c, l, a, r, i, t, y) {
+      c[a] = c[a] || function() {
+        (c[a].q = c[a].q || []).push(arguments);
+      };
+      t = l.createElement(r);
+      t.async = 1;
+      t.src = 'https://www.clarity.ms/tag/' + i;
+
+      t.onerror = function() {
+        log('Failed to load Microsoft Clarity script', 'error');
+      };
+
+      t.onload = function() {
+        log('Microsoft Clarity script loaded', 'debug');
+
+        // Set consent state based on existing consent or default to denied
+        setTimeout(() => {
+          if (window.clarity) {
+            try {
+              const consentState = consent && consent.categories ? {
+                ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+                analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+              } : {
+                ad_storage: 'denied',
+                analytics_storage: 'denied'
+              };
+
+              window.clarity('consentv2', consentState);
+              log('Clarity consent initialized', 'info', consentState);
+            } catch (error) {
+              log('Error setting Clarity consent', 'error', error);
+            }
+          }
+        }, 100);
+      };
+
+      y = l.getElementsByTagName(r)[0];
+      y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', CONFIG.microsoftClarityId);
+  }
+
+  // Update Google Analytics consent
+  function updateGoogleConsent(consent) {
+    if (!window.gtag) {
+      log('Google Analytics not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Google Analytics', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        'analytics_storage': consent.categories.analytics ? 'granted' : 'denied',
+        'ad_storage': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_user_data': consent.categories.marketing ? 'granted' : 'denied',
+        'ad_personalization': consent.categories.marketing ? 'granted' : 'denied'
+      };
+
+      window.gtag('consent', 'update', consentState);
+      log('Google Analytics consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Google Analytics consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update Microsoft Clarity consent
+  function updateClarityConsent(consent) {
+    if (!window.clarity) {
+      log('Microsoft Clarity not available for consent update', 'warn');
+      return false;
+    }
+
+    if (!consent || !consent.categories) {
+      log('Invalid consent object for Clarity', 'error');
+      return false;
+    }
+
+    try {
+      const consentState = {
+        ad_storage: consent.categories.marketing ? 'granted' : 'denied',
+        analytics_storage: consent.categories.analytics ? 'granted' : 'denied'
+      };
+
+      window.clarity('consentv2', consentState);
+      log('Clarity consent updated', 'debug', consentState);
+      return true;
+    } catch (error) {
+      log('Error updating Clarity consent', 'error', error);
+      return false;
+    }
+  }
+
+  // Update all analytics consents
+  function updateAllConsents(consent) {
+    log('Updating all analytics consents', 'debug', consent?.categories);
+
+    const googleSuccess = updateGoogleConsent(consent);
+    const claritySuccess = updateClarityConsent(consent);
+
+    if (!googleSuccess || !claritySuccess) {
+      log('Some consent updates may have failed', 'warn');
+    }
+  }
+
+  // Main initialization
+  window.addEventListener('load', function() {
+    log('Starting CookieDialog and Analytics initialization', 'info');
+
+    if (!window.CookieDialog) {
+      log('CookieDialog library not loaded', 'error');
+      return;
+    }
+
+    try {
+      // Initialize CookieDialog
+      const dialog = CookieDialog.init({
+        position: 'bottom',
+        theme: 'light',
+        privacyUrl: '/privacy-policy/',
+        enableLocation: false,
+        categories: [
+          {
+            id: 'necessary',
+            name: 'Essential',
+            required: true,
+            description: 'Required for the website to function properly'
+          },
+          {
+            id: 'analytics',
+            name: 'Analytics',
+            required: false,
+            description: 'Google Analytics and Microsoft Clarity for website insights'
+          },
+          {
+            id: 'marketing',
+            name: 'Marketing/Advertising',
+            required: false,
+            description: 'Used for targeted advertising and marketing purposes'
+          }
+        ],
+        texts: {
+          title: 'We use cookies',
+          description: 'We use cookies and similar technologies to enhance your browsing experience, analyze site traffic, and provide personalized content. This includes Google Analytics for website analytics, Microsoft Clarity for user experience insights, and Amazon affiliate links for product recommendations.',
+          acceptAll: 'Accept All',
+          rejectAll: 'Reject All',
+          manageSettings: 'Manage Settings',
+          privacyPolicy: 'Learn more'
+        },
+        onAccept: function(consent) {
+          log('User accepted cookies', 'info', Object.keys(consent.categories).filter(k => consent.categories[k]));
+          updateAllConsents(consent);
+        },
+        onReject: function(consent) {
+          log('User rejected optional cookies', 'info');
+          updateAllConsents(consent);
+        },
+        onChange: function(consent) {
+          log('User changed cookie settings', 'info');
+          updateAllConsents(consent);
+        },
+      });
+   
+      
+      // Get existing consent or null
+      const existingConsent = dialog.getConsent();
+         log('CookieDialog initialized', 'debug', existingConsent);
+      // Load analytics scripts with existing consent or defaults
+      log('Loading analytics scripts', 'info');
+      initializeGoogleAnalytics(existingConsent);
+      initializeMicrosoftClarity(existingConsent);
+      log('Initialization completed successfully', 'info');
+
+    } catch (error) {
+      log('Critical error during initialization', 'error', error);
+    }
+  });
+</script></head>
+<body class="post-template">
+  <header class="site-head">
+    <div class="site-head-inner">
+      <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
+        <img class="site-head-logo" src="/assets/logo.webp" alt="" width="40" height="40" decoding="async">
+        <span class="site-head-wordmark">RoboDodd</span>
+      </a>
+      <nav class="site-head-nav" aria-label="Primary">
+        <ul>
+                      <li>
+              <a href="https://www.linkedin.com/in/timothy-dodd-a53b38131/" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.01H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg><span class="sr-only">LinkedIn</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://github.com/timothydodd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="Github">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.41-4.04-1.41-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg><span class="sr-only">Github</span>
+                              </a>
+            </li>
+                      <li>
+              <a href="https://x.com/robododd" target="_blank" rel="noopener noreferrer" class="site-head-link is-icon" aria-label="X">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2H21.5l-7.5 8.57L22.88 22H16l-5.36-7L4.5 22H1.24l8.02-9.17L1 2h6.88L12.7 8.36 18.244 2zm-1.14 18h1.84L6.94 3.88H4.98L17.104 20z"/></svg><span class="sr-only">X</span>
+                              </a>
+            </li>
+                  </ul>
+      </nav>
+    </div>
+    <div class="reading-progress" aria-hidden="true"><div class="reading-progress-bar"></div></div>
+  </header>
+
+  <main class="site-main" id="main">
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+            <h1 class="post-full-title">Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s</h1>
+      <p class="post-full-subtitle">Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.</p>    </header>
+
+        <figure class="post-full-image">
+      <img src="/images/2026/04/antenna-post.webp" srcset="/images/2026/04/antenna-post-400w.webp 400w, /images/2026/04/antenna-post-800w.webp 800w, /images/2026/04/antenna-post.webp 959w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Synthwave-styled render of an antenna and Raspberry Pi over a glowing magenta and cyan grid" fetchpriority="high" loading="eager" decoding="async" width="959" height="752">
+          </figure>
+    
+    <div class="post-full-topline gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/rtl-433/">rtl_433</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2026-04-25T17:00:00.000Z">Apr 25, 2026</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>8 min read</span>
+      </div>
+      <div class="post-full-byline">
+                <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.webp" alt="" width="28" height="28" decoding="async">
+                <span class="post-full-byline-name">Tim Dodd</span>
+      </div>
+    </div>
+
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#what-youll-need" data-toc-link>What you’ll need</a>
+                                <ol>
+                                                                        <li><a href="#the-sensors" data-toc-link>The sensors</a></li>
+                                                                        <li><a href="#the-sdr-dongle" data-toc-link>The SDR dongle</a></li>
+                                                                        <li><a href="#the-broker" data-toc-link>The broker</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#the-plan" data-toc-link>The plan</a>
+                                </li>
+                                                                                        <li><a href="#host-prep-blacklist-dvb-drivers" data-toc-link>Host prep — blacklist DVB drivers</a>
+                                <ol>
+                                                                        <li><a href="#windows-host-usbipd-win-wsl2" data-toc-link>Windows host — usbipd-win + WSL2</a></li>
+                                                                        <li><a href="#windows-host-rtl-tcp-alternative" data-toc-link>Windows host — rtl_tcp alternative</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#the-dockerfile" data-toc-link>The Dockerfile</a>
+                                </li>
+                                                                                        <li><a href="#the-entrypoint" data-toc-link>The entrypoint</a>
+                                </li>
+                                                                                        <li><a href="#docker-compose-for-first-run-bring-up" data-toc-link>Docker Compose for first-run bring-up</a>
+                                </li>
+                                                                                        <li><a href="#the-usb-open-error-4-trap" data-toc-link>The usb_open error -4 trap</a>
+                                </li>
+                                                                                        <li><a href="#publishing-a-multi-arch-image" data-toc-link>Publishing a multi-arch image</a>
+                                </li>
+                                                                                        <li><a href="#the-k3s-manifest" data-toc-link>The k3s manifest</a>
+                                <ol>
+                                                                        <li><a href="#pin-to-the-node-with-the-dongle" data-toc-link>Pin to the node with the dongle</a></li>
+                                                                        <li><a href="#single-replica-recreate-strategy" data-toc-link>Single replica + Recreate strategy</a></li>
+                                                                        <li><a href="#usb-passthrough-on-k3s" data-toc-link>USB passthrough on k3s</a></li>
+                                </ol></li>
+                                                                                        <li><a href="#verifying-end-to-end" data-toc-link>Verifying end-to-end</a>
+                                </li>
+                                                                                        <li><a href="#createcontainerconfigerror" data-toc-link>CreateContainerConfigError?</a>
+                                </li>
+                                                                                        <li><a href="#whats-next" data-toc-link>What’s next</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>I have an AcuRite weather station bolted to the back of the house and a couple of cheap 433 MHz temp/humidity sensors scattered around the garage and crawlspace. None of them speak Wi-Fi. None of them know what Home Assistant is. They just chirp out raw RF packets every 30 seconds and hope something is listening.</p>
+<p>That something is <code>rtl_433</code> — an open-source decoder that turns a $25 USB SDR dongle into a universal 433 MHz receiver. Pair it with an MQTT broker and Home Assistant suddenly has live readings from every wireless sensor in the house.</p>
+<p>This post is the working setup: a Dockerised <code>rtl_433</code>, an env-driven entrypoint that handles both Compose and k3s, and a manifest pinned to whichever Pi has the dongle plugged in.</p>
+<hr>
+<h2 id="what-youll-need">What you’ll need</h2>
+<h3 id="the-sensors">The sensors</h3>
+<p>I run two AcuRite kits and <code>rtl_433</code> decodes both with no extra config.</p>
+<p><img src="/images/2026/04/acurite-notos-3n1.webp" alt="AcuRite Notos 3n1 outdoor sensor" loading="lazy" decoding="async" width="1500" height="1500" data-zoom=""></p>
+<p><strong>AcuRite Notos 3n1 (TXC)</strong> — outdoor sensor with temperature, humidity and wind speed in one waterproof shell. This is the one mounted outside. <a href="https://amzn.to/42tCHUV" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
+<p><strong>AcuRite indoor temperature/humidity sensor</strong> — small puck that lives inside on a shelf. I have a few of these in different rooms. <a href="https://amzn.to/4tB1qCP" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
+<p><code>rtl_433</code> understands Acurite, LaCrosse, Oregon Scientific, Ambient Weather, and a long tail of other 433 MHz protocols. If it transmits in the ISM band, odds are it is already supported.</p>
+<h3 id="the-sdr-dongle">The SDR dongle</h3>
+<p>You need an RTL-SDR USB dongle. The chipset to look for is the RTL2832U + R820T2 — that is what every dongle in the rtl-sdr ecosystem speaks to.</p>
+<p><img src="/images/2026/04/nesdr-nano-3.webp" alt="Nooelec NESDR Nano 3 dongle" loading="lazy" decoding="async" width="1476" height="1500" data-zoom=""></p>
+<p><strong>Nooelec NESDR Nano 3 (Premium ADS-B)</strong> — what I run on the Pi cluster. Tiny, dual-band, well-shielded. <a href="https://amzn.to/4d6T4g8" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
+<p><img src="/images/2026/04/nesdr-mini.webp" alt="Nooelec NESDR Mini USB dongle" loading="lazy" decoding="async" width="1492" height="1500" data-zoom=""></p>
+<p><strong>Nooelec NESDR Mini</strong> — cheaper alternative, works just as well for 433 MHz. <a href="https://amzn.to/4mQxxM9" target="_blank" rel="noopener noreferrer">Buy on Amazon</a></p>
+<h3 id="the-broker">The broker</h3>
+<p>You also need an MQTT broker reachable from the container. I run <a href="/setting-up-eclipse-mosquitto-mqtt-on-k3s-a-complete-guide/">Eclipse Mosquitto on k3s</a> — that guide covers the broker side end-to-end.</p>
+<hr>
+<h2 id="the-plan">The plan</h2>
+<p>One container that:</p>
+<ol>
+<li>Talks to the SDR dongle over USB.</li>
+<li>Decodes 433 MHz packets via <code>rtl_433</code>.</li>
+<li>Publishes JSON-shaped events to your MQTT broker.</li>
+</ol>
+<p>The same image runs under Docker Compose on a workstation (good for first-time bring-up) and as a k3s <code>Deployment</code> pinned to whichever node has the dongle plugged in.</p>
+<p>Key files for the rest of this post: <code>Dockerfile</code>, <code>entrypoint.sh</code>, <code>docker-compose.yml</code>, and <code>k3s/rtl_433.yaml</code>.</p>
+<h2 id="host-prep-blacklist-dvb-drivers">Host prep — blacklist DVB drivers</h2>
+<p>The kernel <code>dvb_usb_rtl28xxu</code> driver auto-claims any RTL2832U it sees, which means by default the SDR is held by a TV-tuner driver instead of being free for <code>rtl_433</code>. Blacklist it on the host:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'blacklist dvb_usb_rtl28xxu'</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/modprobe.d/rtl-sdr-blacklist.conf
+<span class="token builtin class-name">echo</span> <span class="token string">'blacklist rtl2832'</span>          <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> <span class="token parameter variable">-a</span> /etc/modprobe.d/rtl-sdr-blacklist.conf
+<span class="token builtin class-name">echo</span> <span class="token string">'blacklist rtl2830'</span>          <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> <span class="token parameter variable">-a</span> /etc/modprobe.d/rtl-sdr-blacklist.conf
+<span class="token function">sudo</span> rmmod dvb_usb_rtl28xxu rtl2832 rtl2830 <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Unplug + replug the dongle (or reboot). Verify with <code>lsusb</code> — you want <code>Realtek RTL2838</code> showing up unclaimed.</p>
+<p>If you ever re-image the Pi or swap in a new node, redo this. It is a one-time-per-host step.</p>
+<h3 id="windows-host-usbipd-win-wsl2">Windows host — usbipd-win + WSL2</h3>
+<p>If you are building on Windows, Docker Desktop’s daemon runs <em>inside</em> WSL2, so the USB dongle has to be attached to the WSL2 VM, not Windows. From an admin PowerShell:</p>
+<div class="pre-wrapper"><pre class="language-powershell"><code class="language-powershell">winget install <span class="token operator">--</span>interactive <span class="token operator">--</span>exact dorssel<span class="token punctuation">.</span>usbipd-win
+usbipd list                       <span class="token comment"># find the bus-id, e.g. 2-10</span>
+usbipd bind   <span class="token operator">--</span>busid 2-10
+usbipd attach <span class="token operator">--</span>wsl <span class="token operator">--</span>busid 2-10
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p><code>bind</code> is one-time. <code>attach</code> has to be re-run after every reboot, unplug, or <code>wsl --shutdown</code>. A logon-triggered Task Scheduler entry takes the manual step out of the loop.</p>
+<p>Verify with <code>lsusb</code> inside WSL2 before launching the container.</p>
+<h3 id="windows-host-rtl-tcp-alternative">Windows host — rtl_tcp alternative</h3>
+<p>If usbipd is too much friction, run <code>rtl_tcp.exe</code> on Windows and have the container connect over TCP:</p>
+<ol>
+<li>Install the <a href="https://github.com/rtlsdrblog/rtl-sdr-blog/releases" target="_blank" rel="noopener noreferrer">rtl-sdr-blog Windows release</a>.</li>
+<li>Use Zadig to swap the kernel driver for WinUSB.</li>
+<li>Run <code>rtl_tcp.exe -a 0.0.0.0 -p 1234</code>.</li>
+<li>Set <code>RTL_TCP_HOST=host.docker.internal</code> in the container env.</li>
+</ol>
+<p>Bonus: the container can live anywhere on the LAN, not just the box with the dongle.</p>
+<hr>
+<h2 id="the-dockerfile">The Dockerfile</h2>
+<p>Multi-stage build — the heavy CMake/build-essential toolchain gets thrown away, the runtime stage just carries the binary plus the libs it needs.</p>
+<div class="pre-wrapper"><pre class="language-docker"><code class="language-docker"><span class="token comment"># syntax=docker/dockerfile:1.6</span>
+
+<span class="token comment"># ---------- build stage ----------</span>
+<span class="token instruction"><span class="token keyword">FROM</span> debian:bookworm-slim <span class="token keyword">AS</span> build</span>
+<span class="token instruction"><span class="token keyword">ARG</span> RTL_433_REF=master</span>
+
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get update &amp;&amp; apt-get install -y --no-install-recommends <span class="token operator">\</span>
+        ca-certificates git cmake build-essential make pkg-config libtool <span class="token operator">\</span>
+        libusb-1.0-0-dev librtlsdr-dev rtl-sdr libssl-dev <span class="token operator">\</span>
+    &amp;&amp; rm -rf /var/lib/apt/lists/*</span>
+
+<span class="token instruction"><span class="token keyword">WORKDIR</span> /src</span>
+<span class="token instruction"><span class="token keyword">RUN</span> git clone https://github.com/merbanan/rtl_433.git <span class="token operator">\</span>
+    &amp;&amp; cd rtl_433 <span class="token operator">\</span>
+    &amp;&amp; git checkout <span class="token string">"${RTL_433_REF}"</span> <span class="token operator">\</span>
+    &amp;&amp; mkdir build &amp;&amp; cd build <span class="token operator">\</span>
+    &amp;&amp; cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. <span class="token operator">\</span>
+    &amp;&amp; make -j<span class="token string">"$(nproc)"</span> <span class="token operator">\</span>
+    &amp;&amp; make install DESTDIR=/out</span>
+
+<span class="token comment"># ---------- runtime stage ----------</span>
+<span class="token instruction"><span class="token keyword">FROM</span> debian:bookworm-slim <span class="token keyword">AS</span> runtime</span>
+<span class="token instruction"><span class="token keyword">RUN</span> apt-get update &amp;&amp; apt-get install -y --no-install-recommends <span class="token operator">\</span>
+        ca-certificates librtlsdr0 libusb-1.0-0 libssl3 rtl-sdr usbutils tini <span class="token operator">\</span>
+    &amp;&amp; rm -rf /var/lib/apt/lists/*</span>
+
+<span class="token instruction"><span class="token keyword">COPY</span> <span class="token options"><span class="token property">--from</span><span class="token punctuation">=</span><span class="token string">build</span></span> /out/usr/local /usr/local</span>
+<span class="token instruction"><span class="token keyword">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh</span>
+<span class="token instruction"><span class="token keyword">RUN</span> chmod +x /usr/local/bin/entrypoint.sh</span>
+
+<span class="token instruction"><span class="token keyword">ENTRYPOINT</span> [<span class="token string">"/usr/bin/tini"</span>, <span class="token string">"--"</span>, <span class="token string">"/usr/local/bin/entrypoint.sh"</span>]</span>
+<span class="token instruction"><span class="token keyword">CMD</span> []</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>A few things to call out:</p>
+<ul>
+<li><strong><code>libssl-dev</code> in the build stage</strong> — required for TLS-aware MQTT output. Skip it and your <code>mqtts://</code> URLs silently will not work.</li>
+<li><strong><code>tini</code> as PID 1</strong> — without it, SIGTERM does not reach <code>rtl_433</code> cleanly. The container waits the full grace period and gets killed instead of exiting in 100 ms.</li>
+<li><strong><code>RTL_433_REF</code> build arg</strong> — pin to a tag (<code>23.11</code>, etc.) for reproducible builds. <code>master</code> is fine for hobby use.</li>
+</ul>
+<h2 id="the-entrypoint">The entrypoint</h2>
+<p><code>entrypoint.sh</code> builds the <code>rtl_433</code> invocation from environment variables. If you pass args after the image name, those win and the env is ignored — useful for one-off debugging.</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-eu</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$#</span>"</span> <span class="token parameter variable">-gt</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">exec</span> rtl_433 <span class="token string">"<span class="token variable">$@</span>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token builtin class-name">set</span> --
+<span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${RTL_TCP_HOST<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">set</span> -- <span class="token string">"<span class="token variable">$@</span>"</span> <span class="token parameter variable">-d</span> <span class="token string">"rtl_tcp://<span class="token variable">${RTL_TCP_HOST}</span>:<span class="token variable">${RTL_TCP_PORT<span class="token operator">:-</span>1234}</span>"</span>
+<span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${UTC_MODE<span class="token operator">:-</span>true}</span>"</span>     <span class="token operator">=</span> <span class="token string">"true"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">set</span> -- <span class="token string">"<span class="token variable">$@</span>"</span> <span class="token parameter variable">-M</span> utc
+<span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${OUTPUT_JSON<span class="token operator">:-</span>true}</span>"</span>  <span class="token operator">=</span> <span class="token string">"true"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">set</span> -- <span class="token string">"<span class="token variable">$@</span>"</span> <span class="token parameter variable">-F</span> json
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${MQTT_ENABLED<span class="token operator">:-</span>false}</span>"</span> <span class="token operator">=</span> <span class="token string">"true"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token assign-left variable">cred</span><span class="token operator">=</span><span class="token string">""</span>
+    <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_USER<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_PASSWORD<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">cred</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${MQTT_USER}</span>:<span class="token variable">${MQTT_PASSWORD}</span>@"</span>
+    <span class="token assign-left variable">spec</span><span class="token operator">=</span><span class="token string">"mqtt://<span class="token variable">${cred}</span><span class="token variable">${MQTT_HOST}</span>:<span class="token variable">${MQTT_PORT<span class="token operator">:-</span>1883}</span>"</span>
+    <span class="token assign-left variable">opts</span><span class="token operator">=</span><span class="token string">""</span>
+    <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_EVENTS<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span>  <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">opts</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${opts}</span>,events=<span class="token variable">${MQTT_EVENTS}</span>"</span>
+    <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_STATES<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span>  <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">opts</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${opts}</span>,states=<span class="token variable">${MQTT_STATES}</span>"</span>
+    <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_DEVICES<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">opts</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${opts}</span>,devices=<span class="token variable">${MQTT_DEVICES}</span>"</span>
+    <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">${MQTT_RETAIN<span class="token operator">:-</span>}</span>"</span> <span class="token punctuation">]</span>  <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">opts</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${opts}</span>,retain=<span class="token variable">${MQTT_RETAIN}</span>"</span>
+    <span class="token builtin class-name">set</span> -- <span class="token string">"<span class="token variable">$@</span>"</span> <span class="token parameter variable">-F</span> <span class="token string">"<span class="token variable">${spec}</span><span class="token variable">${opts}</span>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment"># shellcheck disable=SC2086</span>
+<span class="token builtin class-name">set</span> -- <span class="token string">"<span class="token variable">$@</span>"</span> <span class="token variable">${RTL_433_EXTRA_ARGS<span class="token operator">:-</span>}</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"+ rtl_433 <span class="token variable">$*</span>"</span> <span class="token operator">&gt;</span><span class="token file-descriptor important">&amp;2</span>
+<span class="token builtin class-name">exec</span> rtl_433 <span class="token string">"<span class="token variable">$@</span>"</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>The <code>echo "+ rtl_433 $*"</code> line is worth keeping — when something is wrong, the first thing you want is the exact command that ran.</p>
+<p>The full env reference:</p>
+<table>
+<thead>
+<tr>
+<th>Var</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUTPUT_JSON</code>, <code>UTC_MODE</code></td>
+<td>toggle <code>-F json</code>, <code>-M utc</code></td>
+</tr>
+<tr>
+<td><code>MQTT_ENABLED</code></td>
+<td>master switch — without it no <code>mqtt://</code> flag is added</td>
+</tr>
+<tr>
+<td><code>MQTT_HOST</code>, <code>MQTT_PORT</code>, <code>MQTT_USER</code>, <code>MQTT_PASSWORD</code></td>
+<td>broker connection</td>
+</tr>
+<tr>
+<td><code>MQTT_EVENTS</code>, <code>MQTT_STATES</code>, <code>MQTT_DEVICES</code>, <code>MQTT_RETAIN</code></td>
+<td>comma-options on the MQTT URL</td>
+</tr>
+<tr>
+<td><code>RTL_TCP_HOST</code>, <code>RTL_TCP_PORT</code></td>
+<td>switch from local USB to a remote <code>rtl_tcp</code> server</td>
+</tr>
+<tr>
+<td><code>RTL_433_EXTRA_ARGS</code></td>
+<td>escape hatch — anything else, e.g. <code>-R 40</code> to limit decoders</td>
+</tr>
+</tbody>
+</table>
+<h2 id="docker-compose-for-first-run-bring-up">Docker Compose for first-run bring-up</h2>
+<p>Get it working on a workstation before promoting to k3s. Saves a lot of “is it the manifest or is it the dongle?” debugging.</p>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">rtl_433</span><span class="token punctuation">:</span>
+    <span class="token key atrule">build</span><span class="token punctuation">:</span>
+      <span class="token key atrule">context</span><span class="token punctuation">:</span> .
+      <span class="token key atrule">args</span><span class="token punctuation">:</span>
+        <span class="token key atrule">RTL_433_REF</span><span class="token punctuation">:</span> master
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> rtl_433<span class="token punctuation">:</span>local
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> rtl_433
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped
+
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> /dev/bus/usb<span class="token punctuation">:</span>/dev/bus/usb
+    <span class="token key atrule">device_cgroup_rules</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">'c 189:* rmw'</span>
+    <span class="token comment"># privileged: true   # sledgehammer fallback if the above fails</span>
+
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token key atrule">OUTPUT_JSON</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+      <span class="token key atrule">UTC_MODE</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+      <span class="token key atrule">MQTT_ENABLED</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+      <span class="token key atrule">MQTT_HOST</span><span class="token punctuation">:</span> <span class="token string">"192.168.1.100"</span>
+      <span class="token key atrule">MQTT_PORT</span><span class="token punctuation">:</span> <span class="token string">"1883"</span>
+      <span class="token key atrule">MQTT_EVENTS</span><span class="token punctuation">:</span> <span class="token string">"pitemp[/model][/id]"</span>
+      <span class="token comment"># RTL_TCP_HOST: "host.docker.internal"</span>
+      <span class="token comment"># RTL_TCP_PORT: "1234"</span>
+
+    <span class="token key atrule">extra_hosts</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"host.docker.internal:host-gateway"</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Bring it up:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">docker</span> compose build
+<span class="token function">docker</span> compose up <span class="token parameter variable">-d</span>
+<span class="token function">docker</span> compose logs <span class="token parameter variable">-f</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Inside 30 seconds you should see lines like:</p>
+<div class="pre-wrapper"><pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"time"</span><span class="token operator">:</span><span class="token string">"2026-04-25 14:02:11"</span><span class="token punctuation">,</span><span class="token property">"model"</span><span class="token operator">:</span><span class="token string">"Acurite-Tower"</span><span class="token punctuation">,</span><span class="token property">"id"</span><span class="token operator">:</span><span class="token number">1234</span><span class="token punctuation">,</span><span class="token property">"channel"</span><span class="token operator">:</span><span class="token string">"A"</span><span class="token punctuation">,</span><span class="token property">"battery_ok"</span><span class="token operator">:</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token property">"temperature_C"</span><span class="token operator">:</span><span class="token number">21.4</span><span class="token punctuation">,</span><span class="token property">"humidity"</span><span class="token operator">:</span><span class="token number">48</span><span class="token punctuation">}</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<h2 id="the-usb-open-error-4-trap">The usb_open error -4 trap</h2>
+<p>This bit ate me half an afternoon and is the single most useful thing in this post.</p>
+<p><strong>Symptom:</strong> <code>rtl_test</code> enumerates the dongle, prints <code>Found 1 device(s): Generic RTL2832U OEM</code>, but <code>libusb_open</code> immediately returns <code>-4</code> (<code>LIBUSB_ERROR_NO_DEVICE</code>). Container will not actually receive anything.</p>
+<p><strong>False leads I chased and you can skip:</strong></p>
+<ul>
+<li>DVB kernel modules — already blacklisted, <code>lsmod | grep -E 'dvb|rtl28'</code> came back empty.</li>
+<li><code>usbipd bind</code>/<code>attach</code> state — both showed <code>Attached</code>.</li>
+</ul>
+<p><strong>Actual cause:</strong> Compose’s <code>devices:</code> list takes a <em>static</em> device-cgroup snapshot at container start. With usbipd-win, the device file under <code>/dev/bus/usb/BBB/DDD</code> can change identity across attach cycles, and even when the path is right the cgroup rule generated by <code>devices:</code> does not always grant the bits libusb wants.</p>
+<p><strong>Fix:</strong> swap the static <code>devices:</code> mapping for a <em>dynamic</em> bind mount plus an explicit cgroup rule for the entire USB device class:</p>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> /dev/bus/usb<span class="token punctuation">:</span>/dev/bus/usb
+<span class="token key atrule">device_cgroup_rules</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token string">'c 189:* rmw'</span>   <span class="token comment"># USB major</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>That is what is already in the compose file above — calling it out because if you skip it and reach for <code>privileged: true</code> instead, you have taken the sledgehammer when you did not need to.</p>
+<h2 id="publishing-a-multi-arch-image">Publishing a multi-arch image</h2>
+<p>For a Pi cluster you need an <code>arm64</code> build. For a mixed cluster (or to test locally on x86), you want both. <code>buildx</code> handles the cross-build:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/usr/bin/env bash</span>
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-euo</span> pipefail
+
+<span class="token builtin class-name">:</span> <span class="token string">"<span class="token variable">${DOCKERHUB_USER<span class="token operator">:?</span>set DOCKERHUB_USER}</span>"</span>
+<span class="token assign-left variable">IMAGE</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${DOCKERHUB_USER}</span>/rtl_433"</span>
+<span class="token assign-left variable">TAG</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${TAG<span class="token operator">:-</span>$(git rev-parse --short HEAD)}</span>"</span>
+<span class="token assign-left variable">PLATFORMS</span><span class="token operator">=</span><span class="token string">"<span class="token variable">${PLATFORMS<span class="token operator">:-</span>linux<span class="token operator">/</span>amd64<span class="token operator">,</span>linux<span class="token operator">/</span>arm64}</span>"</span>
+
+<span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">docker</span> buildx inspect rtl433-builder <span class="token operator">&gt;</span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token function">docker</span> buildx create <span class="token parameter variable">--name</span> rtl433-builder <span class="token parameter variable">--use</span>
+<span class="token keyword">else</span>
+    <span class="token function">docker</span> buildx use rtl433-builder
+<span class="token keyword">fi</span>
+<span class="token function">docker</span> buildx inspect <span class="token parameter variable">--bootstrap</span> <span class="token operator">&gt;</span>/dev/null
+
+<span class="token function">docker</span> buildx build <span class="token punctuation">\</span>
+    <span class="token parameter variable">--platform</span> <span class="token string">"<span class="token variable">${PLATFORMS}</span>"</span> <span class="token punctuation">\</span>
+    <span class="token parameter variable">--tag</span> <span class="token string">"<span class="token variable">${IMAGE}</span>:<span class="token variable">${TAG}</span>"</span> <span class="token punctuation">\</span>
+    <span class="token parameter variable">--tag</span> <span class="token string">"<span class="token variable">${IMAGE}</span>:latest"</span> <span class="token punctuation">\</span>
+    <span class="token parameter variable">--push</span> <span class="token builtin class-name">.</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Notes:</p>
+<ul>
+<li>First buildx run bootstraps a builder; subsequent runs are fast.</li>
+<li>The <code>arm64</code> leg runs under qemu when built from x86 — expect minutes, not seconds, the first time.</li>
+<li>For an all-Pi cluster, override <code>PLATFORMS=linux/arm64</code> to halve the build.</li>
+</ul>
+<h2 id="the-k3s-manifest">The k3s manifest</h2>
+<p>A single YAML covering namespace, secret, configmap, and deployment. Apply with <code>kubectl apply -f rtl_433.yaml</code> after editing the image and broker host.</p>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Namespace
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Secret
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433<span class="token punctuation">-</span>mqtt
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> rtl433
+<span class="token key atrule">type</span><span class="token punctuation">:</span> Opaque
+<span class="token key atrule">stringData</span><span class="token punctuation">:</span>
+  <span class="token key atrule">MQTT_USER</span><span class="token punctuation">:</span> <span class="token string">""</span>
+  <span class="token key atrule">MQTT_PASSWORD</span><span class="token punctuation">:</span> <span class="token string">""</span>
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ConfigMap
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433<span class="token punctuation">-</span>config
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> rtl433
+<span class="token key atrule">data</span><span class="token punctuation">:</span>
+  <span class="token key atrule">OUTPUT_JSON</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+  <span class="token key atrule">UTC_MODE</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+  <span class="token key atrule">MQTT_ENABLED</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+  <span class="token key atrule">MQTT_HOST</span><span class="token punctuation">:</span> <span class="token string">"192.168.1.100"</span>
+  <span class="token key atrule">MQTT_PORT</span><span class="token punctuation">:</span> <span class="token string">"1883"</span>
+  <span class="token key atrule">MQTT_EVENTS</span><span class="token punctuation">:</span> <span class="token string">"pitemp[/model][/id]"</span>
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433
+  <span class="token key atrule">namespace</span><span class="token punctuation">:</span> rtl433
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">strategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> Recreate
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> rtl433
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> rtl433
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">nodeSelector</span><span class="token punctuation">:</span>
+        <span class="token key atrule">rtl433/sdr</span><span class="token punctuation">:</span> <span class="token string">"true"</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> DOCKERHUB_USER/rtl_433<span class="token punctuation">:</span>latest
+          <span class="token key atrule">imagePullPolicy</span><span class="token punctuation">:</span> Always
+          <span class="token key atrule">envFrom</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">configMapRef</span><span class="token punctuation">:</span>
+                <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433<span class="token punctuation">-</span>config
+            <span class="token punctuation">-</span> <span class="token key atrule">secretRef</span><span class="token punctuation">:</span>
+                <span class="token key atrule">name</span><span class="token punctuation">:</span> rtl433<span class="token punctuation">-</span>mqtt
+          <span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+            <span class="token key atrule">privileged</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+          <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> usb
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /dev/bus/usb
+      <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> usb
+          <span class="token key atrule">hostPath</span><span class="token punctuation">:</span>
+            <span class="token key atrule">path</span><span class="token punctuation">:</span> /dev/bus/usb
+            <span class="token key atrule">type</span><span class="token punctuation">:</span> Directory
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Three things in there that look harmless but matter:</p>
+<h3 id="pin-to-the-node-with-the-dongle">Pin to the node with the dongle</h3>
+<p>The dongle physically lives on one Pi. Label that node and use <code>nodeSelector</code> to keep the pod there:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">kubectl label <span class="token function">node</span> <span class="token operator">&lt;</span>nodename<span class="token operator">&gt;</span> rtl433/sdr<span class="token operator">=</span>true
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Without the label the scheduler can drop the pod on any node, where it will just sit complaining about <code>No supported devices found</code>.</p>
+<h3 id="single-replica-recreate-strategy">Single replica + Recreate strategy</h3>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token key atrule">strategy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> Recreate
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Only one process can hold the SDR at a time. The default rolling-update strategy briefly spins up a second pod alongside the first — it will fight for the dongle and lose. <code>Recreate</code> kills the old pod first, the new one comes up clean.</p>
+<h3 id="usb-passthrough-on-k3s">USB passthrough on k3s</h3>
+<div class="pre-wrapper"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+  <span class="token key atrule">privileged</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+<span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> usb
+    <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /dev/bus/usb
+<span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> usb
+    <span class="token key atrule">hostPath</span><span class="token punctuation">:</span>
+      <span class="token key atrule">path</span><span class="token punctuation">:</span> /dev/bus/usb
+      <span class="token key atrule">type</span><span class="token punctuation">:</span> Directory
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>This is the pragmatic choice. The “proper” alternative is a USB device plugin like <a href="https://gitlab.com/arm-research/smarter/smarter-device-manager" target="_blank" rel="noopener noreferrer">smarter-device-manager</a> that exposes <code>/dev/bus/usb/*</code> as a schedulable resource. Worth knowing about, overkill for a single dongle on a homelab cluster.</p>
+<h2 id="verifying-end-to-end">Verifying end-to-end</h2>
+<p>From any box on the LAN that has the mosquitto clients installed:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">mosquitto_sub <span class="token parameter variable">-h</span> <span class="token number">192.168</span>.1.100 <span class="token parameter variable">-t</span> <span class="token string">'pitemp/#'</span> <span class="token parameter variable">-v</span>
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Within 30 seconds you will see your AcuRite messages flowing. If the dongle is outdoors-adjacent you will also pick up neighbors’ weather stations, tire-pressure sensors driving by, doorbells from down the street — the 433 MHz band is busier than you would think.</p>
+<h2 id="createcontainerconfigerror">CreateContainerConfigError?</h2>
+<p>If the pod sticks in <code>CreateContainerConfigError</code>, it is almost always one of:</p>
+<ul>
+<li>A typo’d <code>Secret</code> or <code>ConfigMap</code> name (or the wrong namespace).</li>
+<li><code>envFrom: secretRef</code> pointing at a Secret with a key the workload does not know how to consume.</li>
+<li>Empty <code>stringData</code> values rejected by a Pod Security Admission policy.</li>
+</ul>
+<p><code>kubectl -n rtl433 describe pod</code> events tell you exactly which object/key. Always the first debugging step.</p>
+<h2 id="whats-next">What’s next</h2>
+<p>Once data is on the broker the rest is easy:</p>
+<ul>
+<li><strong>Home Assistant</strong> picks <code>rtl_433</code> up via its built-in MQTT integration. Point HA at the same broker and add MQTT sensor entries with <code>state_topic: pitemp/Acurite-Tower/1234</code>. Or use one of the <code>rtl_433</code>-aware add-ons that auto-discovers devices.</li>
+<li><strong>Node-RED</strong> is great for the “if outdoor temp &gt; 90 then turn on the basement fan” style of automation.</li>
+<li><strong>Restrict decoders</strong> with <code>RTL_433_EXTRA_ARGS="-R 40 -R 11"</code> once you know the protocol IDs of your sensors. Cuts noise dramatically.</li>
+<li><strong>TLS to the broker</strong> if you are going to expose any of this beyond the LAN — <code>libssl-dev</code> is in the build stage exactly so <code>mqtts://</code> works.</li>
+</ul>
+<p>Total hardware bill of materials is around $50–$70 depending on which AcuRite kit you go with, and once it is wired up you have a foundation for every other 433 MHz sensor you ever buy. Hard to beat for the price.</p>
+        </section>
+
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/rtl-433/">rtl_433</a>
+                      <a href="/tag/mqtt/">MQTT</a>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/iot/">IOT</a>
+                      <a href="/tag/home-automation/">Home Automation</a>
+                      <a href="/tag/docker/">Docker</a>
+                      <a href="/tag/homelab/">homelab</a>
+                      <a href="/tag/sdr/">SDR</a>
+                      <a href="/tag/acurite/">AcuRite</a>
+                      <a href="/tag/weather-station/">Weather Station</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
+
+  </main>
+
+  <footer class="site-foot">
+    <div class="site-foot-inner">
+      <div class="site-foot-copy">© 2026 <a href="/">RoboDodd</a></div>
+      <nav class="site-foot-nav" aria-label="Secondary">
+        <ul>
+                      <li><a href="/about/">About</a></li>
+                      <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                  </ul>
+      </nav>
+    </div>
+  </footer>
+  </body>
+</html>
