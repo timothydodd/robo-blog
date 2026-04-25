@@ -357,6 +357,18 @@ async function main() {
   await fs.writeFile(path.join(SITE, "robots.txt"),
     `User-agent: *\nAllow: /\nSitemap: ${site.url.replace(/\/$/, "")}/sitemap.xml\n`);
 
+  // ---- IndexNow key file (public, used to prove domain ownership when pinging
+  // the IndexNow API). Skip silently if the config isn't present.
+  try {
+    const cfgPath = path.join(ROOT, "tools", "indexnow.config.json");
+    const cfg = JSON.parse(await fs.readFile(cfgPath, "utf8"));
+    if (cfg.key) {
+      await fs.writeFile(path.join(SITE, `${cfg.key}.txt`), cfg.key);
+    }
+  } catch (e) {
+    if (e.code !== "ENOENT") throw e;
+  }
+
   // ---- Tailwind (merged with vendor CSS, minified, written as a single
   // cacheable stylesheet the <link> in layout.eta points at).
   console.log("  running tailwind…");

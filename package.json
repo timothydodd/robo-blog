@@ -7,6 +7,7 @@
   "scripts": {
     "import": "node tools/import-ghost.mjs",
     "optimize-images": "node tools/optimize-images.mjs",
+    "indexnow": "node tools/indexnow.mjs",
     "build": "node builder/build.mjs",
     "preview": "npx --yes serve site -l 4000 --no-port-switching",
     "dev": "npm --prefix editor run dev"
