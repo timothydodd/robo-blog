@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally — RoboDodd</title>
+  <title>Run DeepSeek-R1 on a Raspberry Pi Locally</title>
   <meta name="description" content="Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/">
@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally — RoboDodd">
+  <meta property="og:title" content="Run DeepSeek-R1 on a Raspberry Pi Locally">
   <meta property="og:description" content="Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.">
   <meta property="og:url" content="https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/">
   <meta property="og:image" content="https://robododd.com/images/2025/01/Screenshot-2025-01-27-234349.webp">  <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-01-28T16:33:40.000Z">  <meta property="article:tag" content="Raspberry Pi">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/"},"headline":"How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally","description":"Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.","image":"https://robododd.com/images/2025/01/Screenshot-2025-01-27-234349.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-28T05:04:48.000Z","dateModified":"2025-01-28T16:33:40.000Z","keywords":"Raspberry Pi, Ollama AI, DeepSeek, Promtail","articleSection":"Raspberry Pi"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-run-the-deepseek-r1-ai-model-on-a-raspberry-pi-locally/"},"headline":"Run DeepSeek-R1 on a Raspberry Pi Locally","description":"Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.","image":"https://robododd.com/images/2025/01/Screenshot-2025-01-27-234349.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-01-28T05:04:48.000Z","dateModified":"2025-01-28T16:33:40.000Z","keywords":"Raspberry Pi, Ollama AI, DeepSeek, Promtail","articleSection":"Raspberry Pi"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,11 +318,11 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally</h1>
+            <h1 class="post-full-title">Run DeepSeek-R1 on a Raspberry Pi Locally</h1>
       <p class="post-full-subtitle">Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/01/Screenshot-2025-01-27-234349.webp" srcset="/images/2025/01/Screenshot-2025-01-27-234349-400w.webp 400w, /images/2025/01/Screenshot-2025-01-27-234349-800w.webp 800w, /images/2025/01/Screenshot-2025-01-27-234349.webp 894w" sizes="(min-width: 1200px) 1200px, 100vw" alt="How to Run the DeepSeek-R1 AI Model on a Raspberry Pi Locally" fetchpriority="high" loading="eager" decoding="async" width="894" height="603">
+      <img src="/images/2025/01/Screenshot-2025-01-27-234349.webp" srcset="/images/2025/01/Screenshot-2025-01-27-234349-400w.webp 400w, /images/2025/01/Screenshot-2025-01-27-234349-800w.webp 800w, /images/2025/01/Screenshot-2025-01-27-234349.webp 894w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Run DeepSeek-R1 on a Raspberry Pi Locally" fetchpriority="high" loading="eager" decoding="async" width="894" height="603">
           </figure>
     
     <div class="post-full-topline gh-canvas">

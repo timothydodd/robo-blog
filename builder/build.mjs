@@ -292,7 +292,7 @@ async function main() {
     const canonicalPath = `/${p.slug}/`;
     const html = renderPage({
       body,
-      pageTitle: `${p.title} — ${site.title}`,
+      pageTitle: p.title,
       pageDescription: p.excerpt,
       canonicalPath,
       ogType: "article",
@@ -315,7 +315,7 @@ async function main() {
     const canonicalPath = `/${pg.slug}/`;
     const html = renderPage({
       body,
-      pageTitle: `${pg.title} — ${site.title}`,
+      pageTitle: pg.title,
       pageDescription: pg.excerpt || site.description || "",
       canonicalPath,
       ogImage: pg.feature_image || site.cover_image,
@@ -335,7 +335,7 @@ async function main() {
     const html = renderPage({
       body,
       pageTitle: `${t.name} — ${site.title}`,
-      pageDescription: t.description || `Posts tagged ${t.name}`,
+      pageDescription: t.description || `Browse ${tagPosts.length} ${tagPosts.length === 1 ? "article" : "articles"} tagged ${t.name} on ${site.title} — homelab, Kubernetes, and developer writeups by Tim Dodd.`,
       canonicalPath: `/tag/${t.slug}/`,
       bodyClass: "tag-template",
     });

@@ -1,5 +1,5 @@
 {
-  "title": "Simplifying Local Network IP Assignment for Kubernetes with MetalLB",
+  "title": "Local Network IPs for Kubernetes with MetalLB",
   "slug": "network-metallb",
   "status": "published",
   "published_at": "2024-07-02T11:13:22.000Z",

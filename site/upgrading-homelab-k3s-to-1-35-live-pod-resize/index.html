@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts — RoboDodd</title>
+  <title>Upgrading Homelab K3s to 1.35: Live Pod Resize</title>
   <meta name="description" content="K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts — RoboDodd">
+  <meta property="og:title" content="Upgrading Homelab K3s to 1.35: Live Pod Resize">
   <meta property="og:description" content="K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.">
   <meta property="og:url" content="https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/">
   <meta property="og:image" content="https://robododd.com/images/2026/04/k3s-135-upgrade.webp">  <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2026-04-18T17:25:07.549Z">  <meta property="article:tag" content="K3s">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/"},"headline":"Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts","description":"K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.","image":"https://robododd.com/images/2026/04/k3s-135-upgrade.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-18T17:25:07.549Z","dateModified":"2026-04-18T17:25:07.549Z","keywords":"K3s, Kubernetes, homelab, DevOps, Containerization","articleSection":"K3s"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/upgrading-homelab-k3s-to-1-35-live-pod-resize/"},"headline":"Upgrading Homelab K3s to 1.35: Live Pod Resize","description":"K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.","image":"https://robododd.com/images/2026/04/k3s-135-upgrade.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-18T17:25:07.549Z","dateModified":"2026-04-18T17:25:07.549Z","keywords":"K3s, Kubernetes, homelab, DevOps, Containerization","articleSection":"K3s"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,7 +318,7 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">Upgrading Homelab K3s to 1.35: Live Pod Resize Without Restarts</h1>
+            <h1 class="post-full-title">Upgrading Homelab K3s to 1.35: Live Pod Resize</h1>
       <p class="post-full-subtitle">K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.</p>    </header>
 
         <figure class="post-full-image">

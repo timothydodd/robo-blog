@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month — RoboDodd</title>
+  <title>Set Up a Secure Linode Ubuntu VM for $5 a Month</title>
   <meta name="description" content="Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/">
@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month — RoboDodd">
+  <meta property="og:title" content="Set Up a Secure Linode Ubuntu VM for $5 a Month">
   <meta property="og:description" content="Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.">
   <meta property="og:url" content="https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/">
   <meta property="og:image" content="https://robododd.com/images/2025/02/Screenshot-2025-02-18-155559.webp">  <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2026-04-22T21:13:24.000Z">  <meta property="article:tag" content="Linux">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/"},"headline":"How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month","description":"Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.","image":"https://robododd.com/images/2025/02/Screenshot-2025-02-18-155559.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-02-18T20:58:20.000Z","dateModified":"2026-04-22T21:13:24.000Z","keywords":"Linux, Linode, VirtualMachine, ubuntu, Cyber Security, DevOps, SSH","articleSection":"Linux"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/how-to-set-up-a-secure-cheap-linode-ubuntu-vm-for-5-bucks-a-month/"},"headline":"Set Up a Secure Linode Ubuntu VM for $5 a Month","description":"Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.","image":"https://robododd.com/images/2025/02/Screenshot-2025-02-18-155559.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-02-18T20:58:20.000Z","dateModified":"2026-04-22T21:13:24.000Z","keywords":"Linux, Linode, VirtualMachine, ubuntu, Cyber Security, DevOps, SSH","articleSection":"Linux"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,11 +318,11 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month</h1>
+            <h1 class="post-full-title">Set Up a Secure Linode Ubuntu VM for $5 a Month</h1>
       <p class="post-full-subtitle">Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2025/02/Screenshot-2025-02-18-155559.webp" srcset="/images/2025/02/Screenshot-2025-02-18-155559-400w.webp 400w, /images/2025/02/Screenshot-2025-02-18-155559-800w.webp 800w, /images/2025/02/Screenshot-2025-02-18-155559-1200w.webp 1200w, /images/2025/02/Screenshot-2025-02-18-155559.webp 1362w" sizes="(min-width: 1200px) 1200px, 100vw" alt="How to Set Up a Secure, Cheap Linode Ubuntu VM for 5 bucks a month" fetchpriority="high" loading="eager" decoding="async" width="1362" height="779">
+      <img src="/images/2025/02/Screenshot-2025-02-18-155559.webp" srcset="/images/2025/02/Screenshot-2025-02-18-155559-400w.webp 400w, /images/2025/02/Screenshot-2025-02-18-155559-800w.webp 800w, /images/2025/02/Screenshot-2025-02-18-155559-1200w.webp 1200w, /images/2025/02/Screenshot-2025-02-18-155559.webp 1362w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Set Up a Secure Linode Ubuntu VM for $5 a Month" fetchpriority="high" loading="eager" decoding="async" width="1362" height="779">
           </figure>
     
     <div class="post-full-topline gh-canvas">

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migrating Azure Front Door to Cloudflare Storage Connectors — RoboDodd</title>
+  <title>Migrating Azure Front Door to Cloudflare Storage</title>
   <meta name="description" content="Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/">
@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="Migrating Azure Front Door to Cloudflare Storage Connectors — RoboDodd">
+  <meta property="og:title" content="Migrating Azure Front Door to Cloudflare Storage">
   <meta property="og:description" content="Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.">
   <meta property="og:url" content="https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/">
   <meta property="og:image" content="https://robododd.com/images/2026/04/cloudflare-storage-connector.webp">  <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-11-12T18:13:37.000Z">  <meta property="article:tag" content="Cloudflare">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/"},"headline":"Migrating Azure Front Door to Cloudflare Storage Connectors","description":"Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.","image":"https://robododd.com/images/2026/04/cloudflare-storage-connector.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-11-12T18:00:21.000Z","dateModified":"2025-11-12T18:13:37.000Z","keywords":"Cloudflare, Azure CDN, DevOps, Azure Front Door, Cloudflare Storage Connector","articleSection":"Cloudflare"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/moving-from-azure-front-door-to-cloudflare-cdn-using-storage-connectors/"},"headline":"Migrating Azure Front Door to Cloudflare Storage","description":"Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.","image":"https://robododd.com/images/2026/04/cloudflare-storage-connector.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2025-11-12T18:00:21.000Z","dateModified":"2025-11-12T18:13:37.000Z","keywords":"Cloudflare, Azure CDN, DevOps, Azure Front Door, Cloudflare Storage Connector","articleSection":"Cloudflare"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,11 +318,11 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">Migrating Azure Front Door to Cloudflare Storage Connectors</h1>
+            <h1 class="post-full-title">Migrating Azure Front Door to Cloudflare Storage</h1>
       <p class="post-full-subtitle">Migrate from Azure Front Door to Cloudflare CDN using Storage Connectors. Enable multiple custom domains on Azure Storage without an Enterprise plan.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2026/04/cloudflare-storage-connector.webp" srcset="/images/2026/04/cloudflare-storage-connector-400w.webp 400w, /images/2026/04/cloudflare-storage-connector-800w.webp 800w, /images/2026/04/cloudflare-storage-connector-1200w.webp 1200w, /images/2026/04/cloudflare-storage-connector.webp 1536w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Migrating Azure Front Door to Cloudflare Storage Connectors" fetchpriority="high" loading="eager" decoding="async" width="1536" height="1024">
+      <img src="/images/2026/04/cloudflare-storage-connector.webp" srcset="/images/2026/04/cloudflare-storage-connector-400w.webp 400w, /images/2026/04/cloudflare-storage-connector-800w.webp 800w, /images/2026/04/cloudflare-storage-connector-1200w.webp 1200w, /images/2026/04/cloudflare-storage-connector.webp 1536w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Migrating Azure Front Door to Cloudflare Storage" fetchpriority="high" loading="eager" decoding="async" width="1536" height="1024">
           </figure>
     
     <div class="post-full-topline gh-canvas">
@@ -366,7 +366,7 @@
           <ul class="post-sidebar-related-list">
                         <li>
               <a class="post-sidebar-related-link" href="/host-loc/">
-                <span class="post-sidebar-related-tag">Cloudflare</span>                <span class="post-sidebar-related-headline">Route Your Domain to a Local Service with Cloudflare Tunnel</span>
+                <span class="post-sidebar-related-tag">Cloudflare</span>                <span class="post-sidebar-related-headline">Route Your Domain to a Local Service via Cloudflare</span>
               </a>
             </li>
                       </ul>
@@ -465,13 +465,13 @@
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/host-loc/">
-    <img class="post-card-image" src="/images/2024/07/cloudflare3.webp" srcset="/images/2024/07/cloudflare3-400w.webp 400w, /images/2024/07/cloudflare3-800w.webp 800w, /images/2024/07/cloudflare3-1200w.webp 1200w, /images/2024/07/cloudflare3.webp 1288w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Route Your Domain to a Local Service with Cloudflare Tunnel" loading="lazy" decoding="async" width="1288" height="702">
+    <img class="post-card-image" src="/images/2024/07/cloudflare3.webp" srcset="/images/2024/07/cloudflare3-400w.webp 400w, /images/2024/07/cloudflare3-800w.webp 800w, /images/2024/07/cloudflare3-1200w.webp 1200w, /images/2024/07/cloudflare3.webp 1288w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Route Your Domain to a Local Service via Cloudflare" loading="lazy" decoding="async" width="1288" height="702">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/host-loc/">
       <header class="post-card-header">
                 <div class="post-card-tags"><span class="post-card-primary-tag">Cloudflare</span></div>
-                <h2 class="post-card-title">Route Your Domain to a Local Service with Cloudflare Tunnel</h2>
+                <h2 class="post-card-title">Route Your Domain to a Local Service via Cloudflare</h2>
       </header>
       <div class="post-card-excerpt"><p>Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.</p></div>    </a>
     <footer class="post-card-meta">

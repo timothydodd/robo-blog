@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LogMk: A Streamlined Grafana Alternative for Kubernetes Logs — RoboDodd</title>
+  <title>LogMk: A Grafana Alternative for Kubernetes Logs</title>
   <meta name="description" content="Introducing LogMk, a straightforward alternative to complex logging tools like Grafana, tailored specifically for Kubernetes environments. Ideal for smaller setups or development…">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="LogMk: A Streamlined Grafana Alternative for Kubernetes Logs — RoboDodd">
+  <meta property="og:title" content="LogMk: A Grafana Alternative for Kubernetes Logs">
   <meta property="og:description" content="Introducing LogMk, a straightforward alternative to complex logging tools like Grafana, tailored specifically for Kubernetes environments. Ideal for smaller setups or development…">
   <meta property="og:url" content="https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
   <meta property="og:image" content="https://robododd.com/images/2024/08/Screenshot-2024-08-22-132432.webp">  <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   <meta property="article:modified_time" content="2025-02-22T01:57:30.000Z">  <meta property="article:tag" content="Kubernetes">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/"},"headline":"LogMk: A Streamlined Grafana Alternative for Kubernetes Logs","description":"Introducing LogMk, a straightforward alternative to complex logging tools like Grafana, tailored specifically for Kubernetes environments. Ideal for smaller setups or development…","image":"https://robododd.com/images/2024/08/Screenshot-2024-08-22-132432.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-08-22T16:49:29.000Z","dateModified":"2025-02-22T01:57:30.000Z","keywords":"Kubernetes, Log Monitoring, DevOps, .Net","articleSection":"Kubernetes"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/"},"headline":"LogMk: A Grafana Alternative for Kubernetes Logs","description":"Introducing LogMk, a straightforward alternative to complex logging tools like Grafana, tailored specifically for Kubernetes environments. Ideal for smaller setups or development…","image":"https://robododd.com/images/2024/08/Screenshot-2024-08-22-132432.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-08-22T16:49:29.000Z","dateModified":"2025-02-22T01:57:30.000Z","keywords":"Kubernetes, Log Monitoring, DevOps, .Net","articleSection":"Kubernetes"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,11 +318,11 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">LogMk: A Streamlined Grafana Alternative for Kubernetes Logs</h1>
+            <h1 class="post-full-title">LogMk: A Grafana Alternative for Kubernetes Logs</h1>
           </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/08/Screenshot-2024-08-22-132432.webp" srcset="/images/2024/08/Screenshot-2024-08-22-132432-400w.webp 400w, /images/2024/08/Screenshot-2024-08-22-132432-800w.webp 800w, /images/2024/08/Screenshot-2024-08-22-132432.webp 919w" sizes="(min-width: 1200px) 1200px, 100vw" alt="LogMk: A Streamlined Grafana Alternative for Kubernetes Logs" fetchpriority="high" loading="eager" decoding="async" width="919" height="648">
+      <img src="/images/2024/08/Screenshot-2024-08-22-132432.webp" srcset="/images/2024/08/Screenshot-2024-08-22-132432-400w.webp 400w, /images/2024/08/Screenshot-2024-08-22-132432-800w.webp 800w, /images/2024/08/Screenshot-2024-08-22-132432.webp 919w" sizes="(min-width: 1200px) 1200px, 100vw" alt="LogMk: A Grafana Alternative for Kubernetes Logs" fetchpriority="high" loading="eager" decoding="async" width="919" height="648">
           </figure>
     
     <div class="post-full-topline gh-canvas">
@@ -352,7 +352,7 @@
             </li>
                         <li>
               <a class="post-sidebar-related-link" href="/network-metallb/">
-                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</span>
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">Local Network IPs for Kubernetes with MetalLB</span>
               </a>
             </li>
                         <li>
@@ -603,13 +603,13 @@
 </article>
               <article class="post-card">
     <a class="post-card-image-link" href="/network-metallb/">
-    <img class="post-card-image" src="/images/2024/07/metal.jpg" srcset="/images/2024/07/metal-400w.webp 400w, /images/2024/07/metal-800w.webp 800w, /images/2024/07/metal.jpg 822w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Simplifying Local Network IP Assignment for Kubernetes with MetalLB" loading="lazy" decoding="async" width="822" height="403">
+    <img class="post-card-image" src="/images/2024/07/metal.jpg" srcset="/images/2024/07/metal-400w.webp 400w, /images/2024/07/metal-800w.webp 800w, /images/2024/07/metal.jpg 822w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Local Network IPs for Kubernetes with MetalLB" loading="lazy" decoding="async" width="822" height="403">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/network-metallb/">
       <header class="post-card-header">
                 <div class="post-card-tags"><span class="post-card-primary-tag">Kubernetes</span></div>
-                <h2 class="post-card-title">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</h2>
+                <h2 class="post-card-title">Local Network IPs for Kubernetes with MetalLB</h2>
       </header>
       <div class="post-card-excerpt"><p>Assign local network IPs to Kubernetes services with MetalLB. Straightforward bare-metal load balancing for homelabs — no cloud provider required.</p></div>    </a>
     <footer class="post-card-meta">

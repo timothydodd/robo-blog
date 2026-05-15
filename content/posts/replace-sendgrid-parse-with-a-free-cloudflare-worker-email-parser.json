@@ -1,5 +1,5 @@
 {
-  "title": "Replace SendGrid Parse with a Free Cloudflare Worker Email Parser",
+  "title": "Free Cloudflare Worker Email Parser to Replace SendGrid",
   "slug": "replace-sendgrid-parse-with-a-free-cloudflare-worker-email-parser",
   "status": "published",
   "published_at": "2025-07-05T18:39:57.000Z",
