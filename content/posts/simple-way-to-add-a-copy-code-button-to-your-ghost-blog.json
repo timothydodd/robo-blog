@@ -8,7 +8,7 @@
   "feature_image": "/images/2025/01/Screenshot-2025-01-24-123546.jpg",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Learn how to add a sleek 'Copy Code' button to your Ghost blog. This quick guide shows you how to use CSS and JavaScript to enhance your code snippets, with optional Font Awesome icons for extra style. Improve your blog’s user experience in just a few steps!",
+  "excerpt": "Add a sleek 'Copy Code' button to your Ghost blog with a bit of CSS and JavaScript. Optional Font Awesome icons included. Quick UX win in a few steps.",
   "tags": [
     "ghost-blog",
     "web-development",

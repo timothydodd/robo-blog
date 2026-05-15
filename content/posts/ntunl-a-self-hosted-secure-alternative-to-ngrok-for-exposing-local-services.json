@@ -1,5 +1,5 @@
 {
-  "title": "NTunl: An open Self-Hosted, Secure Alternative to ngrok for Exposing Local Services",
+  "title": "NTunl: An Open, Self-Hosted Alternative to ngrok",
   "slug": "ntunl-a-self-hosted-secure-alternative-to-ngrok-for-exposing-local-services",
   "status": "published",
   "published_at": "2024-11-13T14:51:52.000Z",
@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/11/hyper-1.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "NTunl is a self-hosted alternative to ngrok, offering secure tunneling for local services with SSL, custom domains, and request inspection. Perfect for developers seeking control and flexibility.",
+  "excerpt": "NTunl is an open, self-hosted alternative to ngrok for exposing local services. Secure tunnelling for homelab and dev work — no monthly fees, no vendor.",
   "tags": [
     "dotnet",
     "home-lab",

@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/07/uptime.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Discover how to set up Uptime Kuma on a k3s Kubernetes cluster with this step-by-step guide. Utilize MetalLB for local IP assignment, create necessary YAML configuration files, and deploy Uptime Kuma. Monitor your services efficiently on your local network.",
+  "excerpt": "Set up Uptime Kuma on a k3s cluster with MetalLB for a local IP. Step-by-step guide covering YAML manifests and service monitoring on your home network.",
   "tags": [
     "kubernetes",
     "home-lab",

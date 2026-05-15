@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/05/Screenshot-2024-05-09-140820-1.jpg",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "In this post, I'll show you how I set up my blog using Ghost on Kubernetes. Ghost is a sleek, powerful blogging platform built for simplicity and speed, making it a favorite among bloggers and digital publications.",
+  "excerpt": "How I deployed Ghost on Kubernetes — a sleek, fast blogging platform that's a favourite for bloggers and digital publications. Full walkthrough inside.",
   "tags": [
     "cloud-computing",
     "kubernetes",

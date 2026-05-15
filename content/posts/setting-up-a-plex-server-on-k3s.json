@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/08/plex3.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!",
+  "excerpt": "Run a Plex server on k3s with Intel hardware transcoding and MetalLB for a local IP. Scalable, resilient media streaming — perfect for homelabs.",
   "tags": [
     "plex",
     "kubernetes",

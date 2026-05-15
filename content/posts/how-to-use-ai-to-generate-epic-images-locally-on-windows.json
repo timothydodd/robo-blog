@@ -1,5 +1,5 @@
 {
-  "title": "How to Set Up Stable Diffusion Locally on Windows (Step-by-Step Guide)",
+  "title": "Set Up Stable Diffusion Locally on Windows: Step-by-Step Guide",
   "slug": "how-to-use-ai-to-generate-epic-images-locally-on-windows",
   "status": "published",
   "published_at": "2025-02-27T05:23:03.000Z",
@@ -8,7 +8,7 @@
   "feature_image": "/images/2025/02/00044-1655445935.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Create stunning AI art on your own PC! This guide shows you how to install Stable Diffusion WebUI on Windows for unlimited, high-quality image generation without cloud restrictions.",
+  "excerpt": "Generate epic AI images locally on Windows with Stable Diffusion. Step-by-step setup for running image generation on your own GPU — no cloud, no fees.",
   "tags": [
     "ai",
     "image-generation",

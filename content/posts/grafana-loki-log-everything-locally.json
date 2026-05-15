@@ -1,5 +1,5 @@
 {
-  "title": "Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s",
+  "title": "Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s",
   "slug": "grafana-loki-log-everything-locally",
   "status": "published",
   "published_at": "2024-04-02T17:03:55.000Z",
@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/04/logs.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s\nDeploy a robust logging system in your home lab with Loki for log aggregation, Promtail for collection, and Grafana for visualization on K3s.",
+  "excerpt": "Deploy a robust home-lab logging system on K3s with Loki for log aggregation, Promtail for collection, and Grafana for visualization. Step-by-step guide.",
   "tags": [
     "kubernetes",
     "promtail",

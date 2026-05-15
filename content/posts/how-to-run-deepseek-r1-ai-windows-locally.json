@@ -8,7 +8,7 @@
   "feature_image": "/images/2025/01/Screenshot-2025-01-28-162711.jpg",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Learn how to run the DeepSeek AI model on a Windows machine with Ollama. Enhance your experience with Open WebUI, a sleek, self-hosted platform for managing advanced AI models effortlessly.",
+  "excerpt": "Run DeepSeek R1 locally on Windows with Ollama and Open WebUI. Step-by-step setup for a private, fast AI assistant — no cloud, no API keys required.",
   "tags": [
     "deepseek",
     "ollama-ai",

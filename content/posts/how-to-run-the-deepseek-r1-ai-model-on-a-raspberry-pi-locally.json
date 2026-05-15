@@ -8,7 +8,7 @@
   "feature_image": "/images/2025/01/Screenshot-2025-01-27-234349.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Run the DeepSeek-R1 AI model locally on your Raspberry Pi! Learn how to set up Ollama, install the model, and explore AI on affordable hardware. Fun and educational for enthusiasts!",
+  "excerpt": "Run DeepSeek R1 locally on a Raspberry Pi with Ollama. Step-by-step setup for a tiny, private AI assistant — no cloud or API keys required.",
   "tags": [
     "raspberry-pi",
     "ollama-ai",

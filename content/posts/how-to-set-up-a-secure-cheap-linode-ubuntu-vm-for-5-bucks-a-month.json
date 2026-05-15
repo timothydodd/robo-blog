@@ -8,7 +8,7 @@
   "feature_image": "/images/2025/02/Screenshot-2025-02-18-155559.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Set up a $5 Linode VM the right way—fast, secure, and hacker-resistant. Follow this fun, to-the-point guide to lock it down with SSH keys, and best security practices! ",
+  "excerpt": "Stand up a secure Ubuntu VM on Linode for /month. Covers SSH keys, firewall, automatic updates, and basic hardening — perfect for a side-project box.",
   "tags": [
     "linux",
     "linode",

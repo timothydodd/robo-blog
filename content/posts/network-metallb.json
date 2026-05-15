@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/07/metal.jpg",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.",
+  "excerpt": "Assign local network IPs to Kubernetes services with MetalLB. Straightforward bare-metal load balancing for homelabs — no cloud provider required.",
   "tags": [
     "kubernetes",
     "networking",

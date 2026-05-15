@@ -8,7 +8,7 @@
   "feature_image": "/images/2026/04/k3s-135-upgrade.webp",
   "feature_image_alt": "Abstract illustration of three K3s cluster nodes with one mid-resize, on the RoboDodd gradient",
   "feature_image_caption": null,
-  "excerpt": "K3s 1.35 shipped in January 2026 with two features that actually matter for homelabs: in-place pod resize (GA) and OCI image volumes (Stable). Here's the upgrade walkthrough on a 3-node cluster, with a zero-downtime memory bump demo.",
+  "excerpt": "K3s 1.35 ships in-place pod resize (GA) and OCI image volumes (Stable) — two features that matter for homelabs. Walkthrough on a 3-node cluster inside.",
   "tags": [
     "k3s",
     "kubernetes",

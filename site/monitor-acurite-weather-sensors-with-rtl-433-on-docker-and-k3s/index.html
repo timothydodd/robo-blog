@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s — RoboDodd</title>
-  <meta name="description" content="Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.">
+  <meta name="description" content="Capture AcuRite weather sensor data with an RTL-SDR dongle, rtl_433, and MQTT — all running on Docker and k3s. Step-by-step home-weather-station guide.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -14,14 +14,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
   <meta property="og:title" content="Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s — RoboDodd">
-  <meta property="og:description" content="Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.">
+  <meta property="og:description" content="Capture AcuRite weather sensor data with an RTL-SDR dongle, rtl_433, and MQTT — all running on Docker and k3s. Step-by-step home-weather-station guide.">
   <meta property="og:url" content="https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/">
   <meta property="og:image" content="https://robododd.com/images/2026/04/antenna-post.webp">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-04-25T17:00:00.000Z">
   <meta property="article:modified_time" content="2026-04-25T17:00:00.000Z">  <meta property="article:tag" content="rtl_433">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/"},"headline":"Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s","description":"Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.","image":"https://robododd.com/images/2026/04/antenna-post.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-25T17:00:00.000Z","dateModified":"2026-04-25T17:00:00.000Z","keywords":"rtl_433, MQTT, K3s, IOT, Home Automation, Docker, homelab, SDR, AcuRite, Weather Station","articleSection":"rtl_433"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/"},"headline":"Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s","description":"Capture AcuRite weather sensor data with an RTL-SDR dongle, rtl_433, and MQTT — all running on Docker and k3s. Step-by-step home-weather-station guide.","image":"https://robododd.com/images/2026/04/antenna-post.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-04-25T17:00:00.000Z","dateModified":"2026-04-25T17:00:00.000Z","keywords":"rtl_433, MQTT, K3s, IOT, Home Automation, Docker, homelab, SDR, AcuRite, Weather Station","articleSection":"rtl_433"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -319,7 +319,7 @@
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
             <h1 class="post-full-title">Monitor AcuRite Weather Sensors with rtl_433 on Docker and k3s</h1>
-      <p class="post-full-subtitle">Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.</p>    </header>
+      <p class="post-full-subtitle">Capture AcuRite weather sensor data with an RTL-SDR dongle, rtl_433, and MQTT — all running on Docker and k3s. Step-by-step home-weather-station guide.</p>    </header>
 
         <figure class="post-full-image">
       <img src="/images/2026/04/antenna-post.webp" srcset="/images/2026/04/antenna-post-400w.webp 400w, /images/2026/04/antenna-post-800w.webp 800w, /images/2026/04/antenna-post.webp 959w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Synthwave-styled render of an antenna and Raspberry Pi over a glowing magenta and cyan grid" fetchpriority="high" loading="eager" decoding="async" width="959" height="752">

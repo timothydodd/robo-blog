@@ -1,5 +1,5 @@
 {
-  "title": "Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free",
+  "title": "Route Your Domain to a Local Service with Cloudflare Tunnel",
   "slug": "host-loc",
   "status": "published",
   "published_at": "2024-07-01T09:47:34.000Z",
@@ -8,7 +8,7 @@
   "feature_image": "/images/2024/07/cloudflare3.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.",
+  "excerpt": "Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.",
   "tags": [
     "cloudflare",
     "kubernetes",

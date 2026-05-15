@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide — RoboDodd</title>
-  <meta name="description" content="In this post, I'll show you how I set up my blog using Ghost on Kubernetes. Ghost is a sleek, powerful blogging platform built for simplicity and speed, making it a favorite among bloggers and digital publications.">
+  <meta name="description" content="How I deployed Ghost on Kubernetes — a sleek, fast blogging platform that's a favourite for bloggers and digital publications. Full walkthrough inside.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -14,14 +14,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
   <meta property="og:title" content="Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide — RoboDodd">
-  <meta property="og:description" content="In this post, I'll show you how I set up my blog using Ghost on Kubernetes. Ghost is a sleek, powerful blogging platform built for simplicity and speed, making it a favorite among bloggers and digital publications.">
+  <meta property="og:description" content="How I deployed Ghost on Kubernetes — a sleek, fast blogging platform that's a favourite for bloggers and digital publications. Full walkthrough inside.">
   <meta property="og:url" content="https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/">
   <meta property="og:image" content="https://robododd.com/images/2024/05/Screenshot-2024-05-09-140820-1.jpg">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-05-09T16:41:03.000Z">
   <meta property="article:modified_time" content="2025-01-13T20:58:05.000Z">  <meta property="article:tag" content="Cloud Computing">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/"},"headline":"Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide","description":"In this post, I'll show you how I set up my blog using Ghost on Kubernetes. Ghost is a sleek, powerful blogging platform built for simplicity and speed, making it a favorite among bloggers and digital publications.","image":"https://robododd.com/images/2024/05/Screenshot-2024-05-09-140820-1.jpg","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-05-09T16:41:03.000Z","dateModified":"2025-01-13T20:58:05.000Z","keywords":"Cloud Computing, Kubernetes, Ghost","articleSection":"Cloud Computing"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/deploying-a-ghost-blog-on-kubernetes-a-step-by-step-guide/"},"headline":"Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide","description":"How I deployed Ghost on Kubernetes — a sleek, fast blogging platform that's a favourite for bloggers and digital publications. Full walkthrough inside.","image":"https://robododd.com/images/2024/05/Screenshot-2024-05-09-140820-1.jpg","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-05-09T16:41:03.000Z","dateModified":"2025-01-13T20:58:05.000Z","keywords":"Cloud Computing, Kubernetes, Ghost","articleSection":"Cloud Computing"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -319,7 +319,7 @@
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
             <h1 class="post-full-title">Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide</h1>
-      <p class="post-full-subtitle">In this post, I'll show you how I set up my blog using Ghost on Kubernetes. Ghost is a sleek, powerful blogging platform built for simplicity and speed, making it a favorite among bloggers and digital publications.</p>    </header>
+      <p class="post-full-subtitle">How I deployed Ghost on Kubernetes — a sleek, fast blogging platform that's a favourite for bloggers and digital publications. Full walkthrough inside.</p>    </header>
 
         <figure class="post-full-image">
       <img src="/images/2024/05/Screenshot-2024-05-09-140820-1.jpg" srcset="/images/2024/05/Screenshot-2024-05-09-140820-1-400w.webp 400w, /images/2024/05/Screenshot-2024-05-09-140820-1-800w.webp 800w, /images/2024/05/Screenshot-2024-05-09-140820-1.jpg 1085w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Deploying a Ghost Blog on Kubernetes: A Step-by-Step Guide" fetchpriority="high" loading="eager" decoding="async" width="1085" height="593">

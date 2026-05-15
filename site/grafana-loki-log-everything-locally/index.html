@@ -4,9 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s — RoboDodd</title>
-  <meta name="description" content="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s
-Deploy a robust logging system in your home lab with Loki for log aggregation, Promtail for collection, and Grafana for visualization on K3s.">
+  <title>Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s — RoboDodd</title>
+  <meta name="description" content="Deploy a robust home-lab logging system on K3s with Loki for log aggregation, Promtail for collection, and Grafana for visualization. Step-by-step guide.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/grafana-loki-log-everything-locally/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -14,16 +13,15 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s — RoboDodd">
-  <meta property="og:description" content="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s
-Deploy a robust logging system in your home lab with Loki for log aggregation, Promtail for collection, and Grafana for visualization on K3s.">
+  <meta property="og:title" content="Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s — RoboDodd">
+  <meta property="og:description" content="Deploy a robust home-lab logging system on K3s with Loki for log aggregation, Promtail for collection, and Grafana for visualization. Step-by-step guide.">
   <meta property="og:url" content="https://robododd.com/grafana-loki-log-everything-locally/">
   <meta property="og:image" content="https://robododd.com/images/2024/04/logs.webp">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-04-02T17:03:55.000Z">
   <meta property="article:modified_time" content="2025-02-22T01:54:19.000Z">  <meta property="article:tag" content="Kubernetes">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/grafana-loki-log-everything-locally/"},"headline":"Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s","description":"Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s\nDeploy a robust logging system in your home lab with Loki for log aggregation, Promtail for collection, and Grafana for visualization on K3s.","image":"https://robododd.com/images/2024/04/logs.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-04-02T17:03:55.000Z","dateModified":"2025-02-22T01:54:19.000Z","keywords":"Kubernetes, Promtail, Loki, K3s, Home Lab, Grafana","articleSection":"Kubernetes"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/grafana-loki-log-everything-locally/"},"headline":"Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s","description":"Deploy a robust home-lab logging system on K3s with Loki for log aggregation, Promtail for collection, and Grafana for visualization. Step-by-step guide.","image":"https://robododd.com/images/2024/04/logs.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-04-02T17:03:55.000Z","dateModified":"2025-02-22T01:54:19.000Z","keywords":"Kubernetes, Promtail, Loki, K3s, Home Lab, Grafana","articleSection":"Kubernetes"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -320,12 +318,11 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s</h1>
-      <p class="post-full-subtitle">Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s
-Deploy a robust logging system in your home lab with Loki for log aggregation, Promtail for collection, and Grafana for visualization on K3s.</p>    </header>
+            <h1 class="post-full-title">Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s</h1>
+      <p class="post-full-subtitle">Deploy a robust home-lab logging system on K3s with Loki for log aggregation, Promtail for collection, and Grafana for visualization. Step-by-step guide.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/04/logs.webp" srcset="/images/2024/04/logs-400w.webp 400w, /images/2024/04/logs-800w.webp 800w, /images/2024/04/logs.webp 999w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Setting Up a Home Lab Logging Stack with Loki, Promtail, and Grafana on K3s" fetchpriority="high" loading="eager" decoding="async" width="999" height="991">
+      <img src="/images/2024/04/logs.webp" srcset="/images/2024/04/logs-400w.webp 400w, /images/2024/04/logs-800w.webp 800w, /images/2024/04/logs.webp 999w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Home Lab Logging Stack: Loki, Promtail, and Grafana on K3s" fetchpriority="high" loading="eager" decoding="async" width="999" height="991">
           </figure>
     
     <div class="post-full-topline gh-canvas">
@@ -378,7 +375,7 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
           <ul class="post-sidebar-related-list">
                         <li>
               <a class="post-sidebar-related-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
-                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring</span>
+                <span class="post-sidebar-related-tag">Kubernetes</span>                <span class="post-sidebar-related-headline">LogMk: A Streamlined Grafana Alternative for Kubernetes Logs</span>
               </a>
             </li>
                         <li>
@@ -785,13 +782,13 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
     <div class="read-more">
               <article class="post-card">
     <a class="post-card-image-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
-    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" srcset="/images/2024/08/Screenshot-2024-08-22-132432-400w.webp 400w, /images/2024/08/Screenshot-2024-08-22-132432-800w.webp 800w, /images/2024/08/Screenshot-2024-08-22-132432.webp 919w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring" loading="lazy" decoding="async" width="919" height="648">
+    <img class="post-card-image" src="/images/2024/08/Screenshot-2024-08-22-132432.webp" srcset="/images/2024/08/Screenshot-2024-08-22-132432-400w.webp 400w, /images/2024/08/Screenshot-2024-08-22-132432-800w.webp 800w, /images/2024/08/Screenshot-2024-08-22-132432.webp 919w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="LogMk: A Streamlined Grafana Alternative for Kubernetes Logs" loading="lazy" decoding="async" width="919" height="648">
   </a>
     <div class="post-card-content">
     <a class="post-card-content-link" href="/logmk-a-streamlined-alternative-to-grafana-for-kubernetes-log-monitoring/">
       <header class="post-card-header">
                 <div class="post-card-tags"><span class="post-card-primary-tag">Kubernetes</span></div>
-                <h2 class="post-card-title">LogMk: A Streamlined Alternative to Grafana for Kubernetes Log Monitoring</h2>
+                <h2 class="post-card-title">LogMk: A Streamlined Grafana Alternative for Kubernetes Logs</h2>
       </header>
       <div class="post-card-excerpt"><p>Introducing LogMk, a straightforward alternative to complex logging tools like Grafana, tailored specifically for Kubernetes environments. Ideal for smaller setups or development…</p></div>    </a>
     <footer class="post-card-meta">
@@ -810,7 +807,7 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
                 <div class="post-card-tags"><span class="post-card-primary-tag">Kubernetes</span></div>
                 <h2 class="post-card-title">How to Set Up Uptime Kuma on a k3s Kubernetes Cluster</h2>
       </header>
-      <div class="post-card-excerpt"><p>Discover how to set up Uptime Kuma on a k3s Kubernetes cluster with this step-by-step guide. Utilize MetalLB for local IP assignment, create necessary YAML configuration files, and deploy Uptime Kuma. Monitor your services efficiently on your local network.</p></div>    </a>
+      <div class="post-card-excerpt"><p>Set up Uptime Kuma on a k3s cluster with MetalLB for a local IP. Step-by-step guide covering YAML manifests and service monitoring on your home network.</p></div>    </a>
     <footer class="post-card-meta">
       <time class="post-card-meta-date" datetime="2024-07-02T13:27:36.000Z">Jul 2, 2024</time>
       <span class="post-card-meta-length">1 min read</span>
@@ -827,7 +824,7 @@ Deploy a robust logging system in your home lab with Loki for log aggregation, P
                 <div class="post-card-tags"><span class="post-card-primary-tag">Kubernetes</span></div>
                 <h2 class="post-card-title">Simplifying Local Network IP Assignment for Kubernetes with MetalLB</h2>
       </header>
-      <div class="post-card-excerpt"><p>Learn to assign local network IPs to Kubernetes deployments using MetalLB. This step-by-step guide makes network load balancing easy, perfect for developers and IT pros seeking straightforward IP management without relying on cloud providers.</p></div>    </a>
+      <div class="post-card-excerpt"><p>Assign local network IPs to Kubernetes services with MetalLB. Straightforward bare-metal load balancing for homelabs — no cloud provider required.</p></div>    </a>
     <footer class="post-card-meta">
       <time class="post-card-meta-date" datetime="2024-07-02T11:13:22.000Z">Jul 2, 2024</time>
       <span class="post-card-meta-length">1 min read</span>

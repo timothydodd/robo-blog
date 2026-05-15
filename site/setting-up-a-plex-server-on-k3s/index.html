@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Setting Up a Plex Server on k3s — RoboDodd</title>
-  <meta name="description" content="Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!">
+  <meta name="description" content="Run a Plex server on k3s with Intel hardware transcoding and MetalLB for a local IP. Scalable, resilient media streaming — perfect for homelabs.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/setting-up-a-plex-server-on-k3s/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -14,14 +14,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
   <meta property="og:title" content="Setting Up a Plex Server on k3s — RoboDodd">
-  <meta property="og:description" content="Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!">
+  <meta property="og:description" content="Run a Plex server on k3s with Intel hardware transcoding and MetalLB for a local IP. Scalable, resilient media streaming — perfect for homelabs.">
   <meta property="og:url" content="https://robododd.com/setting-up-a-plex-server-on-k3s/">
   <meta property="og:image" content="https://robododd.com/images/2024/08/plex3.webp">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-08-10T00:51:51.000Z">
   <meta property="article:modified_time" content="2025-01-28T18:37:12.000Z">  <meta property="article:tag" content="plex">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setting-up-a-plex-server-on-k3s/"},"headline":"Setting Up a Plex Server on k3s","description":"Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!","image":"https://robododd.com/images/2024/08/plex3.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-08-10T00:51:51.000Z","dateModified":"2025-01-28T18:37:12.000Z","keywords":"plex, Kubernetes, Beelink","articleSection":"plex"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/setting-up-a-plex-server-on-k3s/"},"headline":"Setting Up a Plex Server on k3s","description":"Run a Plex server on k3s with Intel hardware transcoding and MetalLB for a local IP. Scalable, resilient media streaming — perfect for homelabs.","image":"https://robododd.com/images/2024/08/plex3.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-08-10T00:51:51.000Z","dateModified":"2025-01-28T18:37:12.000Z","keywords":"plex, Kubernetes, Beelink","articleSection":"plex"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -319,7 +319,7 @@
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
             <h1 class="post-full-title">Setting Up a Plex Server on k3s</h1>
-      <p class="post-full-subtitle">Set up a Plex server on k3s with Intel hardware transcoding, MetalLB for network IPs, and seamless integration. Perfect for home labs or small-scale environments. Robust, scalable, and efficient!</p>    </header>
+      <p class="post-full-subtitle">Run a Plex server on k3s with Intel hardware transcoding and MetalLB for a local IP. Scalable, resilient media streaming — perfect for homelabs.</p>    </header>
 
         <figure class="post-full-image">
       <img src="/images/2024/08/plex3.webp" srcset="/images/2024/08/plex3-400w.webp 400w, /images/2024/08/plex3-800w.webp 800w, /images/2024/08/plex3.webp 974w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Setting Up a Plex Server on k3s" fetchpriority="high" loading="eager" decoding="async" width="974" height="641">
@@ -611,7 +611,7 @@
                 <div class="post-card-tags"><span class="post-card-primary-tag">plex</span></div>
                 <h2 class="post-card-title">How to Set Up Plex DVR and an Attic Antenna</h2>
       </header>
-      <div class="post-card-excerpt"><p>Learn how to set up a Plex DVR with an attic antenna to watch and record live TV. This guide covers installation, equipment, and optimizing your over-the-air TV experience.</p></div>    </a>
+      <div class="post-card-excerpt"><p>Cut the cord with a Plex DVR and an attic antenna. Step-by-step guide to setting up over-the-air TV recording with Plex, HDHomeRun, and a Channel Master preamp.</p></div>    </a>
     <footer class="post-card-meta">
       <time class="post-card-meta-date" datetime="2025-02-04T15:35:51.000Z">Feb 4, 2025</time>
       <span class="post-card-meta-length">3 min read</span>

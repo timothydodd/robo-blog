@@ -8,7 +8,7 @@
   "feature_image": "/images/2026/04/antenna-post.webp",
   "feature_image_alt": "Synthwave-styled render of an antenna and Raspberry Pi over a glowing magenta and cyan grid",
   "feature_image_caption": null,
-  "excerpt": "Pull AcuRite (and any other 433 MHz) sensor data into MQTT using rtl_433 in a container — Docker Compose for bring-up, k3s for the homelab, ready for Home Assistant.",
+  "excerpt": "Capture AcuRite weather sensor data with an RTL-SDR dongle, rtl_433, and MQTT — all running on Docker and k3s. Step-by-step home-weather-station guide.",
   "tags": [
     "rtl-433",
     "mqtt",

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free — RoboDodd</title>
-  <meta name="description" content="Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.">
+  <title>Route Your Domain to a Local Service with Cloudflare Tunnel — RoboDodd</title>
+  <meta name="description" content="Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <link rel="canonical" href="https://robododd.com/host-loc/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
@@ -13,15 +13,15 @@
 
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free — RoboDodd">
-  <meta property="og:description" content="Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.">
+  <meta property="og:title" content="Route Your Domain to a Local Service with Cloudflare Tunnel — RoboDodd">
+  <meta property="og:description" content="Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.">
   <meta property="og:url" content="https://robododd.com/host-loc/">
   <meta property="og:image" content="https://robododd.com/images/2024/07/cloudflare3.webp">  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2024-07-01T09:47:34.000Z">
   <meta property="article:modified_time" content="2025-04-09T20:11:08.000Z">  <meta property="article:tag" content="Cloudflare">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/host-loc/"},"headline":"Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free","description":"Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.","image":"https://robododd.com/images/2024/07/cloudflare3.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-07-01T09:47:34.000Z","dateModified":"2025-04-09T20:11:08.000Z","keywords":"Cloudflare, Kubernetes, DNS, DevOps, Home Lab","articleSection":"Cloudflare"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/host-loc/"},"headline":"Route Your Domain to a Local Service with Cloudflare Tunnel","description":"Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.","image":"https://robododd.com/images/2024/07/cloudflare3.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2024-07-01T09:47:34.000Z","dateModified":"2025-04-09T20:11:08.000Z","keywords":"Cloudflare, Kubernetes, DNS, DevOps, Home Lab","articleSection":"Cloudflare"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -318,11 +318,11 @@
   <main class="site-main" id="main">
   <article class="post-full gh-article">
     <header class="post-full-header gh-canvas">
-            <h1 class="post-full-title">Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free</h1>
-      <p class="post-full-subtitle">Learn how to set up Cloudflare to securely route traffic from your public domain to a local Kubernetes service without exposing your IP address. This step-by-step guide covers account creation, Zero Trust setup, agent installation in Kubernetes, and domain configuration.</p>    </header>
+            <h1 class="post-full-title">Route Your Domain to a Local Service with Cloudflare Tunnel</h1>
+      <p class="post-full-subtitle">Securely route your public domain to a local Kubernetes service via Cloudflare Tunnel — no exposed IP. Covers Zero Trust, agent install, and DNS setup.</p>    </header>
 
         <figure class="post-full-image">
-      <img src="/images/2024/07/cloudflare3.webp" srcset="/images/2024/07/cloudflare3-400w.webp 400w, /images/2024/07/cloudflare3-800w.webp 800w, /images/2024/07/cloudflare3-1200w.webp 1200w, /images/2024/07/cloudflare3.webp 1288w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Securely Route Traffic from Your Domain to Local Web Services with Cloudflare for Free" fetchpriority="high" loading="eager" decoding="async" width="1288" height="702">
+      <img src="/images/2024/07/cloudflare3.webp" srcset="/images/2024/07/cloudflare3-400w.webp 400w, /images/2024/07/cloudflare3-800w.webp 800w, /images/2024/07/cloudflare3-1200w.webp 1200w, /images/2024/07/cloudflare3.webp 1288w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Route Your Domain to a Local Service with Cloudflare Tunnel" fetchpriority="high" loading="eager" decoding="async" width="1288" height="702">
           </figure>
     
     <div class="post-full-topline gh-canvas">

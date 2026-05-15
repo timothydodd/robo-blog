@@ -8,7 +8,7 @@
   "feature_image": "/images/2026/05/terraria-k3s-wake-proxy.webp",
   "feature_image_alt": null,
   "feature_image_caption": null,
-  "excerpt": "A TShock Terraria server pegs a full CPU core whether anyone's online or not. Here's how I wrapped mine in a tiny Go proxy that scales the StatefulSet to zero when idle and wakes it on the first TCP connect.",
+  "excerpt": "A TShock Terraria server pegs a CPU core 24/7. Here's a tiny Go proxy that scales the k3s StatefulSet to zero when idle and wakes it on first TCP connect.",
   "tags": [
     "terraria",
     "k3s",
