@@ -2,9 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://robododd.com/</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/scale-to-zero-terraria-server-on-k3s-with-a-wake-on-connect-proxy/</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://robododd.com/monitor-acurite-weather-sensors-with-rtl-433-on-docker-and-k3s/</loc>
@@ -740,7 +746,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/homelab/</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -770,13 +776,13 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/k3s/</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://robododd.com/tag/kubernetes/</loc>
-    <lastmod>2026-04-19</lastmod>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1064,7 +1070,7 @@
   </url>
   <url>
     <loc>https://robododd.com/tag/self-hosted/</loc>
-    <lastmod>2025-05-26</lastmod>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1107,6 +1113,12 @@
   <url>
     <loc>https://robododd.com/tag/tech-gifts-for-dads/</loc>
     <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://robododd.com/tag/terraria/</loc>
+    <lastmod>2026-05-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

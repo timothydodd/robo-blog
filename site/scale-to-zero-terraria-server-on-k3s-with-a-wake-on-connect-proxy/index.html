@@ -4,23 +4,24 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Robo Dodd - Tech Guides, Kubernetes, App Development & Home Labs</title>
-  <meta name="description" content="A tech blog offering detailed guides, practical setups, and hands-on experiments for Kubernetes, app development, and home labs. Clear insights for your journey.">
+  <title>Scale-to-Zero Terraria Server on k3s with a Wake-on-Connect Proxy — RoboDodd</title>
+  <meta name="description" content="A TShock Terraria server pegs a full CPU core whether anyone's online or not. Here's how I wrapped mine in a tiny Go proxy that scales the StatefulSet to zero when idle and wakes it on the first TCP connect.">
   <meta name="referrer" content="no-referrer-when-downgrade">
-  <link rel="canonical" href="https://robododd.com/page/6/">
+  <link rel="canonical" href="https://robododd.com/scale-to-zero-terraria-server-on-k3s-with-a-wake-on-connect-proxy/">
   <link rel="icon" href="/assets/logo.png" type="image/png">
   <link rel="alternate" type="application/rss+xml" title="RoboDodd" href="https://robododd.com/rss.xml">
 
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
   <meta property="og:site_name" content="RoboDodd">
-  <meta property="og:title" content="Robo Dodd - Tech Guides, Kubernetes, App Development & Home Labs">
-  <meta property="og:description" content="A tech blog offering detailed guides, practical setups, and hands-on experiments for Kubernetes, app development, and home labs. Clear insights for your journey.">
-  <meta property="og:url" content="https://robododd.com/page/6/">
-  <meta property="og:image" content="https://robododd.com/images/2025/05/orb.jpg">  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@robododd">  
+  <meta property="og:title" content="Scale-to-Zero Terraria Server on k3s with a Wake-on-Connect Proxy — RoboDodd">
+  <meta property="og:description" content="A TShock Terraria server pegs a full CPU core whether anyone's online or not. Here's how I wrapped mine in a tiny Go proxy that scales the StatefulSet to zero when idle and wakes it on the first TCP connect.">
+  <meta property="og:url" content="https://robododd.com/scale-to-zero-terraria-server-on-k3s-with-a-wake-on-connect-proxy/">
+  <meta property="og:image" content="https://robododd.com/images/2026/05/terraria-k3s-wake-proxy.webp">  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@robododd">    <meta property="article:published_time" content="2026-05-15T12:00:00.000Z">
+  <meta property="article:modified_time" content="2026-05-15T12:00:00.000Z">  <meta property="article:tag" content="Terraria">  
   <link rel="stylesheet" href="/assets/app.css">
   <script defer src="/assets/main.js"></script>
-      <script defer src="/assets/vendor/cookiedialog.min.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://robododd.com/scale-to-zero-terraria-server-on-k3s-with-a-wake-on-connect-proxy/"},"headline":"Scale-to-Zero Terraria Server on k3s with a Wake-on-Connect Proxy","description":"A TShock Terraria server pegs a full CPU core whether anyone's online or not. Here's how I wrapped mine in a tiny Go proxy that scales the StatefulSet to zero when idle and wakes it on the first TCP connect.","image":"https://robododd.com/images/2026/05/terraria-k3s-wake-proxy.webp","author":{"@type":"Person","name":"Tim Dodd","url":"https://robododd.com","image":"https://robododd.com/images/2026/04/img-2753-jpg-829cdc43.webp"},"publisher":{"@type":"Organization","name":"RoboDodd","url":"https://robododd.com","logo":{"@type":"ImageObject","url":"https://robododd.com/images/2025/02/16945751-8fdd-46f3-945a-108684760892-1.webp"}},"datePublished":"2026-05-15T12:00:00.000Z","dateModified":"2026-05-15T12:00:00.000Z","keywords":"Terraria, K3s, Kubernetes, self-hosted, homelab","articleSection":"Terraria"}</script>    <script defer src="/assets/vendor/cookiedialog.min.js"></script>
 <script>
   const CONFIG = {
     googleAnalyticsId: 'G-GPS7086DZW', // Replace with your actual GA4 ID
@@ -284,7 +285,7 @@
     }
   });
 </script></head>
-<body class="home-template">
+<body class="post-template">
   <header class="site-head">
     <div class="site-head-inner">
       <a class="site-head-brand" href="/" aria-label="RoboDodd — home">
@@ -315,80 +316,128 @@
   </header>
 
   <main class="site-main" id="main">
-  <div class="post-feed">
-          <article class="post-card">
-    <a class="post-card-image-link" href="/moving-pulumi-resources-from-one-project-to-another/">
-    <img class="post-card-image" src="/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp" srcset="/images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal-400w.webp 400w, /images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal-800w.webp 800w, /images/2024/01/DALL-E-2024-01-09-13.54.13---A-metaphorical-scene-showing-a-lost-developer-soul-walking-towards-a-beam-of-light.-The-developer--a-middle-aged-Caucasian-man--looks-weary-and-is-wal.webp 1024w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Moving Pulumi Resources from one project to another" loading="lazy" decoding="async" width="1024" height="1024">
-  </a>
-    <div class="post-card-content">
-    <a class="post-card-content-link" href="/moving-pulumi-resources-from-one-project-to-another/">
-      <header class="post-card-header">
-                <div class="post-card-tags"><span class="post-card-primary-tag">Pulumi</span></div>
-                <h2 class="post-card-title">Moving Pulumi Resources from one project to another</h2>
-      </header>
-      <div class="post-card-excerpt"><p>Learn how to painlessly transfer Pulumi resources between projects.</p></div>    </a>
-    <footer class="post-card-meta">
-      <time class="post-card-meta-date" datetime="2024-01-09T19:49:28.000Z">Jan 9, 2024</time>
-      <span class="post-card-meta-length">1 min read</span>
-    </footer>
-  </div>
-</article>
-          <article class="post-card">
-    <a class="post-card-image-link" href="/local-network-https-on-chrome/">
-    <img class="post-card-image" src="/images/2023/10/cert.webp" srcset="/images/2023/10/cert-400w.webp 400w, /images/2023/10/cert-800w.webp 800w, /images/2023/10/cert.webp 1024w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Local Network  SSL / Https on Chrome without Certificate Errors" loading="lazy" decoding="async" width="1024" height="1024">
-  </a>
-    <div class="post-card-content">
-    <a class="post-card-content-link" href="/local-network-https-on-chrome/">
-      <header class="post-card-header">
-                <div class="post-card-tags"><span class="post-card-primary-tag">SSL</span></div>
-                <h2 class="post-card-title">Local Network  SSL / Https on Chrome without Certificate Errors</h2>
-      </header>
-      <div class="post-card-excerpt"><p>If you've ever hosted a private web service on your local network , you've ran into the pain point of chrome or any other browser complaining that the connection is not secure or…</p></div>    </a>
-    <footer class="post-card-meta">
-      <time class="post-card-meta-date" datetime="2023-10-26T02:54:50.000Z">Oct 25, 2023</time>
-      <span class="post-card-meta-length">4 min read</span>
-    </footer>
-  </div>
-</article>
-          <article class="post-card">
-    <a class="post-card-image-link" href="/pfsense-setup-guide/">
-    <img class="post-card-image" src="/images/2023/08/pic2.jpg" srcset="/images/2023/08/pic2-400w.webp 400w, /images/2023/08/pic2.jpg 696w" sizes="(min-width: 1024px) 380px, (min-width: 720px) 45vw, 100vw" alt="Pfsense Hardware Setup Guide" loading="lazy" decoding="async" width="696" height="365">
-  </a>
-    <div class="post-card-content">
-    <a class="post-card-content-link" href="/pfsense-setup-guide/">
-      <header class="post-card-header">
-                <div class="post-card-tags"><span class="post-card-primary-tag">pfsesnse</span></div>
-                <h2 class="post-card-title">Pfsense Hardware Setup Guide</h2>
-      </header>
-      <div class="post-card-excerpt"><p>Learn how to set up custom pfSense hardware and explore why it's a top choice for network enthusiasts and professionals.</p></div>    </a>
-    <footer class="post-card-meta">
-      <time class="post-card-meta-date" datetime="2023-08-02T11:30:57.000Z">Aug 2, 2023</time>
-      <span class="post-card-meta-length">5 min read</span>
-    </footer>
-  </div>
-</article>
-          <article class="post-card">
-    <a class="post-card-image-link" href="/atomic-pi-kubernetes-cluster/">
-    <img class="post-card-image" src="/images/2023/01/flower.svg" alt="Beginner's Guide: Setup a Kubernetes Cluster" loading="lazy" decoding="async" width="576" height="210">
-  </a>
-    <div class="post-card-content">
-    <a class="post-card-content-link" href="/atomic-pi-kubernetes-cluster/">
-      <header class="post-card-header">
-                <div class="post-card-tags"><span class="post-card-primary-tag">Kubernetes</span></div>
-                <h2 class="post-card-title">Beginner's Guide: Setup a Kubernetes Cluster</h2>
-      </header>
-      <div class="post-card-excerpt"><p>Intro In this post, I'll walk you through the steps needed to install K3s, a lightweight Kubernetes distribution. For this tutorial, I'm setting it up on an Atomic Pi, a low-cost…</p></div>    </a>
-    <footer class="post-card-meta">
-      <time class="post-card-meta-date" datetime="2023-05-21T15:53:10.000Z">May 21, 2023</time>
-      <span class="post-card-meta-length">4 min read</span>
-    </footer>
-  </div>
-</article>
-      </div>
+  <article class="post-full gh-article">
+    <header class="post-full-header gh-canvas">
+            <h1 class="post-full-title">Scale-to-Zero Terraria Server on k3s with a Wake-on-Connect Proxy</h1>
+      <p class="post-full-subtitle">A TShock Terraria server pegs a full CPU core whether anyone's online or not. Here's how I wrapped mine in a tiny Go proxy that scales the StatefulSet to zero when idle and wakes it on the first TCP connect.</p>    </header>
 
-    <nav class="pagination" aria-label="Pagination">
-    <a class="pagination-prev" rel="prev" href="/page/5/">&larr; Newer posts</a>    <span class="pagination-location">Page 6 of 6</span>
-    <span></span>  </nav>
+        <figure class="post-full-image">
+      <img src="/images/2026/05/terraria-k3s-wake-proxy.webp" srcset="/images/2026/05/terraria-k3s-wake-proxy-400w.webp 400w, /images/2026/05/terraria-k3s-wake-proxy-800w.webp 800w, /images/2026/05/terraria-k3s-wake-proxy-1200w.webp 1200w, /images/2026/05/terraria-k3s-wake-proxy.webp 1672w" sizes="(min-width: 1200px) 1200px, 100vw" alt="Scale-to-Zero Terraria Server on k3s with a Wake-on-Connect Proxy" fetchpriority="high" loading="eager" decoding="async" width="1672" height="941">
+          </figure>
+    
+    <div class="post-full-topline gh-canvas">
+      <div class="post-full-meta">
+                  <a class="post-full-meta-tag" href="/tag/terraria/">Terraria</a>
+          <span class="post-full-meta-sep" aria-hidden="true">·</span>
+                <time datetime="2026-05-15T12:00:00.000Z">May 15, 2026</time>
+        <span class="post-full-meta-sep" aria-hidden="true">·</span>
+        <span>3 min read</span>
+      </div>
+      <div class="post-full-byline">
+                <img class="post-full-byline-avatar" src="/images/2026/04/img-2753-jpg-829cdc43.webp" alt="" width="28" height="28" decoding="async">
+                <span class="post-full-byline-name">Tim Dodd</span>
+      </div>
+    </div>
+
+        <div class="post-body">
+            <aside class="post-sidebar" aria-label="Article resources">
+                <nav class="post-toc" aria-label="Table of contents">
+          <p class="post-toc-title">Contents</p>
+          <ol>
+                                                                      <li><a href="#how-it-works" data-toc-link>How it works</a>
+                                </li>
+                                                                                        <li><a href="#running-it" data-toc-link>Running it on your own cluster</a>
+                                </li>
+                                                                                        <li><a href="#tuning" data-toc-link>Tuning</a>
+                                </li>
+                                                                                        <li><a href="#gotchas" data-toc-link>A couple of gotchas</a>
+                                </li>
+                                                    </ol>
+        </nav>
+        
+              </aside>
+      
+      <div class="post-main">
+        <section class="post-full-content gh-content gh-canvas">
+          <p>I recently set up a TShock-based Terraria server on my k3s cluster for the occasional play session with friends. It worked great — except for one thing: the Terraria dedicated server pegs a full CPU core and holds onto ~2 GB of RAM whether anyone is online or not. For a server that gets used a few hours a week, that’s a lot of wasted electricity.</p>
+<p>So I built a small Go proxy that sits in front of the server and scales the pod down to zero when nobody’s connected. When someone tries to join, the proxy wakes it back up. Code and prebuilt image are public — anyone with a k3s cluster can drop it in.</p>
+<ul>
+<li><strong>Repo:</strong> <a href="https://github.com/timothydodd/lazy-terraria" target="_blank" rel="noopener noreferrer">github.com/timothydodd/lazy-terraria</a></li>
+<li><strong>Image:</strong> <a href="https://hub.docker.com/r/timdoddcool/terraria-proxy" target="_blank" rel="noopener noreferrer"><code>timdoddcool/terraria-proxy</code></a></li>
+</ul>
+<h2 id="how-it-works">How it works</h2>
+<p>The public LoadBalancer points at the <strong>proxy</strong>, not the Terraria server. Here’s the flow:</p>
+<p><img src="/images/2026/05/lazy-terraria-flow.webp" alt="Flow diagram: a Terraria client connects to the LoadBalancer, which routes the connection through the terraria-proxy Deployment. The proxy scales the terraria StatefulSet from 0 to 1 via the Kubernetes scale subresource, then splices the TCP stream through to the TShock pod via the terraria-backend ClusterIP service." loading="lazy" decoding="async" width="1693" height="929" data-zoom=""></p>
+<p>When a Terraria client connects:</p>
+<ol>
+<li>The proxy accepts the TCP connection.</li>
+<li>If the server is scaled to zero, it bumps the StatefulSet to <code>replicas: 1</code>.</li>
+<li>It waits for TShock to bind port <code>7777</code>, then splices the connection through.</li>
+<li>While at least one client is connected, the server stays up. Once everyone disconnects and the idle window elapses, the proxy scales back to zero.</li>
+</ol>
+<p>No operators, no custom resources — just the built-in Kubernetes <code>scale</code> subresource. The first connect after a long idle takes 10–30 seconds while the pod cold-starts; Terraria’s client timeout is generous enough to handle it.</p>
+<h2 id="running-it">Running it on your own cluster</h2>
+<p>You’ll need a k3s (or any Kubernetes) cluster with a working LoadBalancer — MetalLB works fine if you’re on bare metal. If you don’t have a cluster yet, I wrote a walkthrough on building one from cheap hardware here: <a href="/atomic-pi-kubernetes-cluster/">Beginner’s Guide: Setup a Kubernetes Cluster</a>. Once you’ve got a cluster:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/timothydodd/lazy-terraria.git
+<span class="token builtin class-name">cd</span> lazy-terraria
+kubectl apply <span class="token parameter variable">-f</span> k3s/
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>That applies everything in one shot: namespace, PVCs, the TShock StatefulSet, the proxy Deployment, RBAC, and both services. Watch first-boot world generation:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">kubectl <span class="token parameter variable">-n</span> terraria logs <span class="token parameter variable">-f</span> statefulset/terraria
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Grab the external IP:</p>
+<div class="pre-wrapper"><pre class="language-bash"><code class="language-bash">kubectl <span class="token parameter variable">-n</span> terraria get svc terraria
+</code></pre><button type="button" class="copy-button" aria-label="Copy code"><span class="copy-icon" aria-hidden="true">⧉</span><span class="copied-text">Copy</span></button></div>
+<p>Point your Terraria client at that IP on port <code>7777</code> and you’re in.</p>
+<h2 id="tuning">Tuning</h2>
+<p>A few env vars on the <code>terraria-proxy</code> Deployment control the wake/sleep behaviour:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IDLE_TIMEOUT</code></td>
+<td><code>10m</code></td>
+<td>How long the server stays up after everyone disconnects.</td>
+</tr>
+<tr>
+<td><code>WAKE_TIMEOUT</code></td>
+<td><code>120s</code></td>
+<td>Max time to wait for TShock to come up after a cold start.</td>
+</tr>
+<tr>
+<td><code>CHECK_INTERVAL</code></td>
+<td><code>30s</code></td>
+<td>How often the idle watcher runs.</td>
+</tr>
+</tbody>
+</table>
+<p>If your world is large and takes longer to load, bump <code>WAKE_TIMEOUT</code>. If you want the server to stay up longer between sessions, bump <code>IDLE_TIMEOUT</code>.</p>
+<h2 id="gotchas">A couple of gotchas</h2>
+<ul>
+<li><strong>Any TCP connect wakes it.</strong> The proxy doesn’t parse the Terraria protocol, so a port scan or a misconfigured TCP health check will wake the server. On a friends-only setup this is fine — port scanners aren’t frequent enough to matter, and the idle timer catches them.</li>
+<li><strong>First-time connection is slow.</strong> Cold-starts take 10–30 seconds. Tell your friends to retry once if their client times out the first time.</li>
+</ul>
+<p>That’s the whole thing. If you run a Terraria server (or any TCP game server that idle-burns CPU) and don’t want it eating cycles 24/7, grab the repo and give it a try. The pattern works for anything that speaks plain TCP and tolerates a cold-start delay on the first packet.</p>
+        </section>
+
+                <aside class="post-full-tag-list gh-canvas">
+          <strong>More on</strong>
+                      <a href="/tag/terraria/">Terraria</a>
+                      <a href="/tag/k3s/">K3s</a>
+                      <a href="/tag/kubernetes/">Kubernetes</a>
+                      <a href="/tag/self-hosted/">self-hosted</a>
+                      <a href="/tag/homelab/">homelab</a>
+                  </aside>
+              </div>
+    </div>
+  </article>
+
   </main>
 
   <footer class="site-foot">
